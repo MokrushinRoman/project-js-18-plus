@@ -1,3 +1,3 @@
-import { onSuccessAlert } from './helpers/notifications';
+// import { onSuccessAlert } from './helpers/notifications';
 
-onSuccessAlert();
+// onSuccessAlert();
