@@ -1,6 +1,6 @@
 const options = {};
 
-onSuccessAlert = message => Notify.success(message, options);
+export const onSuccessAlert = message => Notify.success(message, options);
 
 onErrorAlert = message => Notify.error(message, options);
 
