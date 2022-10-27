@@ -1,8 +1,9 @@
-import API from 'api';
+import API from './api';
+
 import { Notify } from 'notiflix';
 export const getTrending = async ({ timeWindow = 'day', page = 1 } = {}) => {
   return await API.get(
-    `/trending/all/${timeWindow}?api_key=${process.env.REACT_APP_API_KEY}&page=${page}`
+    `/trending/all/${timeWindow}?api_key=ab344de8f558939380086877abcdb83a&page=${page}`
   )
     .then(response => {
       return response.data;
