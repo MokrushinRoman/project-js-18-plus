@@ -1,1 +1,3 @@
-import { onSuccessAlert } from './helpers/notifications';
+// (function test() {
+console.log(window.location.href);
+// })();
