@@ -4,4 +4,4 @@ const options = {};
 
 export const onSuccessAlert = message => Notify.success(message, options);
 
-onErrorAlert = message => Notify.error(message, options);
+export const onErrorAlert = message => Notify.error(message, options);

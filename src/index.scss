@@ -1,6 +1,15 @@
-@import './sass/common';
-@import './sass/movies';
-@import './sass/utils/mixins';
 @import './sass/utils/vars';
+
+@import './sass/common';
+
+@import './sass/base/reset';
+
 @import './sass/utils/hidden';
+@import './sass/utils/mixins';
+
+@import './sass/components/container';
+@import './sass/components/buttons';
+
+@import './sass/movies';
 @import './sass/layout/header';
+@import './sass/layout/footer';
