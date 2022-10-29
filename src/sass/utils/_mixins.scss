@@ -1,53 +1,47 @@
-@mixin mq($screen) {
-    $mobile: 320px;
-    $tablet: 768px;
-    $desktop: 1280px;
+// DISPLAY
+@mixin flex-centred($d: flex, $ai: center, $jc: center) {
+  display: $d;
+  align-items: $ai;
+  justify-content: $jc;
+}
 
-    @if $screen==mobile-only {
-        @media screen and (max-width: #{$tablet - 0.02}) {
-            @content;
-        }
-    }
+// POSITION
+@mixin position($pos: absolute, $t: 0, $l: 0) {
+  position: $pos;
+  top: $t;
+  left: $l;
+}
 
-    @else if $screen==mobile {
-        @media screen and (min-width: $mobile) {
-            @content;
-        }
-    }
+// FONT
+@mixin font($fw, $fs, $lh, $ls) {
+  font-weight: $fw;
+  font-size: $fs;
+  line-height: $lh;
+  letter-spacing: $ls;
+}
 
-    @else if $screen==tablet-only {
-        @media screen and (min-width: $tablet) and (max-width: #{$desktop - 0.02}) {
-            @content;
-        }
-    }
+// MEDIA
+@mixin mobile {
+  @media screen and (min-width: 480px) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}
 
-    @else if $screen==tablet {
-        @media screen and (min-width: $tablet) {
-            @content;
-        }
-    }
-
-    @else if $screen==desktop {
-        @media screen and (min-width: $desktop) {
-            @content;
-        }
-    }
-
-    @else if $screen==notDesktop {
-        @media screen and (max-width: #{$desktop - 0.02}) {
-            @content;
-        }
-    }
-
-    @else if $screen==retina {
-
-        @media screen and (min-device-pixel-ratio: 2),
-        screen and (-moz-min-device-pixel-ratio: 2),
-        screen and (-o-min-device-pixel-ratio: 2/1),
-        screen and (-webkit-min-device-pixel-ratio: 2),
-        screen and (min-resolution: 192dpi),
-        screen and (min-resolution: 2dppx) {
-            @content;
-        }
-    }
+// RETINA
+@mixin retina {
+  @media (min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi),
+    (min-resolution: 2dppx) {
+    @content;
+  }
 }

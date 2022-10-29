@@ -4,7 +4,7 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  color: var($main-text-color);
+  color: $main-text-color;
   margin: 0;
 }
 
@@ -45,4 +45,11 @@ img {
 
 address {
   font-style: normal;
+}
+
+.container {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 0 auto;
+  width: 100%;
 }

@@ -1,7 +1,13 @@
-@import './sass/common';
-@import './sass/movies';
-@import './sass/layout/footer.scss';
-@import './sass/base/reset';
-@import './sass/movies_card';
-@import './sass/utils/mixins';
 @import './sass/utils/vars';
+
+@import './sass/common';
+
+@import './sass/base/reset';
+
+@import './sass/utils/hidden';
+@import './sass/utils/mixins';
+
+@import './sass/components/container';
+@import './sass/components/buttons';
+
+@import './sass/movies';
