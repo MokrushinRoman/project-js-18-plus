@@ -1,0 +1,26 @@
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 200px));
+  grid-gap: 40px;
+  padding: 0;
+  list-style: none;
+  max-width: 1200px;
+}
+.movie {
+  &__img {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    min-height: 329px;
+    height: -webkit-fill-available;
+    max-height: 300px;
+  }
+  &__title {
+    margin: 0;
+    padding: 12px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
