@@ -41,6 +41,7 @@ const movies = async () => {
       return movieCards;
     }
   );
+  console.log('document.querySelector ', document);
   document.querySelector('.movie-list').innerHTML = result;
 };
 movies();
