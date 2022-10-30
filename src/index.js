@@ -1,4 +1,5 @@
 import { getTrending } from './filmsApi';
+import All from './js/modal';
 
 let totalPages = 0;
 let page = 1;
@@ -9,7 +10,7 @@ const card = ({
   imgUrl,
   title,
   id,
-}) => `<li id=""${id} class="movie-list__item movie">
+}) => `<li id="${id}" class="movie-list__item movie">
     <img
 		class="movie__img"
       src=${imgUrl ? `https://image.tmdb.org/t/p/w200${imgUrl} ` : ''}
