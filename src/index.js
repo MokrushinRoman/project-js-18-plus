@@ -1,6 +1,8 @@
 import { getTrending } from './filmsApi';
 import './js/myLibrary';
-import All from './js/modal';
+import {getModal} from './js/modal';
+
+getModal('.movie-list');
 
 let totalPages = 0;
 let page = 1;

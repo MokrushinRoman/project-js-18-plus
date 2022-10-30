@@ -1,12 +1,15 @@
 import { getMovieDetails } from '../filmsApi';
 
 const modalEl = document.querySelector('[data-modal]');
-const movieListEL = document.querySelector('.movie-list');
 const bodyEl = document.querySelector('body');
 let idTargetCard = '';
 let modalCloseBtn = '';
+let movieListEL = '';
 
-movieListEL.addEventListener('click', onModalOpen);
+export function getModal (selector) {
+  movieListEL = document.querySelector(selector);
+  movieListEL.addEventListener('click', onModalOpen);
+};
 
 async function onModalOpen(e) {
   if (e.target.nodeName !== 'IMG') {
@@ -125,8 +128,7 @@ function resetModal() {
 
 function quantityRegulator(arr) {
     if (arr.length <= 2) {
-      return genres
-        .map(item => {
+      return arr.map(item => {
           return item.name;
         })
         .join(', ');
@@ -134,5 +136,3 @@ function quantityRegulator(arr) {
       return `${arr[0].name}, ${arr[1].name}, Other`;
     }
 };
-
-
