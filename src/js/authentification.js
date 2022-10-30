@@ -5,6 +5,82 @@ import {
 import auth from '../firebase';
 const logInBtn = document.getElementById('logIn');
 const signInBtn = document.getElementById('signIn');
+// const signInForm = document.getElementById('signInForm');
+const logInForm = document.getElementById('logInForm');
+const passRegExp = '/(?=.*?[A-Z])(?=.*?[a-z]).{6,}/';
+const emailRegExp =
+  '/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/';
+const emaliInput = logInForm.querySelector('#email');
+// get modal
+const modal = document.querySelector('.auth-modal');
+//get close btn
+const close = document.getElementById('auth-close');
+
+const handleClickOutsideModal = () => {
+  closeAuthModal();
+};
+const handleCloseModal = () => {
+  console.log('clossse icon');
+  closeAuthModal();
+};
+const setErrorMessage = (input, message) => {
+  const formControl = input.closest('.form-control');
+  const errorContainer = formControl.querySelector('small');
+  errorContainer.innerText = message;
+  formControl.className = 'form-control error';
+};
+const clearErrors = () => {
+  const formControls = document.querySelectorAll('.form-control');
+  formControls.forEach(el => {
+    console.log('fired');
+    if (el.classList.contains('error')) {
+      el.querySelector('small').innerText = '';
+      el.classList.remove('error');
+    }
+  });
+};
+closeAuthModal = () => {
+  const authForm = document.querySelector('.auth-form');
+  logInForm.reset();
+
+  window.removeEventListener('click', handleClickOutsideModal);
+  close.removeEventListener('click', handleCloseModal);
+  logInForm.removeEventListener('submit', createUser);
+  authForm.classList.add('hide');
+};
+let errorMessageTimeOut;
+const validateSignUpForm = e => {
+  e.preventDefault();
+  const {
+    elements: { email, password },
+  } = e.currentTarget;
+  const emailValue = email.value.trim();
+  const passValue = password.value.trim();
+  const isEmailValid = emailValue.match(emailRegExp);
+  if (!emailValue) {
+    setErrorMessage(email, 'email cannot be empty');
+  } else if (!isEmailValid) {
+    setErrorMessage(email, 'fill correct email');
+  }
+  const isPassValid = passValue.match(passRegExp);
+  if (!passValue) {
+    setErrorMessage(password, 'password cannot be empty');
+  } else if (!isPassValid) {
+    setErrorMessage(
+      password,
+      'should contain  one upper and one small letter and be 6 or more symbols'
+    );
+  }
+  errorMessageTimeOut = setTimeout(() => {
+    clearErrors();
+  }, 3000);
+};
+const validateSignInForm = e => {
+  return toggleSignIn();
+};
+clearMessage = () => {
+  clearTimeout(errorMessageTimeOut);
+};
 const createUser = ({ email, password }) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
@@ -16,11 +92,11 @@ const createUser = ({ email, password }) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       // ..
-    });
+    })
+    .finally(() => {});
 };
 
 function toggleSignIn(email, password) {
-  closeAuthModal();
   if (auth.currentUser) {
     auth.signOut();
   } else {
@@ -43,8 +119,6 @@ function toggleSignIn(email, password) {
         alert(errorMessage);
       }
       closeAuthModal();
-
-      // document.getElementById('quickstart-sign-in').disabled = false;
     });
   }
   // document.getElementById('quickstart-sign-in').disabled = true;
@@ -81,28 +155,15 @@ auth.onAuthStateChanged(function (user) {
   }
   // document.getElementById('quickstart-sign-in').disabled = false;
 });
-function closeAuthModal() {
-  const formElements = document.querySelectorAll('.auth-form');
-  formElements.forEach(el => {
-    if (el.classList.contains('hide')) {
-      return;
-    }
-    el.classList.add('hide');
-  });
-}
+
+// Hide what user should not see if not logged
 function togglePrivateRoutes() {
   const privateRoutes = document.querySelectorAll('.private-route');
   privateRoutes.forEach(routeElement => routeElement.classList.toggle('hide'));
 }
-const signInForm = document.getElementById('signInForm');
-const logInForm = document.getElementById('logInForm');
-// get modal
-const modal = document.querySelector('.auth-modal');
-//get close btn
-const close = document.getElementById('auth-close');
-close.addEventListener('click', e => {
-  closeAuthModal();
-});
+// handle close modal
+
+// handle click outside of modal to close it
 window.addEventListener('click', e => {
   if (e.target == modal) {
     closeAuthModal();
@@ -110,34 +171,39 @@ window.addEventListener('click', e => {
 });
 showLogInForm = () => {
   modal.classList.toggle('hide');
-  logInForm.classList.toggle('hide');
-  logInForm.addEventListener('submit', e => {
-    console.log('e: ', e);
-    e.preventDefault();
-    const {
-      elements: {
-        email: { value: email },
-        password: { value: password },
-      },
-    } = e.currentTarget;
-    logInForm.classList.toggle('hide');
+  close.addEventListener('click', handleCloseModal);
 
-    toggleSignIn(email, password);
-  });
+  // logInForm.classList.toggle('hide');
+  emaliInput.focus();
+  logInForm.addEventListener('submit', validateSignInForm);
+  //  e => {
+  //   e.preventDefault();
+  //   console.log('logInForm.checkValidity(): ', logInForm.checkValidity());
+  //   if (!logInForm.checkValidity()) return;
+
+  //   // logInForm.classList.toggle('hide');
+
+  //   toggleSignIn(email, password);
+  // });
 };
+
 showSignInForm = () => {
-  signInForm.classList.toggle('hide');
-  signInForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const {
-      elements: {
-        email: { value: email },
-        password: { value: password },
-      },
-    } = e.currentTarget;
-    // const checkPass = `//`;
-    createUser({ email, password });
-  });
+  modal.classList.toggle('hide');
+  close.addEventListener('click', handleCloseModal);
+
+  // logInForm.classList.toggle('hide');
+  logInForm.addEventListener('submit', validateSignUpForm);
+  // e => {
+  //   e.preventDefault();
+  //   const {
+  //     elements: {
+  //       email: { value: email },
+  //       password: { value: password },
+  //     },
+  //   } = e.currentTarget;
+  //   // const checkPass = `//`;
+  //   createUser({ email, password });
+  // });
 };
 // Access auth elements
 const authAction = document.querySelectorAll('.auth');

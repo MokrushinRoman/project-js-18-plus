@@ -8,28 +8,56 @@
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
   &__body {
+    position: relative;
     background-color: #fefefe;
     margin: 4% auto;
     border: 1px solid #888;
     max-width: 350px;
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: center;
   }
-  input:invalid {
-    border: 1px solid red;
-  }
-  #password:invalid + .error {
-    display: block;
+  .form-control {
+    position: relative;
+    padding-bottom: 16px;
+    margin-bottom: 4px;
+    width: 100%;
+    &__label {
+      display: block;
+      margin-bottom: 4px;
+    }
+    &__input {
+      width: 100%;
+      border: 2px solid #f0f0f0;
+      border-radius: 4px;
+      display: block;
+      padding: 10px;
+      font-size: 14px;
+    }
+    &__error-message {
+      position: absolute;
+      visibility: hidden;
+      color: $red-accent-color;
+      bottom: 0;
+      left: 0;
+    }
+
+    &.error {
+      &:last-of-type {
+        margin-bottom: 20px;
+      }
+      .form-control__error-message {
+        visibility: visible;
+      }
+    }
   }
 
-  .error {
-    display: none;
-    color: red;
-    font-size: 12px;
-    text-align: center;
-  }
   #auth-close {
-    float: right;
-    margin-right: -15px;
-    margin-top: -15px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
     font-weight: bold;
     padding: 0px 7px 5px 7 px;
     border-radius: 100px;
