@@ -1,4 +1,5 @@
 import { getTrending } from './filmsApi';
+import './js/myLibrary';
 import All from './js/modal';
 
 let totalPages = 0;
