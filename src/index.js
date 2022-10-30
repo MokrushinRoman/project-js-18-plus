@@ -1,10 +1,11 @@
 import { getTrending } from './filmsApi';
-
+import Pagination from 'tui-pagination'; /* ES6 */
 let totalPages = 0;
 let page = 1;
 let itemsPerPage = 20;
 let timeWindow = 'day';
-
+const container = document.getElementById('pagination-container');
+const instance = new Pagination(container, {});
 const card = ({
   imgUrl,
   title,
@@ -41,6 +42,7 @@ const movies = async () => {
       return movieCards;
     }
   );
+  console.log('document.querySelector ', document);
   document.querySelector('.movie-list').innerHTML = result;
 };
 movies();

@@ -9,7 +9,8 @@
 
 @import './sass/components/container';
 @import './sass/components/buttons';
+@import 'sass/movies';
 
-@import './sass/movies';
 @import './sass/layout/header';
 @import './sass/layout/footer';
+@import '../node_modules/tui-pagination/dist/tui-pagination.css';
