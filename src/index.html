@@ -12,6 +12,7 @@
     />
     <link rel="stylesheet" href="./index.scss" />
   </head>
+
   <body>
     <div>
       <button id="logIn" class="auth" auth="show-log-in-form">Log in</button>
@@ -75,9 +76,13 @@
       </div>
     </div>
     <!-- ❗️❗️❗️ Add partials like so for every page -->
+    <include src="partials/header.html"></include>
 
     <main>
+      <h1 class="visually-hidden">Filmoteka</h1>
+
       <include src="partials/home.html"></include>
+      <div class="loader is-hidden">Loading...</div>
     </main>
     <include src="partials/footer.html"></include>
     <script type="module" src="./index.js"></script>
