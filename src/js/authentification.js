@@ -5,7 +5,6 @@ import {
 import { Notify } from 'notiflix';
 import auth from '../firebase';
 const logInBtn = document.getElementById('logIn');
-const signUpBtn = document.getElementById('signUp');
 const logInForm = document.getElementById('logInForm');
 const signUpForm = document.getElementById('signUpForm');
 const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
@@ -16,18 +15,23 @@ const modal = document.querySelector('.auth-modal');
 //get close btn
 const close = document.getElementById('auth-close');
 
+// handle click outside of modal to close it
 const handleClickOutsideModal = () => {
   closeAuthModal();
 };
+// handle click on close btn in modal to close modal
 const handleCloseModal = () => {
   closeAuthModal();
 };
+// handle error message
 const setErrorMessage = (input, message) => {
+  //take closest parent for easier find error message container related to current  element
   const formControl = input.closest('.form-control');
   const errorContainer = formControl.querySelector('small');
   errorContainer.innerText = message;
   formControl.className = 'form-control error';
 };
+// clear erros to default
 const clearErrors = () => {
   const formControls = document.querySelectorAll('.form-control');
   formControls.forEach(el => {
@@ -37,26 +41,27 @@ const clearErrors = () => {
     }
   });
 };
+
+// fully close modal and clear listeners
 closeAuthModal = () => {
   clearErrorMessage();
   const authFormElements = document.querySelectorAll('.auth-form');
-
   // reset form
   logInForm.reset();
   //remove listeners
   window.removeEventListener('click', handleClickOutsideModal);
   close.removeEventListener('click', handleCloseModal);
   logInForm.removeEventListener('submit', createUser);
+  //hide what should be hidden
   authFormElements.forEach(el => {
     if (el.classList.contains('hide')) {
       return;
     }
     el.classList.add('hide');
   });
-  // hide modal
-  // authForm.classList.add('hide');
 };
 let errorMessageTimeOut;
+//Check sign up validation
 const validateSignUpForm = e => {
   e.preventDefault();
   const {
@@ -93,6 +98,7 @@ const validateSignUpForm = e => {
       }, 3000))
     : createUser(emailValue, passValue);
 };
+//check Loggin for valid
 const validateSignInForm = e => {
   e.preventDefault();
   const {
@@ -119,15 +125,18 @@ const validateSignInForm = e => {
       }, 3000))
     : toggleSignIn(emailValue, passValue);
 };
+// clear timeOut
 clearErrorMessage = () => {
   clearTimeout(errorMessageTimeOut);
 };
-const createUser = async (email, password) => {
+// create user
+async function createUser(email, password) {
   await createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
       // Signed in
       const user = userCredential.user;
       auth.currentUser;
+      //TODO create and handle name here
       togglePrivateRoutes();
     })
     .catch(error => {
@@ -136,8 +145,8 @@ const createUser = async (email, password) => {
       Notify.failure(errorMessage);
       // ..
     });
-};
-
+}
+// check sign in or should logout
 function toggleSignIn(email, password) {
   if (auth.currentUser) {
     auth.signOut();
@@ -158,7 +167,6 @@ function toggleSignIn(email, password) {
       }
     });
   }
-  // document.getElementById('quickstart-sign-in').disabled = true;
 }
 auth.onAuthStateChanged(function (user) {
   if (user) {
@@ -182,14 +190,8 @@ auth.onAuthStateChanged(function (user) {
     //   document.getElementById('quickstart-verify-email').disabled = false;
     // }
   } else {
-    // User is signed out.
-    document.getElementById('quickstart-sign-in-status').textContent =
-      'Logged out';
     logInBtn.textContent = 'Log in';
-
-    // document.getElementById('quickstart-account-details').textContent = 'null';
   }
-  // document.getElementById('quickstart-sign-in').disabled = false;
 });
 
 // Hide what user should not see if not logged
@@ -205,6 +207,7 @@ window.addEventListener('click', e => {
     closeAuthModal();
   }
 });
+// open login form
 showLogInForm = () => {
   modal.classList.toggle('hide');
   logInForm.classList.remove('hide');
@@ -214,7 +217,7 @@ showLogInForm = () => {
   emailInput.focus();
   logInForm.addEventListener('submit', validateSignInForm);
 };
-
+// open sign in form
 showSignInForm = () => {
   modal.classList.toggle('hide');
   signUpForm.classList.remove('hide');
@@ -232,6 +235,7 @@ authAction.forEach(item => {
     let chosen = e.target.getAttribute('auth');
     if (chosen === 'show-log-in-form') {
       if (auth.currentUser) {
+        // if user logged in, then it was clicke to logout so lets do logout
         togglePrivateRoutes();
 
         return auth.signOut();
