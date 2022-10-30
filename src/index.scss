@@ -4,7 +4,6 @@
 
 @import './sass/base/reset';
 
-@import './sass/utils/hidden';
 @import './sass/utils/mixins';
 
 @import './sass/components/container';
@@ -14,3 +13,4 @@
 
 @import './sass/layout/header';
 @import './sass/layout/footer';
+@import 'sass/utils/hidden';

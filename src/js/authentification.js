@@ -3,6 +3,8 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import auth from '../firebase';
+const logInBtn = document.getElementById('logIn');
+const signInBtn = document.getElementById('signIn');
 const createUser = ({ email, password }) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
@@ -17,9 +19,12 @@ const createUser = ({ email, password }) => {
       // ..
     });
 };
+console.log('auth.currentUser: ', auth.currentUser);
 function toggleSignIn(email, password) {
   closeAuthModal();
   if (auth.currentUser) {
+    console.log('auth.currentUser: ', auth.currentUser);
+
     auth.signOut();
   } else {
     if (email.length < 4) {
@@ -51,17 +56,21 @@ function toggleSignIn(email, password) {
 }
 auth.onAuthStateChanged(function (user) {
   if (user) {
+    togglePrivateRoutes();
     // User is signed in.
     var displayName = user.displayName;
     // console.log('displayName: ', displayName);
     var email = user.email;
+    console.log('email: ', email);
     // var emailVerified = user.emailVerified;
     // var photoURL = user.photoURL;
     // var isAnonymous = user.isAnonymous;
     var uid = user.uid;
     var providerData = user.providerData;
-    // document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-    // document.getElementById('quickstart-sign-in').textContent = 'Sign out';
+    document.getElementById('quickstart-sign-in-status').textContent =
+      'Logged in';
+    logInBtn.textContent = 'Log out';
+
     // document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
     // if (!emailVerified) {
     //   document.getElementById('quickstart-verify-email').disabled = false;
@@ -70,8 +79,10 @@ auth.onAuthStateChanged(function (user) {
     console.log('log out');
     closeAuthModal();
     // User is signed out.
-    // document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-    // document.getElementById('quickstart-sign-in').textContent = 'Sign in';
+    document.getElementById('quickstart-sign-in-status').textContent =
+      'Logged out';
+    logInBtn.textContent = 'Log in';
+    signInBtn.classList.remove('hide');
     // document.getElementById('quickstart-account-details').textContent = 'null';
   }
   // document.getElementById('quickstart-sign-in').disabled = false;
@@ -84,6 +95,10 @@ function closeAuthModal() {
     }
     el.classList.add('hide');
   });
+}
+function togglePrivateRoutes() {
+  const privateRoutes = document.querySelectorAll('.private-route');
+  privateRoutes.forEach(routeElement => routeElement.classList.toggle('hide'));
 }
 const signInForm = document.getElementById('signInForm');
 const logInForm = document.getElementById('logInForm');
@@ -118,7 +133,6 @@ showLogInForm = () => {
 };
 showSignInForm = () => {
   console.log('logInForm.classList: ', logInForm.classList);
-  modal.classList.toggle('hide');
 
   signInForm.classList.toggle('hide');
   signInForm.addEventListener('submit', e => {
@@ -141,6 +155,9 @@ authAction.forEach(item => {
   item.addEventListener('click', e => {
     let chosen = e.target.getAttribute('auth');
     if (chosen === 'show-log-in-form') {
+      if (auth.currentUser) {
+        auth.signOut();
+      }
       showLogInForm();
     } else {
       showSignInForm();
