@@ -8,7 +8,6 @@ const signInBtn = document.getElementById('signIn');
 const createUser = ({ email, password }) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
-      console.log('userCredential: ', userCredential);
       // Signed in
       const user = userCredential.user;
       // ...
@@ -19,12 +18,10 @@ const createUser = ({ email, password }) => {
       // ..
     });
 };
-console.log('auth.currentUser: ', auth.currentUser);
+
 function toggleSignIn(email, password) {
   closeAuthModal();
   if (auth.currentUser) {
-    console.log('auth.currentUser: ', auth.currentUser);
-
     auth.signOut();
   } else {
     if (email.length < 4) {
@@ -37,7 +34,6 @@ function toggleSignIn(email, password) {
     }
     // Sign in with email and pass.
     signInWithEmailAndPassword(auth, email, password).catch(function (error) {
-      console.log('error: ', error);
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -48,7 +44,6 @@ function toggleSignIn(email, password) {
       }
       closeAuthModal();
 
-      console.log(error);
       // document.getElementById('quickstart-sign-in').disabled = false;
     });
   }
@@ -59,9 +54,9 @@ auth.onAuthStateChanged(function (user) {
     togglePrivateRoutes();
     // User is signed in.
     var displayName = user.displayName;
-    // console.log('displayName: ', displayName);
+    //
     var email = user.email;
-    console.log('email: ', email);
+
     // var emailVerified = user.emailVerified;
     // var photoURL = user.photoURL;
     // var isAnonymous = user.isAnonymous;
@@ -76,7 +71,6 @@ auth.onAuthStateChanged(function (user) {
     //   document.getElementById('quickstart-verify-email').disabled = false;
     // }
   } else {
-    console.log('log out');
     closeAuthModal();
     // User is signed out.
     document.getElementById('quickstart-sign-in-status').textContent =
@@ -110,7 +104,6 @@ close.addEventListener('click', e => {
   closeAuthModal();
 });
 window.addEventListener('click', e => {
-  console.log('e.target: ', e.target);
   if (e.target == modal) {
     closeAuthModal();
   }
@@ -119,6 +112,7 @@ showLogInForm = () => {
   modal.classList.toggle('hide');
   logInForm.classList.toggle('hide');
   logInForm.addEventListener('submit', e => {
+    console.log('e: ', e);
     e.preventDefault();
     const {
       elements: {
@@ -132,8 +126,6 @@ showLogInForm = () => {
   });
 };
 showSignInForm = () => {
-  console.log('logInForm.classList: ', logInForm.classList);
-
   signInForm.classList.toggle('hide');
   signInForm.addEventListener('submit', e => {
     e.preventDefault();
@@ -143,7 +135,7 @@ showSignInForm = () => {
         password: { value: password },
       },
     } = e.currentTarget;
-
+    // const checkPass = `//`;
     createUser({ email, password });
   });
 };

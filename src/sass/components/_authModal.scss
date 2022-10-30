@@ -13,6 +13,19 @@
     border: 1px solid #888;
     max-width: 350px;
   }
+  input:invalid {
+    border: 1px solid red;
+  }
+  #password:invalid + .error {
+    display: block;
+  }
+
+  .error {
+    display: none;
+    color: red;
+    font-size: 12px;
+    text-align: center;
+  }
   #auth-close {
     float: right;
     margin-right: -15px;

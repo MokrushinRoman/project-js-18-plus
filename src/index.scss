@@ -8,10 +8,10 @@
 
 @import './sass/components/container';
 @import './sass/components/buttons';
-@import './sass/components/authModal';
+@import 'sass/components/authModal';
 @import './sass/components/movies';
 
-@import './sass/layout/header';
+@import 'sass/layout/header';
 @import './sass/layout/footer';
 @import 'sass/utils/hidden';
 @import './sass/layout/loader';

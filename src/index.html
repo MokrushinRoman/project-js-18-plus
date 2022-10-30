@@ -27,33 +27,39 @@
         <button type="button" id="auth-close">&times</button>
         <div class="authentification">
           <form id="logInForm" class="auth-form hide">
-            <div>
-              <label for="email">
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="enter your email"
-                />
-              </label>
-              <label for="password">
-                <input
-                  type="text"
-                  id="password"
-                  name="password"
-                  placeholder="enter your password"
-                />
-              </label>
-            </div>
+            <label for="email">
+              <input
+                type="email"
+                id="email"
+                required
+                name="email"
+                placeholder="enter your email"
+              />
+            </label>
+            <label for="password">
+              <input
+                type="text"
+                id="password"
+                name="password"
+                pattern="(?=^.{6,}$)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9]).*"
+                placeholder="enter your password"
+                aria-describedBy="error_text"
+              />
+              <span class="error" id="error_text"
+                >should contain one min one upper and one small case and be 6 or
+                more symbols</span
+              >
+            </label>
             <button type="submit" id="logInButton">Log In</button>
           </form>
-          <form id="signInForm" class="auth-form hide">
+          <form id="signInForm" class="auth-form">
             <div>
               <label for="email">
                 <input
                   type="email"
                   id="email"
                   name="email"
+                  pattern="[\w-\.]+@([\w-]+\.)+[\w-]{2,4}"
                   placeholder="enter your email"
                 />
               </label>
