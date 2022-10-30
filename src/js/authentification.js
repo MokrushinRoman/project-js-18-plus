@@ -2,15 +2,15 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+import { Notify } from 'notiflix';
 import auth from '../firebase';
 const logInBtn = document.getElementById('logIn');
-const signInBtn = document.getElementById('signIn');
-// const signInForm = document.getElementById('signInForm');
+const signUpBtn = document.getElementById('signUp');
 const logInForm = document.getElementById('logInForm');
-const passRegExp = '/(?=.*?[A-Z])(?=.*?[a-z]).{6,}/';
-const emailRegExp =
-  '/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/';
-const emaliInput = logInForm.querySelector('#email');
+const signUpForm = document.getElementById('signUpForm');
+const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
+const emailRegExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+const emailInput = document.querySelector('#email');
 // get modal
 const modal = document.querySelector('.auth-modal');
 //get close btn
@@ -20,7 +20,6 @@ const handleClickOutsideModal = () => {
   closeAuthModal();
 };
 const handleCloseModal = () => {
-  console.log('clossse icon');
   closeAuthModal();
 };
 const setErrorMessage = (input, message) => {
@@ -32,7 +31,6 @@ const setErrorMessage = (input, message) => {
 const clearErrors = () => {
   const formControls = document.querySelectorAll('.form-control');
   formControls.forEach(el => {
-    console.log('fired');
     if (el.classList.contains('error')) {
       el.querySelector('small').innerText = '';
       el.classList.remove('error');
@@ -40,13 +38,23 @@ const clearErrors = () => {
   });
 };
 closeAuthModal = () => {
-  const authForm = document.querySelector('.auth-form');
-  logInForm.reset();
+  clearErrorMessage();
+  const authFormElements = document.querySelectorAll('.auth-form');
 
+  // reset form
+  logInForm.reset();
+  //remove listeners
   window.removeEventListener('click', handleClickOutsideModal);
   close.removeEventListener('click', handleCloseModal);
   logInForm.removeEventListener('submit', createUser);
-  authForm.classList.add('hide');
+  authFormElements.forEach(el => {
+    if (el.classList.contains('hide')) {
+      return;
+    }
+    el.classList.add('hide');
+  });
+  // hide modal
+  // authForm.classList.add('hide');
 };
 let errorMessageTimeOut;
 const validateSignUpForm = e => {
@@ -55,70 +63,99 @@ const validateSignUpForm = e => {
     elements: { email, password },
   } = e.currentTarget;
   const emailValue = email.value.trim();
+
   const passValue = password.value.trim();
-  const isEmailValid = emailValue.match(emailRegExp);
+  const isEmailValid = emailRegExp.test(emailValue);
+
+  let errors = false;
   if (!emailValue) {
     setErrorMessage(email, 'email cannot be empty');
+    errors = true;
   } else if (!isEmailValid) {
     setErrorMessage(email, 'fill correct email');
+    errors = true;
   }
-  const isPassValid = passValue.match(passRegExp);
+  const isPassValid = passRegExp.test(passValue);
+
   if (!passValue) {
     setErrorMessage(password, 'password cannot be empty');
+    errors = true;
   } else if (!isPassValid) {
     setErrorMessage(
       password,
       'should contain  one upper and one small letter and be 6 or more symbols'
     );
+    errors = true;
   }
-  errorMessageTimeOut = setTimeout(() => {
-    clearErrors();
-  }, 3000);
+  errors
+    ? (errorMessageTimeOut = setTimeout(() => {
+        clearErrors();
+      }, 3000))
+    : createUser(emailValue, passValue);
 };
 const validateSignInForm = e => {
-  return toggleSignIn();
+  e.preventDefault();
+  const {
+    elements: { email, password },
+  } = e.currentTarget;
+  const emailValue = email.value.trim();
+  const passValue = password.value.trim();
+  let errors = false;
+  if (!emailValue) {
+    setErrorMessage(email, 'email cannot be empty');
+    errors = true;
+  }
+  if (!passValue) {
+    setErrorMessage(password, 'password cannot be empty');
+    errors = true;
+  }
+  if (passValue.length < 6) {
+    setErrorMessage(password, 'password cannot less than 6 symbols');
+    errors = true;
+  }
+  return errors
+    ? (errorMessageTimeOut = setTimeout(() => {
+        clearErrors();
+      }, 3000))
+    : toggleSignIn(emailValue, passValue);
 };
-clearMessage = () => {
+clearErrorMessage = () => {
   clearTimeout(errorMessageTimeOut);
 };
-const createUser = ({ email, password }) => {
-  createUserWithEmailAndPassword(auth, email, password)
+const createUser = async (email, password) => {
+  await createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
       // Signed in
       const user = userCredential.user;
-      // ...
+      auth.currentUser;
+      togglePrivateRoutes();
     })
     .catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      Notify.failure(errorMessage);
       // ..
-    })
-    .finally(() => {});
+    });
 };
 
 function toggleSignIn(email, password) {
   if (auth.currentUser) {
     auth.signOut();
+    togglePrivateRoutes();
   } else {
-    if (email.length < 4) {
-      alert('Please enter an email address.');
-      return;
-    }
-    if (password.length < 4) {
-      alert('Please enter a password.');
-      return;
-    }
     // Sign in with email and pass.
     signInWithEmailAndPassword(auth, email, password).catch(function (error) {
       // Handle Errors here.
       var errorCode = error.code;
+
       var errorMessage = error.message;
       if (errorCode === 'auth/wrong-password') {
-        alert('Wrong password.');
+        Notify.failure('Wrong password!');
+      } else if (errorCode === 'auth/user-not-found') {
+        Notify.failure("User doesn't exist");
       } else {
-        alert(errorMessage);
+        Notify.failure(errorMessage);
       }
-      closeAuthModal();
     });
   }
   // document.getElementById('quickstart-sign-in').disabled = true;
@@ -139,18 +176,17 @@ auth.onAuthStateChanged(function (user) {
     document.getElementById('quickstart-sign-in-status').textContent =
       'Logged in';
     logInBtn.textContent = 'Log out';
-
+    closeAuthModal();
     // document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
     // if (!emailVerified) {
     //   document.getElementById('quickstart-verify-email').disabled = false;
     // }
   } else {
-    closeAuthModal();
     // User is signed out.
     document.getElementById('quickstart-sign-in-status').textContent =
       'Logged out';
     logInBtn.textContent = 'Log in';
-    signInBtn.classList.remove('hide');
+
     // document.getElementById('quickstart-account-details').textContent = 'null';
   }
   // document.getElementById('quickstart-sign-in').disabled = false;
@@ -171,39 +207,21 @@ window.addEventListener('click', e => {
 });
 showLogInForm = () => {
   modal.classList.toggle('hide');
+  logInForm.classList.remove('hide');
   close.addEventListener('click', handleCloseModal);
 
   // logInForm.classList.toggle('hide');
-  emaliInput.focus();
+  emailInput.focus();
   logInForm.addEventListener('submit', validateSignInForm);
-  //  e => {
-  //   e.preventDefault();
-  //   console.log('logInForm.checkValidity(): ', logInForm.checkValidity());
-  //   if (!logInForm.checkValidity()) return;
-
-  //   // logInForm.classList.toggle('hide');
-
-  //   toggleSignIn(email, password);
-  // });
 };
 
 showSignInForm = () => {
   modal.classList.toggle('hide');
+  signUpForm.classList.remove('hide');
   close.addEventListener('click', handleCloseModal);
 
   // logInForm.classList.toggle('hide');
-  logInForm.addEventListener('submit', validateSignUpForm);
-  // e => {
-  //   e.preventDefault();
-  //   const {
-  //     elements: {
-  //       email: { value: email },
-  //       password: { value: password },
-  //     },
-  //   } = e.currentTarget;
-  //   // const checkPass = `//`;
-  //   createUser({ email, password });
-  // });
+  signUpForm.addEventListener('submit', validateSignUpForm);
 };
 // Access auth elements
 const authAction = document.querySelectorAll('.auth');
@@ -214,7 +232,9 @@ authAction.forEach(item => {
     let chosen = e.target.getAttribute('auth');
     if (chosen === 'show-log-in-form') {
       if (auth.currentUser) {
-        auth.signOut();
+        togglePrivateRoutes();
+
+        return auth.signOut();
       }
       showLogInForm();
     } else {
