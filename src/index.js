@@ -1,5 +1,9 @@
 import { getTrending } from './filmsApi';
 import './js/myLibrary';
+import {getModal} from './js/modal';
+
+getModal('.movie-list');
+
 
 let totalPages = 0;
 let page = 1;
@@ -10,7 +14,7 @@ const card = ({
   imgUrl,
   title,
   id,
-}) => `<li id=""${id} class="movie-list__item movie">
+}) => `<li id="${id}" class="movie-list__item movie">
     <img
 		class="movie__img"
       src=${imgUrl ? `https://image.tmdb.org/t/p/w200${imgUrl} ` : ''}
