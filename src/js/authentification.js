@@ -17,9 +17,17 @@ const modal = document.querySelector('.auth-modal');
 const close = document.getElementById('auth-close');
 
 // [SM] handle click outside of modal to close it
-const handleClickOutsideModal = () => {
-  closeAuthModal();
+const handleClickOutsideModal = e => {
+  if (e.target == modal) {
+    closeAuthModal();
+  }
 };
+const handleEscClick = e => {
+  if (e.key === 'Escape') {
+    closeAuthModal();
+  }
+};
+
 // [SM] handle click on close btn in modal to close modal
 const handleCloseModal = () => {
   closeAuthModal();
@@ -51,6 +59,7 @@ closeAuthModal = () => {
   logInForm.reset();
   // [SM]remove listeners
   window.removeEventListener('click', handleClickOutsideModal);
+  window.removeEventListener('keydown', handleEscClick);
   close.removeEventListener('click', handleCloseModal);
   logInForm.removeEventListener('submit', createUser);
   // [SM]hide what should be hidden
@@ -197,11 +206,8 @@ function togglePrivateRoutes() {
 // [SM] handle close modal
 
 // [SM] handle click outside of modal to close it
-window.addEventListener('click', e => {
-  if (e.target == modal) {
-    closeAuthModal();
-  }
-});
+window.addEventListener('click', handleClickOutsideModal);
+window.addEventListener('keydown', handleEscClick);
 // [SM] open login form
 showLogInForm = () => {
   modal.classList.toggle('hide');
