@@ -22,83 +22,14 @@
         Sign in
       </button>
     </div>
-    <!-- AUthentification modal -->
-    <div class="auth-modal auth-form hide">
-      <div class="auth-modal__body">
-        <button type="button" id="auth-close">&times</button>
-        <div class="authentification">
-          <form id="logInForm" class="auth-form hide">
-            <div class="form-control">
-              <label class="form-control__label" for="email">
-                <input
-                  type="email"
-                  id="email"
-                  class="form-control__input"
-                  name="email"
-                  placeholder="enter your email"
-                />
-                <small class="form-control__error-message"></small>
-              </label>
-            </div>
-            <div class="form-control">
-              <label class="form-control__label" for="password">
-                <input
-                  type="text"
-                  class="form-control__input"
-                  id="password"
-                  name="password"
-                  placeholder="enter your password"
-                />
-                <small class="form-control__error-message">
-                  should contain one min one upper and one small case and be 6
-                  or more symbols</small
-                >
-              </label>
-            </div>
 
-            <button type="submit" id="logInButton">Log In</button>
-          </form>
-          <form id="signUpForm" class="auth-form hide">
-            <div class="form-control">
-              <label class="form-control__label" for="email">
-                <input
-                  type="email"
-                  id="email"
-                  class="form-control__input"
-                  name="email"
-                  placeholder="enter your email"
-                />
-                <small class="form-control__error-message"></small>
-              </label>
-            </div>
-            <div class="form-control">
-              <label class="form-control__label" for="password">
-                <input
-                  type="text"
-                  class="form-control__input"
-                  id="password"
-                  name="password"
-                  placeholder="enter your password"
-                />
-                <small class="form-control__error-message">
-                  should contain one min one upper and one small case and be 6
-                  or more symbols</small
-                >
-              </label>
-            </div>
-
-            <button type="submit" id="logInButton">Log In</button>
-          </form>
-        </div>
-      </div>
-    </div>
     <!-- ❗️❗️❗️ Add partials like so for every page -->
     <include src="partials/header.html"></include>
 
     <main>
       <h1 class="visually-hidden">Filmoteka</h1>
-
       <include src="partials/home.html"></include>
+      <include src="partials/authModal.html"></include>
       <div class="loader is-hidden">Loading...</div>
     </main>
     <include src="partials/footer.html"></include>
