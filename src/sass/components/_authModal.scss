@@ -6,68 +6,60 @@
   width: 100%;
   overflow: auto;
 
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.7);
 
-  // transition: opacity $transition;
+  transition: opacity var(--transition);
 
   &__body {
     position: relative;
-    // background-color: #fefefe;
+
+    background-color: #fefefe;
 
     border: 1px solid #888;
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: center;
+
     transform: translate(-50%, -50%) scale(1);
     @include position($t: 50%, $l: 50%);
 
     max-width: 450px;
     width: calc(100% - 30px);
     padding: 40px;
-    border: 1px solid #f7f7f7;
 
     text-align: center;
-    color: #ffffff;
-    // @include font();
+    // color: #ffffff;
 
-    background: url(images/header-library-mobile-min.jpg);
-    background-color: rgba(0, 0, 0, 0.7);
-    background-size: cover;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
       0px 2px 1px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 
-    transition: transform var(--transition) 200ms;
+    transition: transform var(--transition) 1000ms;
     max-width: 450px;
     width: calc(100% - 30px);
 
-    background-image: url(images/header-library-mobile-min.jpg);
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-      left: 0px;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-    // background-color: rgba(0, 0, 0, 0.7);
+    // &::before {
+    //   content: '';
+    //   position: absolute;
+    //   top: 0px;
+    //   right: 0px;
+    //   bottom: 0px;
+    //   left: 0px;
+    //   background-color: rgba(0, 0, 0, 0.4);
+    // }
 
     @include tablet {
       max-width: 450px;
       width: 100%;
-
-      background-image: url(images/header-library-tablet-min.jpg);
     }
 
     @include desktop {
       max-width: 530px;
       width: 100%;
-
-      background-image: url(images/header-library-desktop-min.jpg);
     }
-    // align-items: center;
+
+    .auth-modal.hide & {
+      transform: translate(-50%, -50%) scale(0);
+    }
   }
+
   .form-control {
     position: relative;
     padding-bottom: 16px;
@@ -79,7 +71,7 @@
     }
     &__input {
       width: 100%;
-      border: 2px solid #f0f0f0;
+      // border: 2px solid #f0f0f0;
       border-radius: 4px;
       display: block;
       padding: 10px;
@@ -108,8 +100,6 @@
     top: 10px;
     right: 10px;
     font-size: 19px;
-    // line-height: 20px;
-    // font-weight: bold;
     padding: 0;
     padding-left: 1px;
     padding-top: 0.5px;
@@ -117,7 +107,7 @@
     height: 26px;
     border-radius: 50%;
     background-color: transparent;
-    color: white;
+    color: #000000;
     &:hover,
     &:focus {
       text-decoration: none;
@@ -147,7 +137,7 @@
   &__input {
     padding: 10px;
     width: 100%;
-    border: 1px solid #ffffff;
+    border: 1px solid #000000;
     border-radius: 5px;
 
     background-color: transparent;
@@ -155,11 +145,12 @@
     color: currentColor;
 
     &#email {
-      margin-bottom: 20px;
+      margin-top: 15px;
     }
   }
 
   &__button {
-    margin-top: 15px;
+    border: 1px solid #000000;
+    color: black;
   }
 }
