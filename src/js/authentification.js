@@ -23,6 +23,7 @@ const handleClickOutsideModal = e => {
   }
 };
 const handleEscClick = e => {
+  console.log('e: ', e);
   if (e.key === 'Escape') {
     closeAuthModal();
   }
@@ -59,7 +60,7 @@ closeAuthModal = () => {
   logInForm.reset();
   // [SM]remove listeners
   window.removeEventListener('click', handleClickOutsideModal);
-  window.removeEventListener('keydown', handleEscClick);
+  window.removeEventListener('keyup', handleEscClick);
   close.removeEventListener('click', handleCloseModal);
   logInForm.removeEventListener('submit', createUser);
   // [SM]hide what should be hidden
@@ -207,7 +208,7 @@ function togglePrivateRoutes() {
 
 // [SM] handle click outside of modal to close it
 window.addEventListener('click', handleClickOutsideModal);
-window.addEventListener('keydown', handleEscClick);
+window.addEventListener('keyup', handleEscClick);
 // [SM] open login form
 showLogInForm = () => {
   modal.classList.toggle('hide');
