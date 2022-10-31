@@ -30,7 +30,7 @@ async function createModal() {
   });
 };
 
-async function createModalMarkup({
+function createModalMarkup({
   title,
   original_title,
   popularity,
@@ -40,7 +40,7 @@ async function createModalMarkup({
   genres,
   poster_path,
 }) {
-  const genreList = await quantityRegulator(genres);
+  const genreList = quantityRegulator(genres);
   const voteAverage = vote_average.toFixed(1);
   const popularityValue = popularity.toFixed(1);
   const markup = `<div class="modal">

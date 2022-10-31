@@ -55,7 +55,7 @@ function checkCountMovies(arrMovies) {
 function movieListMarkup(arrMovies) {
   return arrMovies
     .map(({ title, poster_path, id }) => {
-      return `<li id=""${id} class="movie-list__item movie">
+      return `<li id="${id}" class="movie-list__item movie">
         <img class="movie__img" src=${
           poster_path ? `https://image.tmdb.org/t/p/w200${poster_path} ` : ''
         }
