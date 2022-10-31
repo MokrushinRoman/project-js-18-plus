@@ -4,6 +4,7 @@ import {getModal} from './js/modal';
 
 getModal('.movie-list');
 
+
 let totalPages = 0;
 let page = 1;
 let itemsPerPage = 20;

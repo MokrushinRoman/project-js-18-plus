@@ -1,33 +1,62 @@
 import { getMovieDetails } from '../filmsApi';
 
-const modalEl = document.querySelector('[data-modal]');
-const bodyEl = document.querySelector('body');
-let idTargetCard = '';
-let modalCloseBtn = '';
-let movieListEL = '';
+export function getRefs() {
+  const refs = {
+    modalEl: document.querySelector('[data-modal]'),
+    bodyEl: document.querySelector('body'),
+    idTargetCard: '',
+    modalCloseBtn: '',
+    movieListEL: '',
+    watchedBtn: '',
+    queueBtn: '',
+  };
+  return refs;
+};
+
+const refs = getRefs();
 
 export function getModal (selector) {
-  movieListEL = document.querySelector(selector);
-  movieListEL.addEventListener('click', onModalOpen);
+  refs.movieListEL = document.querySelector(selector);
+  refs.movieListEL.addEventListener('click', onModalOpen);
 };
 
 async function onModalOpen(e) {
   if (e.target.nodeName !== 'IMG') {
     return;
   }
-  idTargetCard = e.target.parentElement.attributes.id.value;
+  refs.idTargetCard = e.target.parentElement.attributes.id.value;
   await createModal();
-  modalEl.classList.remove('backdrop_is-hidden');
-  modalCloseBtn = modalEl.querySelector('[data-modal-close]');
-  modalCloseBtn.addEventListener('click', onModalClose);
+  refs.modalEl.classList.remove('backdrop_is-hidden');
+  getAccessToBtn();
+  refs.modalCloseBtn.addEventListener('click', onModalClose);
   document.addEventListener('keydown', onKeyDown);
-  bodyEl.classList.add('overflow-hidden');
+  refs.modalEl.addEventListener('click', onClickOutside);
+  refs.bodyEl.classList.add('overflow-hidden');
 };
 
 async function createModal() {
-  await getMovieDetails(idTargetCard).then(response => {
+  await getMovieDetails(refs.idTargetCard).then(response => {
     return createModalMarkup(response);
   });
+};
+
+function getAccessToBtn() { 
+  refs.modalCloseBtn = refs.modalEl.querySelector('[data-modal-close]');
+  refs.watchedBtn = refs.modalEl.querySelector('[data-control-watched]');
+  refs.queueBtn = refs.modalEl.querySelector('[data-control-turn]');
+};
+
+function onModalClose() {
+  refs.idTargetCard = '';
+  refs.modalEl.classList.add('backdrop_is-hidden');
+  resetModal();
+  document.removeEventListener('keydown', onKeyDown);
+  refs.modalEl.removeEventListener('click', onClickOutside);
+  refs.bodyEl.classList.remove('overflow-hidden');
+};
+
+function onKeyDown(e) {
+  e.code === 'Escape' && onModalClose();
 };
 
 function createModalMarkup({
@@ -104,26 +133,15 @@ function createModalMarkup({
       </div>
     </div>
   </div>`;
-  return modalEl.insertAdjacentHTML('afterbegin', markup);
+  return refs.modalEl.insertAdjacentHTML('afterbegin', markup);
 };
 
-function onModalClose() {
-  idTargetCard = '';
-  modalEl.classList.add('backdrop_is-hidden');
-  resetModal();
-  document.removeEventListener('keydown', onKeyDown);
-  bodyEl.classList.remove('overflow-hidden');
-};
-
-function onKeyDown(e) {
-  if (e.code !== 'Escape') {
-    return;
-  }
-  onModalClose();
+function onClickOutside(e) {
+  e.target === refs.modalEl && onModalClose();
 };
 
 function resetModal() {
-  modalEl.innerHTML = '';
+  refs.modalEl.innerHTML = '';
 };
 
 function quantityRegulator(arr) {
