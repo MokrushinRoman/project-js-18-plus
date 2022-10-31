@@ -36,7 +36,16 @@
     width: calc(100% - 30px);
 
     background-image: url(images/header-library-mobile-min.jpg);
-    background-color: rgba(0, 0, 0, 0.7);
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      left: 0px;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    // background-color: rgba(0, 0, 0, 0.7);
 
     @include tablet {
       max-width: 450px;
@@ -92,14 +101,22 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    font-weight: bold;
+    font-size: 19px;
+    // line-height: 20px;
+    // font-weight: bold;
     padding: 0;
-    border-radius: 100px;
+    padding-left: 1px;
+    padding-top: 0.5px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
     background-color: transparent;
+    color: white;
     &:hover,
     &:focus {
       text-decoration: none;
       cursor: pointer;
+      transform: scale(1.1);
     }
   }
 }
