@@ -1,6 +1,25 @@
-// import Жанри
 import 'lazysizes';
-// import placeholderImg from 'Занйти Плейсхолдер';
+import placeholderImg from '../placeholderImg/film.jpg';
+import { load, GENREFILMS_LOCALSTORAGE_KEY } from '../localstorage/localstorage';
+
+function getGenresById(genre_ids) {
+  if (genre_ids !== undefined && genre_ids.length !== 0) {
+    const tmpLoad = load(GENREFILMS_LOCALSTORAGE_KEY)
+      ? load(GENREFILMS_LOCALSTORAGE_KEY)
+      : [];
+    const allGenres = Array.from(tmpLoad);
+
+    const myGenres = allGenres.filter(genre => genre_ids.includes(genre.id));
+
+    return myGenres.length > 3
+      ? myGenres
+          .slice(0, 2)
+          .map(genre => genre.name)
+          .join(', ') + ', Other'
+      : myGenres.map(genre => genre.name).join(', ');
+  } else return 'No genres found';
+}
+
 
 export function renderCards(data) {
   const movieCardMarkup = data
@@ -16,7 +35,7 @@ export function renderCards(data) {
         vote_average,
         genre_ids,
       }) => {
-        // const genresNames = Жанри(genre_ids);
+        const genresNames = getGenresById(genre_ids);
         return `<li class="movie-card" data-id="${id}">
   <div class="img-container">
   ${
