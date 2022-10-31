@@ -1,14 +1,14 @@
 import { showLoader, hideLoader } from './loader';
 
-const watchedBtnRef = document.querySelector('.btn__watched');
-const queueBtnRef = document.querySelector('.btn__queue');
+const watchedBtnRef = document.querySelector('#btn__watched');
+const queueBtnRef = document.querySelector('#btn__queue');
 const libraryListError = document.querySelector('.library-list__error');
 const movieList = document.querySelector('.movie-list');
 
 watchedBtnRef.addEventListener('click', onWatchedBtnClick);
 queueBtnRef.addEventListener('click', onQueueBtnClick);
 
-function onWatchedBtnClick() {
+export function onWatchedBtnClick() {
   if (watchedBtnRef.classList.contains('btn__library--active')) return;
 
   watchedBtnRef.classList.add('btn__library--active');

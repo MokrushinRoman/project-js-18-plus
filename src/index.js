@@ -1,4 +1,5 @@
 import { getTrending } from './filmsApi';
+import './js/homepage';
 import './js/myLibrary';
 
 let totalPages = 0;
@@ -19,6 +20,7 @@ const card = ({
     />
     <MovieTittle title={title}>${title}</MovieTittle>
 </li>`;
+
 const movies = async () => {
   const result = await getTrending({ timeWindow, page, itemsPerPage }).then(
     ({ results, total_pages }) => {
@@ -39,6 +41,7 @@ const movies = async () => {
             })
         )
         .join('');
+      console.log(movieCards);
       return movieCards;
     }
   );
