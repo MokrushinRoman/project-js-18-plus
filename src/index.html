@@ -24,7 +24,7 @@
         <button type="button" id="auth-close">&times</button>
         <div class="authentification">
           <form id="logInForm" class="auth-form hide">
-            <h2 class="authentification__title">
+            <h2 class="auth-form__title">
               Hey! registered users get access to their personal movie library!
             </h2>
             <div>
@@ -47,9 +47,18 @@
                 />
               </label>
             </div>
-            <button type="submit" id="logInButton">Log In</button>
+            <button
+              class="auth-form__button button button--current"
+              type="submit"
+              id="logInButton"
+            >
+              Log In
+            </button>
           </form>
           <form id="signInForm" class="auth-form hide">
+            <h2 class="auth-form__title">
+              Hey! registered users get access to their personal movie library!
+            </h2>
             <div>
               <label for="email">
                 <input
@@ -70,7 +79,13 @@
                 />
               </label>
             </div>
-            <button type="submit" id="signInButton">Sign In</button>
+            <button
+              class="auth-form__button button"
+              type="submit"
+              id="signInButton"
+            >
+              Sign In
+            </button>
           </form>
         </div>
       </div>
