@@ -1,5 +1,6 @@
 import { showLoader, hideLoader } from './loader';
 
+
 const watchedBtnRef = document.querySelector('.btn__watched');
 const queueBtnRef = document.querySelector('.btn__queue');
 const libraryListError = document.querySelector('.library-list__error');
