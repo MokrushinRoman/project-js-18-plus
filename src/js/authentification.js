@@ -58,6 +58,7 @@ closeAuthModal = () => {
   const authFormElements = document.querySelectorAll('.auth-form');
   // [SM] reset form
   logInForm.reset();
+  signUpForm.reset();
   // [SM]remove listeners
   window.removeEventListener('click', handleClickOutsideModal);
   window.removeEventListener('keyup', handleEscClick);
@@ -99,7 +100,7 @@ const validateSignUpForm = e => {
   } else if (!isPassValid) {
     setErrorMessage(
       password,
-      'should contain  one upper and one small letter and be 6 or more symbols'
+      'should contain at least one lower and one upper case and be 6 or more symbols'
     );
     errors = true;
   }
@@ -148,7 +149,7 @@ async function createUser(email, password) {
       const user = userCredential.user;
       auth.currentUser;
       // TODO create and handle name here
-      togglePrivateRoutes();
+      // togglePrivateRoutes();
     })
     .catch(error => {
       const errorCode = error.code;
@@ -159,8 +160,8 @@ async function createUser(email, password) {
 // [SM] check sign in or should logout
 function toggleSignIn(email, password) {
   if (auth.currentUser) {
-    auth.signOut();
     togglePrivateRoutes();
+    auth.signOut();
   } else {
     // [SM] Sign in with email and pass.
     signInWithEmailAndPassword(auth, email, password).catch(function (error) {
@@ -190,8 +191,7 @@ auth.onAuthStateChanged(function (user) {
     // var isAnonymous = user.isAnonymous;
     var uid = user.uid;
     var providerData = user.providerData;
-    document.getElementById('quickstart-sign-in-status').textContent =
-      'Logged in';
+
     logInBtn.textContent = 'Log out';
     closeAuthModal();
   } else {
