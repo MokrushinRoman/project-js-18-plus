@@ -206,13 +206,14 @@ function togglePrivateRoutes() {
 }
 // [SM] handle close modal
 
-// [SM] handle click outside of modal to close it
-window.addEventListener('click', handleClickOutsideModal);
-window.addEventListener('keyup', handleEscClick);
 // [SM] open login form
 showLogInForm = () => {
   modal.classList.toggle('hide');
   logInForm.classList.remove('hide');
+  // [SM] handle click outside of modal to close it
+  window.addEventListener('click', handleClickOutsideModal);
+  // [SM] handle click escape  to close   modal
+  window.addEventListener('keyup', handleEscClick);
   close.addEventListener('click', handleCloseModal);
 
   // [SM] logInForm.classList.toggle('hide');
@@ -223,6 +224,10 @@ showLogInForm = () => {
 showSignInForm = () => {
   modal.classList.toggle('hide');
   signUpForm.classList.remove('hide');
+  // [SM] handle click outside of modal to close it
+  window.addEventListener('click', handleClickOutsideModal);
+  // [SM] handle click escape  to close   modal
+  window.addEventListener('keyup', handleEscClick);
   close.addEventListener('click', handleCloseModal);
 
   signUpForm.addEventListener('submit', validateSignUpForm);
