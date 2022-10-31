@@ -1,0 +1,120 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    z-index: 10;
+    transition: opacity 250ms linear, transform 250ms linear;
+
+    &.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+.modal {
+    overflow-y: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    width: 50%;
+    height: 100%;
+    padding: 30px;
+    background-color: gray;
+    border-radius: 4px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+        0px 2px 1px rgba(0, 0, 0, 0.2);
+    transition: opacity 250ms linear, transform 250ms linear;
+} 
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.modal__title {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 35;
+    font-weight: 500;
+    color: rgba(194, 22, 22, 0.849);
+}
+
+.modal__descr {
+    text-align: center;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal__team {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -100px;
+}
+
+.modal__team-people {
+    margin-left: 100px;
+    width: calc((100% - 300px) / 3);
+
+}
+
+
+.modal__team-img {
+        transition: 250ms transform linear;
+        &:hover,
+        &:focus {
+            transform: scale(1.2);
+        }
+}
+
+.footer {
+    background-color: rgba(247, 247, 247, 1);
+}
+ .footer__list {
+    margin-left: 408px;
+    margin-right: 390px;
+    display: inline-flex;
+    padding-top: 30px;
+    padding-bottom: 28px;
+ }
+
+ .footer__left-text {
+    margin-right: 10px;
+    display: inline-block;
+    height: auto;
+    font-size: 16px;
+    line-height: 1.19;
+    text-align: center;
+    color: rgba(84, 84, 84, 1);
+
+ }
+
+ .footer__img {
+    margin-right: 10px;
+ }
+
+  .footer__right-text {
+    display: inline-block;
+        height: auto;
+        font-size: 16px;
+        line-height: 1.19;
+        text-align: center;
+        color: rgba(84, 84, 84, 1);
+  }
+
+.footer__link {
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.no-scroll {
+    overflow-y: hidden;
+}
