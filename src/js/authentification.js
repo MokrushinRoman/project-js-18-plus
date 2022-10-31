@@ -100,7 +100,7 @@ const validateSignUpForm = e => {
   } else if (!isPassValid) {
     setErrorMessage(
       password,
-      'should contain  one upper and one small letter and be 6 or more symbols'
+      'should contain at least one lower and one upper case and be 6 or more symbols'
     );
     errors = true;
   }
