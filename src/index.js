@@ -1,4 +1,6 @@
 import { Pagination } from 'tui-pagination';
+import { getTrending } from './filmsApi';
+import './js/myLibrary';
 
 
 const options = {
