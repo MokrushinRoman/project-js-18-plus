@@ -5,22 +5,23 @@ import {
 } from 'firebase/auth';
 import { Notify } from 'notiflix';
 import auth from '../firebase';
-const logInBtn = document.getElementById('logIn');
-const logInForm = document.getElementById('logInForm');
-const signUpForm = document.getElementById('signUpForm');
+const refs = {
+  logInBtn: document.getElementById('logIn'),
+  logInForm: document.getElementById('logInForm'),
+  signUpForm: document.getElementById('signUpForm'),
+  emailInput: document.querySelector('#email'),
+  modal: document.querySelector('.auth-modal'),
+  close: document.getElementById('auth-close'),
+};
 // const libraryBtn = document.getElementById('libraryButton');
 const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
 const emailRegExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
-const emailInput = document.querySelector('#email');
-// [SM] get modal
-const modal = document.querySelector('.auth-modal');
 // [SM]get close btn
-const close = document.getElementById('auth-close');
 
 // [SM] handle click outside of modal to close it
-const handleClickOutsideModal = e => {
-  if (e.target == modal) {
+handleClickOutsideModal = e => {
+  if (e.target == refs.modal) {
     closeAuthModal();
   }
 };
@@ -58,13 +59,14 @@ closeAuthModal = () => {
   clearErrorMessage();
   const authFormElements = document.querySelectorAll('.auth-form');
   // [SM] reset form
-  logInForm.reset();
-  signUpForm.reset();
+  refs.logInForm?.reset();
+  refs.signUpForm?.reset();
   // [SM]remove listeners
   window.removeEventListener('click', handleClickOutsideModal);
   window.removeEventListener('keyup', handleEscClick);
-  close.removeEventListener('click', handleCloseModal);
-  logInForm.removeEventListener('submit', createUser);
+  refs.close.removeEventListener('click', handleCloseModal);
+  refs.logInForm?.removeEventListener('submit', validateSignInForm);
+  refs.signUpForm?.removeEventListener('submit', validateSignUpForm);
   // [SM]hide what should be hidden
   authFormElements.forEach(el => {
     if (el.classList.contains('hide')) {
@@ -206,10 +208,10 @@ auth.onAuthStateChanged(function (user) {
     var uid = user.uid;
     var providerData = user.providerData;
 
-    logInBtn.textContent = 'Log out';
+    refs.logInBtn.textContent = 'Log out';
     closeAuthModal();
   } else {
-    logInBtn.textContent = 'Log in';
+    refs.logInBtn.textContent = 'Log in';
   }
 });
 
@@ -222,32 +224,32 @@ function togglePrivateRoutes() {
 
 // [SM] open login form
 showLogInForm = () => {
-  modal.classList.toggle('hide');
-  logInForm.classList.remove('hide');
+  refs.modal.classList.toggle('hide');
+  refs.logInForm.classList.remove('hide');
   // [SM] handle click outside of modal to close it
   window.addEventListener('click', handleClickOutsideModal);
   // [SM] handle click escape  to close   modal
   window.addEventListener('keyup', handleEscClick);
-  close.addEventListener('click', handleCloseModal);
+  refs.close.addEventListener('click', handleCloseModal);
 
   // [SM] logInForm.classList.toggle('hide');
-  emailInput.focus();
-  logInForm.addEventListener('submit', validateSignInForm);
+  refs.emailInput.focus();
+  refs.logInForm.addEventListener('submit', validateSignInForm);
 };
 // [SM] open sign in form
 showSignInForm = () => {
-  modal.classList.toggle('hide');
-  signUpForm.classList.remove('hide');
+  refs.modal.classList.toggle('hide');
+  refs.signUpForm.classList.remove('hide');
   // [SM] handle click outside of modal to close it
   window.addEventListener('click', handleClickOutsideModal);
   // [SM] handle click escape  to close   modal
   window.addEventListener('keyup', handleEscClick);
-  close.addEventListener('click', handleCloseModal);
+  refs.close.addEventListener('click', handleCloseModal);
 
-  signUpForm.addEventListener('submit', validateSignUpForm);
+  refs.signUpForm.addEventListener('submit', validateSignUpForm);
 };
 // [SM] Access auth elements
-const authAction = document.querySelectorAll('.auth');
+const authAction = document.querySelectorAll('.auth__button');
 
 // [SM] check attribute what action
 authAction.forEach(item => {
