@@ -1,12 +1,14 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from 'firebase/auth';
 import { Notify } from 'notiflix';
 import auth from '../firebase';
 const logInBtn = document.getElementById('logIn');
 const logInForm = document.getElementById('logInForm');
 const signUpForm = document.getElementById('signUpForm');
+const libraryBtn = document.getElementById('libraryButton');
 const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
 const emailRegExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
@@ -77,14 +79,21 @@ let errorMessageTimeOut;
 const validateSignUpForm = e => {
   e.preventDefault();
   const {
-    elements: { email, password },
+    elements: { email, password, username },
   } = e.currentTarget;
   const emailValue = email.value.trim();
-
+  const nameValue = username.value.trim();
   const passValue = password.value.trim();
   const isEmailValid = emailRegExp.test(emailValue);
 
   let errors = false;
+  if (!nameValue) {
+    setErrorMessage(username, 'name cannot be empty');
+    errors = true;
+  } else if (nameValue.length < 3) {
+    setErrorMessage(username, 'name should be at least 3 symbols');
+    errors = true;
+  }
   if (!emailValue) {
     setErrorMessage(email, 'email cannot be empty');
     errors = true;
@@ -108,7 +117,7 @@ const validateSignUpForm = e => {
     ? (errorMessageTimeOut = setTimeout(() => {
         clearErrors();
       }, 3000))
-    : createUser(emailValue, passValue);
+    : createUser({ email: emailValue, password: passValue, name: nameValue });
 };
 // [SM]check Loggin for valid
 const validateSignInForm = e => {
@@ -142,12 +151,10 @@ clearErrorMessage = () => {
   clearTimeout(errorMessageTimeOut);
 };
 // [SM] create user
-async function createUser(email, password) {
+async function createUser({ email, password, name }) {
   await createUserWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
+    .then(async userCredential => {
       // [SM] Signed in
-      const user = userCredential.user;
-      auth.currentUser;
       // TODO create and handle name here
       // togglePrivateRoutes();
     })
@@ -156,6 +163,12 @@ async function createUser(email, password) {
       const errorMessage = error.message;
       Notify.failure(errorMessage);
     });
+  await updateProfile(auth.currentUser, { displayName: name })
+    .then(result => {
+      const userName = auth.currentUser?.displayName;
+      libraryBtn.innerText = `${userName}'s library`;
+    })
+    .catch(err => console.warn(err));
 }
 // [SM] check sign in or should logout
 function toggleSignIn(email, password) {

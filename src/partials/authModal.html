@@ -4,9 +4,6 @@
     <button type="button" id="auth-close">&times</button>
     <div class="authentification">
       <form id="logInForm" class="auth-form hide">
-        <b class="auth-form__title"
-          >Hey! Registered users get access to their own library!</b
-        >
         <div class="form-control">
           <label class="form-control__label" for="email">
             <input
@@ -39,9 +36,21 @@
         </button>
       </form>
       <form id="signUpForm" class="auth-form hide">
-        <b class="auth-form__title"
-          >Hey! Registered users get access to their own library!</b
+        <b class="auth-form__title">
+          Hey! Registered users get access to their own library!</b
         >
+        <div class="form-control">
+          <label class="form-control__label" for="userName">
+            <input
+              type="text"
+              id="userName"
+              class="form-control__input"
+              name="username"
+              placeholder="enter your name"
+            />
+            <small class="form-control__error-message"></small>
+          </label>
+        </div>
         <div class="form-control">
           <label class="form-control__label" for="email">
             <input
