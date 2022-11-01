@@ -8,7 +8,7 @@ import auth from '../firebase';
 const logInBtn = document.getElementById('logIn');
 const logInForm = document.getElementById('logInForm');
 const signUpForm = document.getElementById('signUpForm');
-const libraryBtn = document.getElementById('libraryButton');
+// const libraryBtn = document.getElementById('libraryButton');
 const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
 const emailRegExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
@@ -25,7 +25,6 @@ const handleClickOutsideModal = e => {
   }
 };
 const handleEscClick = e => {
-  console.log('e: ', e);
   if (e.key === 'Escape') {
     closeAuthModal();
   }
@@ -113,11 +112,14 @@ const validateSignUpForm = e => {
     );
     errors = true;
   }
-  errors
-    ? (errorMessageTimeOut = setTimeout(() => {
-        clearErrors();
-      }, 3000))
-    : createUser({ email: emailValue, password: passValue, name: nameValue });
+  if (errors) {
+    errorMessageTimeOut = setTimeout(() => {
+      clearErrors();
+    }, 3000);
+  } else {
+    closeAuthModal();
+    createUser({ email: emailValue, password: passValue, name: nameValue });
+  }
 };
 // [SM]check Loggin for valid
 const validateSignInForm = e => {
@@ -153,21 +155,17 @@ clearErrorMessage = () => {
 // [SM] create user
 async function createUser({ email, password, name }) {
   await createUserWithEmailAndPassword(auth, email, password)
-    .then(async userCredential => {
-      // [SM] Signed in
-      // TODO create and handle name here
-      // togglePrivateRoutes();
-    })
+    .then(async userCredential => {})
     .catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
       Notify.failure(errorMessage);
     });
   await updateProfile(auth.currentUser, { displayName: name })
-    .then(result => {
-      const userName = auth.currentUser?.displayName;
-    })
-    .catch(err => console.warn(err));
+    .then(() => {})
+    .catch(err => {
+      Notify.warning("Name wasn't saved");
+    });
 }
 // [SM] check sign in or should logout
 function toggleSignIn(email, password) {
@@ -196,6 +194,10 @@ auth.onAuthStateChanged(function (user) {
     togglePrivateRoutes();
     // [SM] User is signed in.
     var displayName = user.displayName;
+    const userContainer = document.querySelector('#userContainer');
+    if (userContainer) {
+      userContainer.innerText = displayName;
+    }
     var email = user.email;
 
     // var emailVerified = user.emailVerified;
