@@ -55,3 +55,12 @@ export const getReviews = async ({ movieId, page = 1 }) => {
       throw err;
     });
 };
+
+export const getVideoTrailer = id => {
+  return API.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=UA`)
+    .then(response => response.data)
+    .catch(err => {
+      Notify.failure("Can't get details");
+      throw err;
+    });
+};

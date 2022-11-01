@@ -166,7 +166,6 @@ async function createUser({ email, password, name }) {
   await updateProfile(auth.currentUser, { displayName: name })
     .then(result => {
       const userName = auth.currentUser?.displayName;
-      libraryBtn.innerText = `${userName}'s library`;
     })
     .catch(err => console.warn(err));
 }
