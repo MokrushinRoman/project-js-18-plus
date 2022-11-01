@@ -1,3 +1,7 @@
+import { getTrending } from './filmsApi';
+import './js/homepage';
+import './js/myLibrary';
+import {getModal} from './js/modal';
 
 import PaginationButton from "./js/pagination.js";
 
@@ -9,3 +13,44 @@ paginationButtons.render();
 paginationButtons.onChange(e => {
   console.log('-- changed', e.target.value)
 });
+const card = ({
+  imgUrl,
+  title,
+  id,
+}) => `<li id="${id}" class="movie-list__item movie">
+    <img
+		class="movie__img"
+      src=${imgUrl ? `https://image.tmdb.org/t/p/w200${imgUrl} ` : ''}
+      alt="${title}"
+      loading="lazy"
+    />
+    <MovieTittle title={title}>${title}</MovieTittle>
+</li>`;
+
+const movies = async () => {
+  const result = await getTrending({ timeWindow, page, itemsPerPage }).then(
+    ({ results, total_pages }) => {
+      totalPages = total_pages;
+      const movieCards = results
+        .map(
+          ({
+            title = '',
+            name = '',
+            poster_path,
+
+            id,
+          }) =>
+            card({
+              title: title ? title : name,
+              imgUrl: poster_path,
+              id,
+            })
+        )
+        .join('');
+      console.log(movieCards);
+      return movieCards;
+    }
+  );
+  document.querySelector('.movie-list').innerHTML = result;
+};
+movies();
