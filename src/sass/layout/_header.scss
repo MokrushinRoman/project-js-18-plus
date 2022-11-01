@@ -311,6 +311,7 @@
     // text-transform: uppercase;
     // position: relative;
     &--active {
+      pointer-events: none;
       &::after {
         visibility: visible;
         content: ' ';

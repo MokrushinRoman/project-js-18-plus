@@ -5,6 +5,7 @@ import {
 } from 'firebase/auth';
 import { Notify } from 'notiflix';
 import auth from '../firebase';
+import { onClickBtnHome } from './homepage';
 import { hideLoader, showLoader } from './loader';
 const refs = {
   logInBtn: document.getElementById('logIn'),
@@ -32,10 +33,12 @@ const handleEscClick = e => {
     closeAuthModal();
   }
 };
-
+const handleLogOutClicked = () => {
+  onClickBtnHome();
+  toggleSignIn();
+};
 // [SM] handle click on close btn in modal to close modal
 const handleCloseModal = () => {
-  console.log('clicked');
   closeAuthModal();
 };
 // [SM] handle error message
@@ -225,7 +228,7 @@ auth.onAuthStateChanged(function (user) {
       const userContainer = document.querySelector('#userContainer');
       if (userContainer) {
         userContainer.innerText = displayName;
-        refs.logOutBtn.addEventListener('click', toggleSignIn);
+        refs.logOutBtn.addEventListener('click', handleLogOutClicked);
       }
     }
 
@@ -237,7 +240,7 @@ auth.onAuthStateChanged(function (user) {
     hideLoader();
     closeAuthModal();
   } else {
-    refs.logOutBtn?.removeEventListener('click', toggleSignIn);
+    refs.logOutBtn?.removeEventListener('click', handleLogOutClicked);
 
     hideLoader();
   }
