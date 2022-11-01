@@ -5,6 +5,7 @@ import {
 } from 'firebase/auth';
 import { Notify } from 'notiflix';
 import auth from '../firebase';
+import { hideLoader, showLoader } from './loader';
 const refs = {
   logInBtn: document.getElementById('logIn'),
   logInForm: document.getElementById('logInForm'),
@@ -12,6 +13,7 @@ const refs = {
   emailInput: document.querySelector('#email'),
   modal: document.querySelector('.auth-modal'),
   close: document.getElementById('auth-close'),
+  logOutBtn: document.getElementById('logOutButton'),
 };
 // const libraryBtn = document.getElementById('libraryButton');
 const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
@@ -33,6 +35,7 @@ const handleEscClick = e => {
 
 // [SM] handle click on close btn in modal to close modal
 const handleCloseModal = () => {
+  console.log('clicked');
   closeAuthModal();
 };
 // [SM] handle error message
@@ -53,7 +56,13 @@ const clearErrors = () => {
     }
   });
 };
-
+const removeEventListeners = () => {
+  window.removeEventListener('click', handleClickOutsideModal);
+  window.removeEventListener('keyup', handleEscClick);
+  refs.close.removeEventListener('click', handleCloseModal);
+  refs.logInForm?.removeEventListener('submit', validateSignInForm);
+  refs.signUpForm?.removeEventListener('submit', validateSignUpForm);
+};
 // [SM] fully close modal and clear listeners
 closeAuthModal = () => {
   clearErrorMessage();
@@ -62,11 +71,7 @@ closeAuthModal = () => {
   refs.logInForm?.reset();
   refs.signUpForm?.reset();
   // [SM]remove listeners
-  window.removeEventListener('click', handleClickOutsideModal);
-  window.removeEventListener('keyup', handleEscClick);
-  refs.close.removeEventListener('click', handleCloseModal);
-  refs.logInForm?.removeEventListener('submit', validateSignInForm);
-  refs.signUpForm?.removeEventListener('submit', validateSignUpForm);
+  removeEventListeners();
   // [SM]hide what should be hidden
   authFormElements.forEach(el => {
     if (el.classList.contains('hide')) {
@@ -119,7 +124,7 @@ const validateSignUpForm = e => {
       clearErrors();
     }, 3000);
   } else {
-    closeAuthModal();
+    showLoader();
     createUser({ email: emailValue, password: passValue, name: nameValue });
   }
 };
@@ -157,61 +162,84 @@ clearErrorMessage = () => {
 // [SM] create user
 async function createUser({ email, password, name }) {
   await createUserWithEmailAndPassword(auth, email, password)
-    .then(async userCredential => {})
+    .then(async userCredential => {
+      console.log('userCredential: ', userCredential);
+      const user = userCredential.user;
+      if (user) {
+        await updateProfile(user, { displayName: name })
+          .then(() => {})
+          .catch(err => {
+            Notify.warning("Name wasn't saved");
+          });
+      }
+      var displayName = user.displayName;
+      const userContainer = document.querySelector('#userContainer');
+      if (userContainer) {
+        userContainer.innerText = displayName;
+      }
+    })
     .catch(error => {
+      hideLoader();
+
       const errorCode = error.code;
       const errorMessage = error.message;
       Notify.failure(errorMessage);
-    });
-  await updateProfile(auth.currentUser, { displayName: name })
-    .then(() => {})
-    .catch(err => {
-      Notify.warning("Name wasn't saved");
     });
 }
 // [SM] check sign in or should logout
 function toggleSignIn(email, password) {
   if (auth.currentUser) {
     togglePrivateRoutes();
+
     auth.signOut();
   } else {
+    showLoader();
     // [SM] Sign in with email and pass.
-    signInWithEmailAndPassword(auth, email, password).catch(function (error) {
-      // [SM] Handle Errors here.
-      var errorCode = error.code;
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        hideLoader();
+      })
+      .catch(function (error) {
+        // [SM] Handle Errors here.
+        var errorCode = error.code;
 
-      var errorMessage = error.message;
-      if (errorCode === 'auth/wrong-password') {
-        Notify.failure('Wrong password!');
-      } else if (errorCode === 'auth/user-not-found') {
-        Notify.failure("User doesn't exist");
-      } else {
-        Notify.failure(errorMessage);
-      }
-    });
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          Notify.failure('Wrong password!');
+        } else if (errorCode === 'auth/user-not-found') {
+          Notify.failure("User doesn't exist");
+        } else {
+          Notify.failure(errorMessage);
+        }
+        hideLoader();
+      });
   }
 }
 auth.onAuthStateChanged(function (user) {
   if (user) {
     togglePrivateRoutes();
     // [SM] User is signed in.
-    var displayName = user.displayName;
-    const userContainer = document.querySelector('#userContainer');
-    if (userContainer) {
-      userContainer.innerText = displayName;
+
+    let displayName = user.displayName;
+    if (displayName) {
+      const userContainer = document.querySelector('#userContainer');
+      if (userContainer) {
+        userContainer.innerText = displayName;
+        refs.logOutBtn.addEventListener('click', toggleSignIn);
+      }
     }
-    var email = user.email;
 
     // var emailVerified = user.emailVerified;
     // var photoURL = user.photoURL;
     // var isAnonymous = user.isAnonymous;
     var uid = user.uid;
     var providerData = user.providerData;
-
-    refs.logInBtn.textContent = 'Log out';
+    hideLoader();
     closeAuthModal();
   } else {
-    refs.logInBtn.textContent = 'Log in';
+    refs.logOutBtn?.removeEventListener('click', toggleSignIn);
+
+    hideLoader();
   }
 });
 

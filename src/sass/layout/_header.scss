@@ -259,6 +259,10 @@
 
   .auth {
     margin-left: 40px;
+    .user-container {
+      display: flex;
+      align-items: center;
+    }
     &__button {
       @include nav__button;
       &:last-child {
@@ -273,6 +277,16 @@
         bottom: -4px;
         right: 0;
         border-radius: 2px;
+      }
+    }
+    &__log-out {
+      margin-left: 8px;
+      height: 26px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      img {
+        height: 100%;
       }
     }
   }
