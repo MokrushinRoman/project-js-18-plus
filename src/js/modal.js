@@ -1,4 +1,5 @@
-import { getMovieDetails } from '../filmsApi';
+import { getMovieDetails, getVideoTrailer } from '../filmsApi';
+import { Notify } from 'notiflix';
 
 export function getRefs() {
   const refs = {
@@ -9,6 +10,8 @@ export function getRefs() {
     movieListEL: '',
     watchedBtn: '',
     queueBtn: '',
+    iframeEl: '',
+    modalBoxEl: '',
   };
   return refs;
 }
@@ -28,10 +31,12 @@ async function onModalOpen(e) {
   await createModal();
   refs.modalEl.classList.remove('backdrop_is-hidden');
   getAccessToBtn();
+  refs.modalBoxEl = refs.modalEl.querySelector('.modal');
   refs.modalCloseBtn.addEventListener('click', onModalClose);
   document.addEventListener('keydown', onKeyDown);
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.bodyEl.classList.add('overflow-hidden');
+  refs.modalEl.addEventListener('click', onPosterClick);
 }
 
 async function createModal() {
@@ -158,4 +163,51 @@ function quantityRegulator(arr) {
   } else {
     return `${arr[0].name}, ${arr[1].name}, Other`;
   }
+}
+
+async function onPosterClick(e) {
+  if (e.target.nodeName !== 'IMG') {
+    return;
+  }
+  await getVideoTrailer(refs.idTargetCard).then(response => {
+    return getTrailer(response.results);
+  });
+  refs.iframeEl = refs.modalEl.querySelector('.modal__video-player');
+  document.removeEventListener('keydown', onKeyDown);
+  refs.modalEl.removeEventListener('click', onClickOutside);
+  refs.modalEl.removeEventListener('click', onPosterClick);
+  refs.modalEl.addEventListener('click', onPlayerCloseToClick);
+  document.addEventListener('keydown', onClosePlayerToEsc);
+}
+
+function onClosePlayerToEsc(e) {
+  console.log(e.code);
+  e.code === 'Escape' && removeVideoPlayer();
+  
+}
+
+function onPlayerCloseToClick(e) {
+  e.currentTarget === refs.modalEl && removeVideoPlayer();
+}
+
+function removeVideoPlayer() {
+  refs.iframeEl.remove();
+  refs.modalEl.removeEventListener('click', onPlayerCloseToClick);
+  document.removeEventListener('keydown', onClosePlayerToEsc);
+  document.addEventListener('keydown', onKeyDown);
+  refs.modalEl.addEventListener('click', onClickOutside);
+  refs.modalEl.addEventListener('click', onPosterClick);
+}
+
+function getTrailer(arr) {
+  const officialTrailer = arr.find(obj => obj.name === "Official Trailer");
+  if (!officialTrailer) {
+   return Notify.failure(`Oops! "Can't find video"`);
+  }
+  createVideoPlayer(officialTrailer);
+}
+
+function createVideoPlayer({key}) {
+  const markup = `<iframe class="modal__video-player" src="https://www.youtube.com/embed/${key}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  return refs.modalBoxEl.insertAdjacentHTML('beforeend', markup);
 }
