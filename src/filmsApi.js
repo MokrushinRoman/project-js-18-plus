@@ -27,7 +27,7 @@ export const searchMovies = async params => {
     });
 };
 export const getMovieDetails = id => {
-  return API.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`)
+  return API.get(`/movie/${id}?api_key=${API_KEY}`)
     .then(response => response.data)
     .catch(err => {
       Notify.failure("Can't get details");
@@ -56,7 +56,7 @@ export const getReviews = async ({ movieId, page = 1 }) => {
 };
 
 export const getVideoTrailer = id => {
-  return API.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=UA`)
+  return API.get(`/movie/${id}/videos?api_key=${API_KEY}&language=UA`)
     .then(response => response.data)
     .catch(err => {
       Notify.failure("Can't get details");

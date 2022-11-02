@@ -46,7 +46,6 @@ const movies = async () => {
             })
         )
         .join('');
-      console.log(movieCards);
       return movieCards;
     }
   );
