@@ -9,9 +9,6 @@ watchedBtnRef.addEventListener('click', onWatchedBtnClick);
 queueBtnRef.addEventListener('click', onQueueBtnClick);
 
 export function onWatchedBtnClick() {
-  console.log('should call');
-  // if (watchedBtnRef.classList.contains('btn__library--active')) return;
-
   watchedBtnRef.classList.add('btn__library--active');
   queueBtnRef.classList.remove('btn__library--active');
 
@@ -42,7 +39,6 @@ function getFilmsInlocalStorage(nameList) {
 }
 
 export function checkCountMovies(arrMovies) {
-  console.log('arrMovies: ', arrMovies);
   if (arrMovies.length < 1) {
     libraryListError.style.display = 'block';
     libraryListError.innerHTML = 'Oops, films not found!';

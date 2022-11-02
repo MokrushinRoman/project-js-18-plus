@@ -83,7 +83,7 @@ function createModalMarkup({
       class="close-button__icon"
       width="30"
       height="30"
-      xmlns="http://www.w3.org/2000/svg
+      xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
         <symbol viewBox="0 0 32 32">
@@ -110,7 +110,7 @@ function createModalMarkup({
         </li>
         <li class="modal__table_grey">
           <p>
-            <span class="modal__table_bc_accent">${voteAverage}</span>&#32;&#47;&#32; 
+            <span class="modal__table_bc_accent">${voteAverage}</span>&#32;&#47;&#32;
             <span class="modal__table_bc_grey">${vote_count}</span>
           </p>
         </li>
@@ -183,7 +183,6 @@ async function onPosterClick(e) {
 function onClosePlayerToEsc(e) {
   console.log(e.code);
   e.code === 'Escape' && removeVideoPlayer();
-  
 }
 
 function onPlayerCloseToClick(e) {
@@ -200,14 +199,14 @@ function removeVideoPlayer() {
 }
 
 function getTrailer(arr) {
-  const officialTrailer = arr.find(obj => obj.name === "Official Trailer");
+  const officialTrailer = arr.find(obj => obj.name === 'Official Trailer');
   if (!officialTrailer) {
-   return Notify.failure(`Oops! "Can't find video"`);
+    return Notify.failure(`Oops! "Can't find video"`);
   }
   createVideoPlayer(officialTrailer);
 }
 
-function createVideoPlayer({key}) {
+function createVideoPlayer({ key }) {
   const markup = `<iframe class="modal__video-player" src="https://www.youtube.com/embed/${key}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   return refs.modalBoxEl.insertAdjacentHTML('beforeend', markup);
 }

@@ -16,6 +16,8 @@ const refs = {
   modal: document.querySelector('.auth-modal'),
   close: document.getElementById('auth-close'),
   logOutBtn: document.getElementById('logOutButton'),
+  inputFile: document.getElementById('file'),
+  removeFileBtn: document.getElementById('file-remove-button'),
 };
 // const libraryBtn = document.getElementById('libraryButton');
 const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
@@ -42,13 +44,20 @@ const handleLogOutClicked = () => {
 const handleCloseModal = () => {
   closeAuthModal();
 };
+const clearUploadedFile = () => {
+  refs.inputFile.style.background = 'unset';
+  refs.removeFileBtn.classList.toggle('hide');
+  refs.inputFile.value = null;
+};
 // [SM] handle error message
-const setErrorMessage = (input, message) => {
-  // [SM]take closest parent for easier find error message container related to current  element
-  const formControl = input.closest('.form-control');
-  const errorContainer = formControl.querySelector('small');
-  errorContainer.innerText = message;
-  formControl.className = 'form-control error';
+const setErrorMessage = errors => {
+  errors.forEach(({ el, message }) => {
+    // [SM]take closest parent for easier find error message container related to current  element
+    const formControl = el.closest('.form-control');
+    const errorContainer = formControl.querySelector('small');
+    errorContainer.innerText = message;
+    formControl.className = 'form-control error';
+  });
 };
 // [SM] clear erros to default
 const clearErrors = () => {
@@ -66,6 +75,7 @@ const removeEventListeners = () => {
   refs.close.removeEventListener('click', handleCloseModal);
   refs.logInForm?.removeEventListener('submit', validateSignInForm);
   refs.signUpForm?.removeEventListener('submit', validateSignUpForm);
+  refs.removeFileBtn?.removeEventListener('click', clearUploadedFile);
 };
 // [SM] fully close modal and clear listeners
 closeAuthModal = () => {
@@ -89,44 +99,55 @@ let errorMessageTimeOut;
 const validateSignUpForm = e => {
   e.preventDefault();
   const {
-    elements: { email, password, username },
+    elements: { email, password, username, confirmPassword, file },
   } = e.currentTarget;
+  console.log('file: ', file.value);
+  return;
   const emailValue = email.value.trim();
   const nameValue = username.value.trim();
   const passValue = password.value.trim();
+  const cPasswordValue = confirmPassword.value.trim();
   const isEmailValid = emailRegExp.test(emailValue);
 
-  let errors = false;
+  let errors = [];
   if (!nameValue) {
-    setErrorMessage(username, 'name cannot be empty');
-    errors = true;
-  } else if (nameValue.length < 3) {
-    setErrorMessage(username, 'name should be at least 3 symbols');
-    errors = true;
+    errors.push({ el: username, message: 'name cannot be empty' });
+  } else if (15 < nameValue.length < 3) {
+    errors.push({
+      el: username,
+      message: 'name should be at least 3 symbols and not more than 15 symbols',
+    });
   }
   if (!emailValue) {
-    setErrorMessage(email, 'email cannot be empty');
-    errors = true;
+    errors.push({ el: email, message: 'email cannot be empty' });
   } else if (!isEmailValid) {
-    setErrorMessage(email, 'fill correct email');
-    errors = true;
+    errors.push({ el: email, message: 'fill correct email' });
   }
   const isPassValid = passRegExp.test(passValue);
 
   if (!passValue) {
-    setErrorMessage(password, 'password cannot be empty');
-    errors = true;
+    errors.push({ el: password, message: 'password cannot be empty' });
   } else if (!isPassValid) {
-    setErrorMessage(
-      password,
-      'should contain at least one lower and one upper case and be 6 or more symbols'
-    );
-    errors = true;
+    errors.push({
+      el: password,
+      message:
+        'should contain at least one lower and one upper case and be 6 or more',
+    });
+  } else if (passValue !== cPasswordValue) {
+    errors.push({
+      el: password,
+      message: 'Your password and confirmation password do not match',
+    });
+    errors.push({
+      el: confirmPassword,
+      message: 'Your password and confirmation password do not match',
+    });
   }
-  if (errors) {
+  setErrorMessage(errors);
+  if (errors.length) {
     errorMessageTimeOut = setTimeout(() => {
       clearErrors();
-    }, 3000);
+    }, 5000);
   } else {
     showLoader();
     createUser({ email: emailValue, password: passValue, name: nameValue });
@@ -143,20 +164,17 @@ const validateSignInForm = e => {
   let errors = false;
   if (!emailValue) {
     setErrorMessage(email, 'email cannot be empty');
-    errors = true;
   }
   if (!passValue) {
     setErrorMessage(password, 'password cannot be empty');
-    errors = true;
   }
   if (passValue.length < 6) {
     setErrorMessage(password, 'password cannot less than 6 symbols');
-    errors = true;
   }
   return errors
     ? (errorMessageTimeOut = setTimeout(() => {
         clearErrors();
-      }, 3000))
+      }, 5000))
     : toggleSignIn(emailValue, passValue);
 };
 // [SM] clear timeOut
@@ -252,7 +270,23 @@ function togglePrivateRoutes() {
   const privateRoutes = document.querySelectorAll('.private-route');
   privateRoutes.forEach(routeElement => routeElement.classList.toggle('hide'));
 }
-// [SM] handle close modal
+// [SM]
+handleAddAvatar = e => {
+  const value = e.currentTarget.value;
+  if (value) {
+    console.log('removeFileBtn: ', refs.removeFileBtn);
+    console.log('refs: ', refs);
+
+    const url = window.URL.createObjectURL(refs.inputFile.files[0]);
+    refs.inputFile.style.background = `url(${url}) no-repeat 100px center / 30px calc(100% - 4px)`;
+    refs.removeFileBtn.classList.toggle('hide');
+    refs.removeFileBtn.addEventListener('click', clearUploadedFile);
+  } else {
+    refs.removeFileBtn.classList.toggle('hide');
+    refs.inputFile.style.background = 'unset';
+    refs.removeFileBtn.removeEventListener('click', clearUploadedFile);
+  }
+};
 
 // [SM] open login form
 showLogInForm = () => {
@@ -263,7 +297,6 @@ showLogInForm = () => {
   // [SM] handle click escape  to close   modal
   window.addEventListener('keyup', handleEscClick);
   refs.close.addEventListener('click', handleCloseModal);
-
   // [SM] logInForm.classList.toggle('hide');
   refs.emailInput.focus();
   refs.logInForm.addEventListener('submit', validateSignInForm);
@@ -273,6 +306,8 @@ showSignInForm = () => {
   refs.modal.classList.toggle('hide');
   const parentWrapper = refs.signUpForm.closest('.auth-form');
   parentWrapper.classList.remove('hide');
+  refs.inputFile.addEventListener('change', handleAddAvatar);
+
   // [SM] handle click outside of modal to close it
   window.addEventListener('click', handleClickOutsideModal);
   // [SM] handle click escape  to close   modal
