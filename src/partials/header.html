@@ -2,26 +2,6 @@
   <div class="header__home" id="bg">
     <div class="container">
       <div class="header__container">
-        <ul class="login">
-          <li>
-            <button
-              id="logIn"
-              class="auth navigation__button"
-              auth="show-log-in-form"
-            >
-              Log in
-            </button>
-          </li>
-          <li class="navigation__item">
-            <button
-              id="signIn"
-              class="auth navigation__button private-route"
-              auth="show-sign-in-form"
-            >
-              Sign in
-            </button>
-          </li>
-        </ul>
         <a href="./index.html" class="header__logo" id="button__logo">
           <div class="header__icon--container">
             <img src="images/film.svg" alt="" />
@@ -35,34 +15,38 @@
                 class="navigation__button navigation__button--active"
                 id="button__home"
               >
-                HOME
+                home
               </button>
             </li>
-            <li class="navigation__item">
+            <li class="navigation__item private-route hide">
               <button class="navigation__button" id="button__library">
-                MY LIBRARY
+                my library
               </button>
             </li>
-            <!-- <li class="navigation__item">
-              <button
-                id="logIn"
-                class="auth navigation__button"
-                auth="show-log-in-form"
-              >
-                Log in
-              </button>
-            </li>
-            <li class="navigation__item">
-              <button
-                id="signIn"
-                class="auth navigation__button private-route"
-                auth="show-sign-in-form"
-              >
-                Sign in
-              </button>
-            </li> -->
           </ul>
         </nav>
+        <div class="auth">
+          <div class="private-route auth__buttons-wrapper">
+            <button id="logIn" class="auth__button" auth="show-log-in-form">
+              log in
+            </button>
+            <button id="signUp" class="auth__button" auth="show-sign-in-form">
+              sign up
+            </button>
+          </div>
+          <div class="private-route hide">
+            <div class="user-container private-route hide">
+              <span id="userContainer"></span>
+              <button type="button" class="auth__log-out" id="logOutButton">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/3840/3840829.png"
+                  alt=""
+                />
+              </button>
+              <!-- TODO put here an icon for log out with id logOutBtn -->
+            </div>
+          </div>
+        </div>
       </div>
       <form class="search__form" id="search-form">
         <div class="search__form_wrapper">
@@ -84,7 +68,7 @@
         </div>
 
       </form>
-      <ul class="library__btn-list">
+      <ul class="library__btn-list private-route hide">
         <li class="btn-list__item">
           <button
             type="button"

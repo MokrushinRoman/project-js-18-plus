@@ -1,16 +1,15 @@
 import { getTrending } from './filmsApi';
 import './js/homepage';
 import './js/myLibrary';
-import {getModal} from './js/modal';
+import './js/students-modal';
+import { getModal } from './js/modal';
 
 getModal('.movie-list');
-
 
 let totalPages = 0;
 let page = 1;
 let itemsPerPage = 20;
 let timeWindow = 'day';
-
 const card = ({
   imgUrl,
   title,
@@ -25,8 +24,13 @@ const card = ({
     <MovieTittle title={title}>${title}</MovieTittle>
 </li>`;
 
-const movies = async () => {
-  const result = await getTrending({ timeWindow, page, itemsPerPage }).then(
+export async function movies({ page }) {
+  const payload = {
+    timeWindow: timeWindow || 'day',
+    page: page || 1,
+    itemsPerPage: itemsPerPage || 20,
+  };
+  const result = await getTrending({ page }).then(
     ({ results, total_pages }) => {
       totalPages = total_pages;
       const movieCards = results
@@ -45,10 +49,13 @@ const movies = async () => {
             })
         )
         .join('');
-      console.log(movieCards);
+
       return movieCards;
     }
   );
+
   document.querySelector('.movie-list').innerHTML = result;
-};
-movies();
+}
+movies({ page });
+currentLocation = window.location.href;
+console.log('currentLocation: ', currentLocation);

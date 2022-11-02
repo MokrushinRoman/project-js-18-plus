@@ -31,8 +31,6 @@
     }
 }
 
-
-
 .modal {
   @include position($pos: absolute, $t: 50%, $l: 50%);
   transform: translate(-50%, -50%) scale(1);
@@ -76,6 +74,7 @@
 }
 
 .modal__poster-container {
+  position: relative;
   flex-basis: 375px;
   @media (min-width: $tablet) {
     flex-basis: 264px;
@@ -83,6 +82,23 @@
   @media (min-width: $desktop) {
     flex-basis: 375px;
   }
+
+    &:hover:after {
+      transform: translate(-50%, -40%) scale(1.2);
+    }
+
+    &::after {
+      @include position($pos: absolute, $t: 50%, $l: 50%);
+      z-index: 2;
+      content: "";
+      width: 25%;
+      height: 25%;
+      transform: translate(-50%, -40%) scale(1);
+      background-image: url(/src/images/icon-play-button.svg);
+      background-repeat: no-repeat;
+      pointer-events: none;
+      transition: transform $transition-basic;
+    }
 }
 
 .modal__poster-item {
@@ -90,6 +106,7 @@
   height: 100%;
   border-radius: 5px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .modal__content-container {

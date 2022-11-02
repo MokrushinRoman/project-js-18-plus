@@ -9,7 +9,8 @@ watchedBtnRef.addEventListener('click', onWatchedBtnClick);
 queueBtnRef.addEventListener('click', onQueueBtnClick);
 
 export function onWatchedBtnClick() {
-  if (watchedBtnRef.classList.contains('btn__library--active')) return;
+  console.log('should call');
+  // if (watchedBtnRef.classList.contains('btn__library--active')) return;
 
   watchedBtnRef.classList.add('btn__library--active');
   queueBtnRef.classList.remove('btn__library--active');
@@ -33,14 +34,15 @@ function getFilmsInlocalStorage(nameList) {
     : [];
 
   if (checkCountMovies(movies)) {
-    if (movies) {
+    if (movies.length) {
       movieList.innerHTML = movieListMarkup(movies);
     }
   }
   hideLoader();
 }
 
-function checkCountMovies(arrMovies) {
+export function checkCountMovies(arrMovies) {
+  console.log('arrMovies: ', arrMovies);
   if (arrMovies.length < 1) {
     libraryListError.style.display = 'block';
     libraryListError.innerHTML = 'Oops, films not found!';
