@@ -16,6 +16,7 @@ export const getTrending = async ({ timeWindow = 'day', page = 1 } = {}) => {
       throw err;
     });
 };
+
 export const searchMovies = async params => {
   const searchParams = new URLSearchParams(params).toString();
 
