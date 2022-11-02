@@ -12,6 +12,7 @@ const refs = {
   logInForm: document.getElementById('logInForm'),
   signUpForm: document.getElementById('signUpForm'),
   emailInput: document.querySelector('#email'),
+  passwordInput: document.querySelector('#password'),
   modal: document.querySelector('.auth-modal'),
   close: document.getElementById('auth-close'),
   logOutBtn: document.getElementById('logOutButton'),
@@ -208,7 +209,7 @@ function toggleSignIn(email, password) {
 
         var errorMessage = error.message;
         if (errorCode === 'auth/wrong-password') {
-          Notify.failure('Wrong password!');
+          Notify.failure('Wrong email or password!');
         } else if (errorCode === 'auth/user-not-found') {
           Notify.failure("User doesn't exist");
         } else {
@@ -270,7 +271,8 @@ showLogInForm = () => {
 // [SM] open sign in form
 showSignInForm = () => {
   refs.modal.classList.toggle('hide');
-  refs.signUpForm.classList.remove('hide');
+  const parentWrapper = refs.signUpForm.closest('.auth-form');
+  parentWrapper.classList.remove('hide');
   // [SM] handle click outside of modal to close it
   window.addEventListener('click', handleClickOutsideModal);
   // [SM] handle click escape  to close   modal
