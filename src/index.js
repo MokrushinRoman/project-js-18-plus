@@ -1,6 +1,11 @@
 import { getTrending } from './filmsApi';
+import './js/homepage';
 import './js/myLibrary';
 import './js/students-modal';
+import {getModal} from './js/modal';
+
+getModal('.movie-list');
+
 
 let totalPages = 0;
 let page = 1;
@@ -11,7 +16,7 @@ const card = ({
   imgUrl,
   title,
   id,
-}) => `<li id=""${id} class="movie-list__item movie">
+}) => `<li id="${id}" class="movie-list__item movie">
     <img
 		class="movie__img"
       src=${imgUrl ? `https://image.tmdb.org/t/p/w200${imgUrl} ` : ''}
@@ -20,6 +25,7 @@ const card = ({
     />
     <MovieTittle title={title}>${title}</MovieTittle>
 </li>`;
+
 const movies = async () => {
   const result = await getTrending({ timeWindow, page, itemsPerPage }).then(
     ({ results, total_pages }) => {
@@ -40,6 +46,7 @@ const movies = async () => {
             })
         )
         .join('');
+      console.log(movieCards);
       return movieCards;
     }
   );
