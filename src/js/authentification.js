@@ -101,8 +101,7 @@ const validateSignUpForm = e => {
   const {
     elements: { email, password, username, confirmPassword, file },
   } = e.currentTarget;
-  console.log('file: ', file.value);
-  return;
+
   const emailValue = email.value.trim();
   const nameValue = username.value.trim();
   const passValue = password.value.trim();
@@ -185,7 +184,6 @@ clearErrorMessage = () => {
 async function createUser({ email, password, name }) {
   await createUserWithEmailAndPassword(auth, email, password)
     .then(async userCredential => {
-      console.log('userCredential: ', userCredential);
       const user = userCredential.user;
       if (user) {
         await updateProfile(user, { displayName: name })
@@ -240,20 +238,17 @@ function toggleSignIn(email, password) {
 auth.onAuthStateChanged(function (user) {
   if (user) {
     togglePrivateRoutes();
-    // [SM] User is signed in.
+    refs.logOutBtn.addEventListener('click', handleLogOutClicked);
 
+    // [SM] User is signed in.
     let displayName = user.displayName;
     if (displayName) {
       const userContainer = document.querySelector('#userContainer');
       if (userContainer) {
         userContainer.innerText = displayName;
-        refs.logOutBtn.addEventListener('click', handleLogOutClicked);
       }
     }
 
-    // var emailVerified = user.emailVerified;
-    // var photoURL = user.photoURL;
-    // var isAnonymous = user.isAnonymous;
     var uid = user.uid;
     var providerData = user.providerData;
     hideLoader();
@@ -274,9 +269,6 @@ function togglePrivateRoutes() {
 handleAddAvatar = e => {
   const value = e.currentTarget.value;
   if (value) {
-    console.log('removeFileBtn: ', refs.removeFileBtn);
-    console.log('refs: ', refs);
-
     const url = window.URL.createObjectURL(refs.inputFile.files[0]);
     refs.inputFile.style.background = `url(${url}) no-repeat 100px center / 30px calc(100% - 4px)`;
     refs.removeFileBtn.classList.toggle('hide');
