@@ -84,7 +84,7 @@
     @media screen and (max-width: 767.98px) {
     margin-left: 0;
     }
-    @media screen and (min-width: 768px) and (max-width: 1199.98px) {
+    @media screen and (min-width: 768px) and (max-width: 1279.98px) {
       margin-left: -20px;  
     }
     margin-left: -30px;
@@ -100,7 +100,7 @@
             transform: scale(1.1);
             }
     }
-    @media screen and (min-width: 768px) and (max-width: 1199.98px) {
+    @media screen and (min-width: 768px) and (max-width: 1279.98px) {
     margin-left: 20px;
     width: calc((100% - 40px) / 2);
     }
@@ -124,26 +124,76 @@
     background-color: rgba(247, 247, 247, 1);
 }
  .footer__list {
-    margin-left: 408px;
-    margin-right: 390px;
-    display: inline-flex;
-    padding-top: 30px;
-    padding-bottom: 28px;
+    display: flex;
+    padding-top: 29px;
+    padding-bottom: 29px;
+    @media screen and (max-width: 767.98px) {
+        margin: 0;
+    }
+    @media screen and (min-width: 768px) {
+      justify-content: center;  
+    }
  }
 
+ .footer__list:first-child {
+    margin-right: 0px;
+    @media screen and (max-width: 767.98px) {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+ }
+}
+
+.footer__left-text {
+    @media screen and (max-width: 767.98px) {
+            margin-left: auto;
+            margin-right: auto;
+        }
+}
+
+
+.footer__el {
+    display: inline-block;
+    margin-right: 0;
+}
+
+.footer__el:first-child {
+    @media screen and (max-width: 767.98px) {
+        display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+}
+
+.footer__el:last-child {
+    @media screen and (max-width: 767.98px) {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
  .footer__left-text {
-    margin-right: 10px;
     display: inline-block;
     height: auto;
     font-size: 16px;
     line-height: 1.19;
     text-align: center;
     color: rgba(84, 84, 84, 1);
+@media screen and (max-width: 767.98px) {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 14px;
+    }
 
  }
 
+
  .footer__img {
     margin-right: 10px;
+    margin-left: 10px;
  }
 
   .footer__right-text {
@@ -153,6 +203,12 @@
         line-height: 1.19;
         text-align: center;
         color: rgba(84, 84, 84, 1);
+        @media screen and (max-width: 767.98px) {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 14px;
+    }
   }
 
 .footer__link {
