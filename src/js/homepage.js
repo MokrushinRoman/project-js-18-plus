@@ -1,5 +1,6 @@
+import { movies } from '../index.js';
 import { getTrending, searchMovies } from '../filmsApi';
-import { onWatchedBtnClick, movieListMarkup } from './myLibrary';
+import { onWatchedBtnClick } from './myLibrary';
 
 const refs = {
   bgHeader: document.getElementById('bg'),
@@ -10,6 +11,7 @@ const refs = {
   form: document.querySelector('.search__form'),
   search: document.querySelector('.search__form_button'),
   movieList: document.querySelector('.movie-list'),
+  libraryListError: document.querySelector('.library-list__error'),
 };
 
 onHome();
@@ -20,16 +22,22 @@ function onHome() {
   refs.form.addEventListener('submit', onSubmit);
 }
 
-function onClickBtnHome() {
+export function onClickBtnHome() {
+  refs.libraryListError.innerText = '';
+  refs.libraryListError.style.display = 'none';
+
   refs.bgHeader.classList.remove('header__library');
   refs.form.style.display = 'flex';
   refs.btnList.style.display = 'none';
   refs.bgHeader.classList.add('header__home');
   refs.library.classList.remove('navigation__button--active');
   refs.home.classList.add('navigation__button--active');
+
+  movies({ page: 1 });
 }
 
 function onClickBtnLibrary() {
+  refs.movieList.innerText = '';
   refs.bgHeader.classList.add('header__library');
   refs.form.style.display = 'none';
   refs.btnList.style.display = 'flex';

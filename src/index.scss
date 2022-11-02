@@ -1,11 +1,16 @@
-@import './sass/utils/vars';
+@import 'sass/utils/vars';
 
-@import './sass/common';
+@import 'sass/common';
 
-@import './sass/base/reset';
+@import 'sass/base/reset';
 
-@import './sass/utils/hidden';
-@import './sass/utils/mixins';
+@import 'sass/utils/mixins';
+
+@import 'sass/components/container';
+@import 'sass/components/buttons';
+@import 'sass/components/authModal';
+@import 'sass/components/movies';
+@import 'sass/components/students-modal';
 
 @import './sass/components/container';
 @import './sass/components/buttons';
@@ -19,3 +24,10 @@
 @import './sass/layout/loader';
 
 
+@import './sass/components/modal';
+
+@import 'sass/layout/header';
+@import 'sass/layout/footer';
+@import 'sass/utils/hidden';
+
+@import 'sass/layout/loader';
