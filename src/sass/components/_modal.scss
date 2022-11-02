@@ -19,19 +19,7 @@
   overflow: hidden;
 }
 
-.modal__video-player {
-  @include position($pos: absolute, $t: 25%, $l: 0%);
-  z-index: 99;
-  width: 100%;
-  height: 50%;
-
-  @media (min-width: $tablet) {
-      width: 50%;
-      left: 25%;
-    }
-}
-
-.modal {
+.movie-modal {
   @include position($pos: absolute, $t: 50%, $l: 50%);
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
@@ -73,7 +61,21 @@
   }
 }
 
-.modal__poster-container {
+.movie-modal__video-player {
+  @include position($pos: absolute, $t: 50%, $l: 10%);
+  z-index: 99;
+  width: 80%;
+  height: 25%;
+
+  @media (min-width: $tablet) {
+    width: 50%;
+    height: 50%;
+    top: 25%;
+    left: 25%;
+  }
+}
+
+.movie-modal__poster-container {
   position: relative;
   flex-basis: 375px;
   @media (min-width: $tablet) {
@@ -101,7 +103,7 @@
     }
 }
 
-.modal__poster-item {
+.movie-modal__poster-item {
   width: 100%;
   height: 100%;
   border-radius: 5px;
@@ -109,7 +111,7 @@
   cursor: pointer;
 }
 
-.modal__content-container {
+.movie-modal__content-container {
   display: flex;
   flex-basis: 375px;
   flex-direction: column;
@@ -124,7 +126,7 @@
     }
 }
 
-.modal__title {
+.movie-modal__title {
   @include font($fw: 500, $fs: 20px, $lh: 1.15, $ls: inherit);
   text-transform: uppercase;
   @media (min-width: $desktop) {
@@ -133,7 +135,7 @@
   }
 }
 
-.modal__content-thumb {
+.movie-modal__content-thumb {
   @include flex-centred($d: flex, $ai: baseline, $jc: flex-start);
   gap: 40px;
 
@@ -142,7 +144,7 @@
   }
 }
 
-.modal__table {
+.movie-modal__table {
   display: grid;
   grid-template-columns: min-content auto;
   grid-template-rows: repeat(4, auto);
@@ -163,36 +165,36 @@
   @include font($fw: 500, $fs: 12px, $lh: 1.33, $ls: inherit);
 }
 
-.modal__table_grey {
+.movie-modal__table_grey {
   color: #8c8c8c;
 }
 
-.modal__table_bc_accent {
+.movie-modal__table_bc_accent {
   color: $white-text-color;
   padding: 1px 10px;
   background-color: $button-accent-bg-color;
   border-radius: 5px;
 }
 
-.modal__table_bc_grey {
+.movie-modal__table_bc_grey {
   color: $main-text-color;
   padding: 1px 4px;
   background-color: $white-text-color;
   border-radius: 5px;
 }
 
-.modal__description-title {
+.movie-modal__description-title {
   @include font($fw: 500, $fs: 12px, $lh: 1.33, $ls: inherit);
   text-transform: uppercase;
 }
 
-.modal__description {
+.movie-modal__description {
   max-height: 260px;
   overflow: auto;
   @include font($fw: 500, $fs: 12px, $lh: 1.67, $ls: inherit);
 }
 
-.modal-button__thumb {
+.movie-modal-button__thumb {
   @include flex-centred($d: flex, $ai: unset, $jc: center);
   gap: 20px;
 
@@ -206,7 +208,7 @@
   }
 }
 
-.modal-button {
+.movie-modal-button {
   flex-basis: 136px;
   height: 44px;
   transform: scale(1);
@@ -240,7 +242,7 @@
   }
 }
 
-.modal-button_accent {
+.movie-modal-button_accent {
   color: $white-text-color;
   background-color: $button-accent-bg-color;
   border: 1px solid transparent;
