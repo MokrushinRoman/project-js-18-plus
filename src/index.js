@@ -7,7 +7,7 @@ import { getModal } from './js/modal';
 import PaginationButton from "./js/pagination.js";
 
 const paginationButtons = new PaginationButton(20, 5);
-
+getModal('.movie-list');
 
 paginationButtons.render();
 

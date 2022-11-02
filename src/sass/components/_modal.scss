@@ -1,4 +1,4 @@
-.backdrop {
+.movie-backdrop {
   @include position($pos: fixed);
   z-index: 999;
   width: 100%;
@@ -61,17 +61,28 @@
   }
 }
 
-.movie-modal__video-player {
-  @include position($pos: absolute, $t: 50%, $l: 10%);
+.movie-modal__video-player-container {
+  @include position($pos: absolute, $t: 50%, $l: 50%);
   z-index: 99;
-  width: 80%;
-  height: 25%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+
+  &::after {
+    content: "";
+    padding-top: 56.25%;
+    display: block;
+  }
+}
+
+.movie-modal__video-player {
+  @include position($pos: absolute, $t: 50%, $l: 50%);
+  transform: translate(-50%, -50%);
+  width: 87%;
+  height: 87%;
 
   @media (min-width: $tablet) {
-    width: 50%;
-    height: 50%;
-    top: 25%;
-    left: 25%;
+    width: 80%;
+    height: 80%;
   }
 }
 
