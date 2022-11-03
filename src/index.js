@@ -5,16 +5,9 @@ import './js/my-library';
 import './js/students-modal';
 import { getModal } from './js/modal';
 
-import PaginationButton from './js/pagination.js';
-
-const paginationButtons = new PaginationButton(20, 5);
+import createPaginations from './js/pagination.js';
 getModal('.movie-list');
 
-paginationButtons.render();
-
-paginationButtons.onChange(e => {
-  console.log('-- changed', e.target.value);
-});
 let totalPages = 0;
 let page = 1;
 let itemsPerPage = 20;
@@ -64,6 +57,7 @@ export async function movies({ page }) {
   );
 
   document.querySelector('.movie-list').innerHTML = result;
+  createPaginations(totalPages, page);
 }
 movies({ page });
 currentLocation = window.location.href;
