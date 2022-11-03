@@ -8,16 +8,18 @@
   };
 
   refs.openModalBtn.addEventListener('click', onOpenModal);
-  refs.closeModalBtn.addEventListener('click', onCloseModal);
-  refs.backdrop.addEventListener('click', onBackdropClick);
 
   function onOpenModal() {
+    refs.closeModalBtn.addEventListener('click', onCloseModal);
+    refs.backdrop.addEventListener('click', onBackdropClick);
     window.addEventListener('keydown', onEscKeyPress);
     refs.modal.classList.remove('hide');
     refs.body.classList.remove('no-scroll');
   }
 
   function onCloseModal() {
+    refs.closeModalBtn.removeEventListener('click', onCloseModal);
+    refs.backdrop.removeEventListener('click', onBackdropClick);
     window.removeEventListener('keydown', onEscKeyPress);
     refs.modal.classList.add('hide');
     refs.body.classList.add('no-scroll');

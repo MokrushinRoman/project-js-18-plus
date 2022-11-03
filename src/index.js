@@ -3,6 +3,7 @@ import './js/homepage';
 import './js/myLibrary';
 import './js/students-modal';
 import { getModal } from './js/modal';
+import { renderCards } from './js/movieCard';
 import createPaginations from './js/pagination.js';
 getModal('.movie-list');
 
