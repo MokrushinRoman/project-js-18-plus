@@ -49,7 +49,6 @@ function onClickBtnLibrary() {
 function onSubmit(event) {
   event.preventDefault();
   const query = event.currentTarget.elements.search.value;
-  console.log(query);
 }
 
 function onClickBtn(event) {
