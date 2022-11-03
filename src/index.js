@@ -3,7 +3,7 @@ import './js/homepage';
 import './js/myLibrary';
 import './js/students-modal';
 import { getModal } from './js/modal';
-
+import createPaginations from "./js/pagination.js";
 getModal('.movie-list');
 
 let totalPages = 0;
@@ -55,6 +55,7 @@ export async function movies({ page }) {
   );
 
   document.querySelector('.movie-list').innerHTML = result;
+  createPaginations(totalPages, page);
 }
 movies({ page });
 currentLocation = window.location.href;

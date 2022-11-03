@@ -10,7 +10,7 @@ export function getRefs() {
     movieListEL: '',
     watchedBtn: '',
     queueBtn: '',
-    iframeEl: '',
+    videoPlayerEl: '',
     modalBoxEl: '',
   };
   return refs;
@@ -29,9 +29,9 @@ async function onModalOpen(e) {
   }
   refs.idTargetCard = e.target.parentElement.attributes.id.value;
   await createModal();
-  refs.modalEl.classList.remove('backdrop_is-hidden');
+  refs.modalEl.classList.remove('movie-backdrop_is-hidden');
   getAccessToBtn();
-  refs.modalBoxEl = refs.modalEl.querySelector('.modal');
+  refs.modalBoxEl = refs.modalEl.querySelector('.movie-modal');
   refs.modalCloseBtn.addEventListener('click', onModalClose);
   document.addEventListener('keydown', onKeyDown);
   refs.modalEl.addEventListener('click', onClickOutside);
@@ -53,7 +53,7 @@ function getAccessToBtn() {
 
 function onModalClose() {
   refs.idTargetCard = '';
-  refs.modalEl.classList.add('backdrop_is-hidden');
+  refs.modalEl.classList.add('movie-backdrop_is-hidden');
   resetModal();
   document.removeEventListener('keydown', onKeyDown);
   refs.modalEl.removeEventListener('click', onClickOutside);
@@ -77,7 +77,7 @@ function createModalMarkup({
   const genreList = quantityRegulator(genres);
   const voteAverage = vote_average.toFixed(1);
   const popularityValue = popularity.toFixed(1);
-  const markup = `<div class="modal">
+  const markup = `<div class="movie-modal">
   <button type="button" class="close-button" data-modal-close>
     <svg
       class="close-button__icon"
@@ -94,49 +94,49 @@ function createModalMarkup({
       </defs>
     </svg>
   </button>
-  <div class="modal__poster-container">
+  <div class="movie-modal__poster-container">
     <img
       src="https://image.tmdb.org/t/p/w500/${poster_path}"
       alt="The poster of the movie '${original_title}' "
-      class="modal__poster-item"
+      class="movie-modal__poster-item"
     />
   </div>
-  <div class="modal__content-container">
-    <h2 class="modal__title">${title}</h2>
-    <div class="modal__content-thumb">
-      <ul class="modal__table">
-        <li class="modal__table_grey">
+  <div class="movie-modal__content-container">
+    <h2 class="movie-modal__title">${title}</h2>
+    <div class="movie-modal__content-thumb">
+      <ul class="movie-modal__table">
+        <li class="movie-modal__table_grey">
           <p>Vote / Votes</p>
         </li>
-        <li class="modal__table_grey">
+        <li class="movie-modal__table_grey">
           <p>
-            <span class="modal__table_bc_accent">${voteAverage}</span>&#32;&#47;&#32;
-            <span class="modal__table_bc_grey">${vote_count}</span>
+            <span class="movie-modal__table_bc_accent">${voteAverage}</span>&#32;&#47;&#32;
+            <span class="movie-modal__table_bc_grey">${vote_count}</span>
           </p>
         </li>
-        <li class="modal__table_grey">
+        <li class="movie-modal__table_grey">
           <p>Popularity</p>
         </li>
         <li><p>${popularityValue}</p></li>
-        <li class="modal__table_grey"><p>Original Title</p></li>
+        <li class="movie-modal__table_grey"><p>Original Title</p></li>
         <li><p>${original_title}</p></li>
-        <li class="modal__table_grey"><p>Genre</p></li>
+        <li class="movie-modal__table_grey"><p>Genre</p></li>
         <li><p>${genreList}</p></li>
       </ul>
     </div>
-    <div class="modal__text-thumb">
-      <h3 class="modal__description-title">About</h3>
-      <p class="modal__description">${overview}</p>
+    <div class="movie-modal__text-thumb">
+      <h3 class="movie-modal__description-title">About</h3>
+      <p class="movie-modal__description">${overview}</p>
     </div>
-    <div class="modal-button__thumb">
+    <div class="movie-modal-button__thumb">
       <button
         type="button"
-        class="modal-button modal-button_accent"
+        class="movie-modal-button movie-modal-button_accent"
         data-control-watched
       >
         Add to Watched
       </button>
-      <button type="button" class="modal-button" data-control-turn>
+      <button type="button" class="movie-modal-button" data-control-turn>
         Add to queue
       </button>
     </div>
@@ -172,7 +172,9 @@ async function onPosterClick(e) {
   await getVideoTrailer(refs.idTargetCard).then(response => {
     return getTrailer(response.results);
   });
-  refs.iframeEl = refs.modalEl.querySelector('.modal__video-player');
+  refs.videoPlayerEl = refs.modalEl.querySelector(
+    '.movie-modal__video-player-container'
+  );
   document.removeEventListener('keydown', onKeyDown);
   refs.modalEl.removeEventListener('click', onClickOutside);
   refs.modalEl.removeEventListener('click', onPosterClick);
@@ -190,7 +192,7 @@ function onPlayerCloseToClick(e) {
 }
 
 function removeVideoPlayer() {
-  refs.iframeEl.remove();
+  refs.videoPlayerEl.remove();
   refs.modalEl.removeEventListener('click', onPlayerCloseToClick);
   document.removeEventListener('keydown', onClosePlayerToEsc);
   document.addEventListener('keydown', onKeyDown);
@@ -207,6 +209,16 @@ function getTrailer(arr) {
 }
 
 function createVideoPlayer({ key }) {
-  const markup = `<iframe class="modal__video-player" src="https://www.youtube.com/embed/${key}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  const markup = `<div class="movie-modal__video-player-container">
+  <iframe
+    class="movie-modal__video-player"
+    src="https://www.youtube.com/embed/${key}"
+    title="YouTube video player"
+    frameborder="0"
+    autoplay="1"
+    allow="accelerometer; clipboard-write; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</div>`;
   return refs.modalBoxEl.insertAdjacentHTML('beforeend', markup);
 }
