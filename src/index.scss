@@ -11,23 +11,14 @@
 @import 'sass/components/authModal';
 @import 'sass/components/movies';
 @import 'sass/components/students-modal';
-
-@import './sass/components/container';
-@import './sass/components/buttons';
-@import './sass/components/pagination';
-@import './sass/components/movies';
-@import './sass/components/modal';
-
-@import './sass/layout/header';
-@import './sass/layout/footer';
-@import '../node_modules/tui-pagination/dist/tui-pagination.css';
-@import './sass/layout/loader';
-
-
-@import './sass/components/modal';
+@import 'sass/components/pagination';
+@import 'sass/components/modal';
 
 @import 'sass/layout/header';
 @import 'sass/layout/footer';
-@import 'sass/utils/hidden';
-
+@import '../node_modules/tui-pagination/dist/tui-pagination.css';
 @import 'sass/layout/loader';
+
+@import 'sass/components/modal';
+
+@import 'sass/utils/hidden';
