@@ -1,17 +1,20 @@
 import { showLoader, hideLoader } from './loader';
 import { getMoviesFromLocalStorage } from './local-storage';
 
-const watchedBtnRef = document.querySelector('.btn__watched');
-const queueBtnRef = document.querySelector('.btn__queue');
-const libraryListError = document.querySelector('.library-error');
+const watchedBtnRef = document.querySelector('#btn__watched');
+const queueBtnRef = document.querySelector('#btn__queue');
+const libraryListError = document.querySelector('.library-list__error');
+
 const movieList = document.querySelector('.movie-list');
 export let pageList = '';
 
 watchedBtnRef.addEventListener('click', onWatchedBtnClick);
 queueBtnRef.addEventListener('click', onQueueBtnClick);
 
-function onWatchedBtnClick() {
-  if (watchedBtnRef.classList.contains('btn__library--active')) return;
+export function onWatchedBtnClick() {
+  console.log('should call');
+  // if (watchedBtnRef.classList.contains('btn__library--active')) return;
+
   showLoader();
   watchedBtnRef.classList.add('btn__library--active');
   queueBtnRef.classList.remove('btn__library--active');
@@ -37,13 +40,14 @@ export function renderMoviesList(listName) {
   const movies = getMoviesFromLocalStorage(listName)[listName];
   console.log('111', movies);
   if (checkCountMovies(movies)) {
-    if (movies) {
+    if (movies.length) {
       movieList.innerHTML = movieListMarkup(movies);
     }
   }
 }
 
-function checkCountMovies(arrMovies) {
+export function checkCountMovies(arrMovies) {
+  console.log('arrMovies: ', arrMovies);
   if (arrMovies.length < 1) {
     libraryListError.style.display = 'block';
     movieList.innerHTML = '';

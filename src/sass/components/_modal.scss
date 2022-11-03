@@ -1,6 +1,6 @@
-.backdrop {
+.movie-backdrop {
   @include position($pos: fixed);
-  z-index: 99;
+  z-index: 999;
   width: 100%;
   height: 100%;
   overflow: scroll;
@@ -19,7 +19,7 @@
   overflow: hidden;
 }
 
-.modal {
+.movie-modal {
   @include position($pos: absolute, $t: 50%, $l: 50%);
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
@@ -27,6 +27,8 @@
   @include flex-centred($d: flex, $ai: flex-start, $jc: center);
 
   width: calc(100% - 40px);
+  max-height: 100%;
+  overflow-y: auto;
   gap: 16px;
   flex-wrap: wrap;
   padding: 40px 20px;
@@ -59,35 +61,83 @@
   }
 }
 
-.modal__poster-container {
+.movie-modal__video-player-container {
+  @include position($pos: absolute, $t: 50%, $l: 50%);
+  z-index: 99;
+  width: 100%;
+  transform: translate(-50%, -50%);
+
+  &::after {
+    content: "";
+    padding-top: 56.25%;
+    display: block;
+  }
+}
+
+.movie-modal__video-player {
+  @include position($pos: absolute, $t: 50%, $l: 50%);
+  transform: translate(-50%, -50%);
+  width: 87%;
+  height: 87%;
+
+  @media (min-width: $tablet) {
+    width: 80%;
+    height: 80%;
+  }
+}
+
+.movie-modal__poster-container {
+  position: relative;
   flex-basis: 375px;
+  @media (min-width: $tablet) {
+    flex-basis: 264px;
+  }
+  @media (min-width: $desktop) {
+    flex-basis: 375px;
+  }
+
+    &:hover:after {
+      transform: translate(-50%, -40%) scale(1.2);
+    }
+
+    &::after {
+      @include position($pos: absolute, $t: 50%, $l: 50%);
+      z-index: 2;
+      content: "";
+      width: 25%;
+      height: 25%;
+      transform: translate(-50%, -40%) scale(1);
+      background-image: url(/src/images/icon-play-button.svg);
+      background-repeat: no-repeat;
+      pointer-events: none;
+      transition: transform $transition-basic;
+    }
+}
+
+.movie-modal__poster-item {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.movie-modal__content-container {
+  display: flex;
+  flex-basis: 375px;
+  flex-direction: column;
+  gap: 20px;
+
   @media (min-width: $tablet) {
     flex-basis: 264px;
   }
 
   @media (min-width: $desktop) {
-    flex-basis: 375px;
-  }
+      flex-basis: 390px;
+    }
 }
 
-.modal__poster-item {
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.modal__content-container {
-  display: flex;
-  flex-basis: 390px;
-  flex-direction: column;
-  gap: 20px;
-  @media (min-width: $tablet) and (max-width: $desktop) {
-    flex-basis: 264px;
-  }
-}
-
-.modal__title {
+.movie-modal__title {
   @include font($fw: 500, $fs: 20px, $lh: 1.15, $ls: inherit);
   text-transform: uppercase;
   @media (min-width: $desktop) {
@@ -96,7 +146,7 @@
   }
 }
 
-.modal__content-thumb {
+.movie-modal__content-thumb {
   @include flex-centred($d: flex, $ai: baseline, $jc: flex-start);
   gap: 40px;
 
@@ -105,65 +155,57 @@
   }
 }
 
-.modal__text {
+.movie-modal__table {
+  display: grid;
+  grid-template-columns: min-content auto;
+  grid-template-rows: repeat(4, auto);
+  font-size: 12px;
+  width: 100%;
+  grid-row-gap: 8px;
+  grid-column-gap: 20px;
+
+  @media (min-width: 320px) {
+    grid-column-gap: 40px;
+    white-space: nowrap;
+  }
+
+  @media (min-width: $desktop) {
+    grid-column-gap: 85px;
+  }
+
   @include font($fw: 500, $fs: 12px, $lh: 1.33, $ls: inherit);
 }
 
-.modal__table {
-  table-layout: fixed;
-  flex-basis: 100%;
-
-  @include font($fw: 500, $fs: 12px, $lh: 1.33, $ls: inherit);
-  vertical-align: baseline;
-  border-spacing: 0px 8px;
-
-  & tr {
-    vertical-align: baseline;
-  }
-
-  & td {
-    padding-top: 0;
-  }
-
-  & th {
-    text-align: start;
-    font-weight: inherit;
-    color: #8c8c8c;
-  }
-}
-
-.modal__table_slash {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+.movie-modal__table_grey {
   color: #8c8c8c;
 }
 
-.modal__table_bc_accent {
+.movie-modal__table_bc_accent {
   color: $white-text-color;
   padding: 1px 10px;
   background-color: $button-accent-bg-color;
   border-radius: 5px;
 }
 
-.modal__table_bc_grey {
+.movie-modal__table_bc_grey {
   color: $main-text-color;
   padding: 1px 4px;
   background-color: $white-text-color;
   border-radius: 5px;
 }
 
-.modal__text_upper {
+.movie-modal__description-title {
+  @include font($fw: 500, $fs: 12px, $lh: 1.33, $ls: inherit);
   text-transform: uppercase;
 }
 
-.modal__description {
+.movie-modal__description {
   max-height: 260px;
   overflow: auto;
   @include font($fw: 500, $fs: 12px, $lh: 1.67, $ls: inherit);
 }
 
-.modal-button__thumb {
+.movie-modal-button__thumb {
   @include flex-centred($d: flex, $ai: unset, $jc: center);
   gap: 20px;
 
@@ -177,7 +219,7 @@
   }
 }
 
-.modal-button {
+.movie-modal-button {
   flex-basis: 136px;
   height: 44px;
   transform: scale(1);
@@ -211,7 +253,7 @@
   }
 }
 
-.modal-button_accent {
+.movie-modal-button_accent {
   color: $white-text-color;
   background-color: $button-accent-bg-color;
   border: 1px solid transparent;

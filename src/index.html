@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./index.scss" />
-  <script type="module" src="./index.js"></script>
 </head>
 
 <body>
@@ -18,11 +17,15 @@
 
   <main>
     <h1 class="visually-hidden">Filmoteka</h1>
-
     <include src="partials/home.html"></include>
+    <include src="partials/authModal.html"></include>
     <div class="loader is-hidden">Loading...</div>
+    <div class="pagination-buttons"></div>
+
   </main>
   <include src="partials/footer.html"></include>
+  <script type="module" src="./index.js"></script>
+  <script type="module" src="js/authentification.js"></script>
   <include src="partials/modal.html"></include>
 </body>
 
