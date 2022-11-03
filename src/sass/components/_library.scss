@@ -1,0 +1,16 @@
+.library-error {
+  display: none;
+  padding: 50px;
+  width: 100%;
+  font-size: 30px;
+  text-align: center;
+  color: #d80000d2;
+}
+.library-error__text {
+  color: black;
+}
+
+.library-error__header {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
