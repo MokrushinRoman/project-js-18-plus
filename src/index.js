@@ -4,7 +4,7 @@ import './js/myLibrary';
 import './js/students-modal';
 import { getModal } from './js/modal';
 import createPaginations from "./js/pagination.js";
-
+getModal('.movie-list');
 
 let totalPages = 0;
 let page = 1;

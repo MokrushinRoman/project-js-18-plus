@@ -10,18 +10,18 @@ export function getRefs() {
     movieListEL: '',
     watchedBtn: '',
     queueBtn: '',
-    iframeEl: '',
+    videoPlayerEl: '',
     modalBoxEl: '',
   };
   return refs;
-}
+};
 
 const refs = getRefs();
 
 export function getModal(selector) {
   refs.movieListEL = document.querySelector(selector);
   refs.movieListEL.addEventListener('click', onModalOpen);
-}
+};
 
 async function onModalOpen(e) {
   if (e.target.nodeName !== 'IMG') {
@@ -29,7 +29,7 @@ async function onModalOpen(e) {
   }
   refs.idTargetCard = e.target.parentElement.attributes.id.value;
   await createModal();
-  refs.modalEl.classList.remove('backdrop_is-hidden');
+  refs.modalEl.classList.remove('movie-backdrop_is-hidden');
   getAccessToBtn();
   refs.modalBoxEl = refs.modalEl.querySelector('.movie-modal');
   refs.modalCloseBtn.addEventListener('click', onModalClose);
@@ -37,32 +37,32 @@ async function onModalOpen(e) {
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.bodyEl.classList.add('overflow-hidden');
   refs.modalEl.addEventListener('click', onPosterClick);
-}
+};
 
 async function createModal() {
   await getMovieDetails(refs.idTargetCard).then(response => {
     return createModalMarkup(response);
   });
-}
+};
 
 function getAccessToBtn() {
   refs.modalCloseBtn = refs.modalEl.querySelector('[data-modal-close]');
   refs.watchedBtn = refs.modalEl.querySelector('[data-control-watched]');
   refs.queueBtn = refs.modalEl.querySelector('[data-control-turn]');
-}
+};
 
 function onModalClose() {
   refs.idTargetCard = '';
-  refs.modalEl.classList.add('backdrop_is-hidden');
+  refs.modalEl.classList.add('movie-backdrop_is-hidden');
   resetModal();
   document.removeEventListener('keydown', onKeyDown);
   refs.modalEl.removeEventListener('click', onClickOutside);
   refs.bodyEl.classList.remove('overflow-hidden');
-}
+};
 
 function onKeyDown(e) {
   e.code === 'Escape' && onModalClose();
-}
+};
 
 function createModalMarkup({
   title,
@@ -143,15 +143,15 @@ function createModalMarkup({
   </div>
 </div>`;
   return refs.modalEl.insertAdjacentHTML('afterbegin', markup);
-}
+};
 
 function onClickOutside(e) {
   e.target === refs.modalEl && onModalClose();
-}
+};
 
 function resetModal() {
   refs.modalEl.innerHTML = '';
-}
+};
 
 function quantityRegulator(arr) {
   if (arr.length <= 2) {
@@ -163,7 +163,7 @@ function quantityRegulator(arr) {
   } else {
     return `${arr[0].name}, ${arr[1].name}, Other`;
   }
-}
+};
 
 async function onPosterClick(e) {
   if (e.target.nodeName !== 'IMG') {
@@ -172,31 +172,31 @@ async function onPosterClick(e) {
   await getVideoTrailer(refs.idTargetCard).then(response => {
     return getTrailer(response.results);
   });
-  refs.iframeEl = refs.modalEl.querySelector('.movie-modal__video-player');
+  refs.videoPlayerEl = refs.modalEl.querySelector('.movie-modal__video-player-container');
   document.removeEventListener('keydown', onKeyDown);
   refs.modalEl.removeEventListener('click', onClickOutside);
   refs.modalEl.removeEventListener('click', onPosterClick);
   refs.modalEl.addEventListener('click', onPlayerCloseToClick);
   document.addEventListener('keydown', onClosePlayerToEsc);
-}
+};
 
 function onClosePlayerToEsc(e) {
   console.log(e.code);
   e.code === 'Escape' && removeVideoPlayer();
-}
+};
 
 function onPlayerCloseToClick(e) {
   e.currentTarget === refs.modalEl && removeVideoPlayer();
-}
+};
 
 function removeVideoPlayer() {
-  refs.iframeEl.remove();
+  refs.videoPlayerEl.remove();
   refs.modalEl.removeEventListener('click', onPlayerCloseToClick);
   document.removeEventListener('keydown', onClosePlayerToEsc);
   document.addEventListener('keydown', onKeyDown);
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.modalEl.addEventListener('click', onPosterClick);
-}
+};
 
 function getTrailer(arr) {
   const officialTrailer = arr.find(obj => obj.name === "Official Trailer");
@@ -204,9 +204,19 @@ function getTrailer(arr) {
    return Notify.failure(`Oops! "Can't find video"`);
   }
   createVideoPlayer(officialTrailer);
-}
+};
 
 function createVideoPlayer({key}) {
-  const markup = `<iframe class="movie-modal__video-player" src="https://www.youtube.com/embed/${key}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  const markup = `<div class="movie-modal__video-player-container">
+  <iframe
+    class="movie-modal__video-player"
+    src="https://www.youtube.com/embed/${key}"
+    title="YouTube video player"
+    frameborder="0"
+    autoplay="1"
+    allow="accelerometer; clipboard-write; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</div>`;
   return refs.modalBoxEl.insertAdjacentHTML('beforeend', markup);
-}
+};
