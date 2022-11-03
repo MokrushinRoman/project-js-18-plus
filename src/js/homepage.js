@@ -19,7 +19,7 @@ onHome();
 function onHome() {
   refs.home.addEventListener('click', onClickBtn);
   refs.library.addEventListener('click', onClickBtn);
-  refs.form.addEventListener('submit', onSubmit);
+  // refs.form.addEventListener('submit', onSubmit);
 }
 
 export function onClickBtnHome() {
@@ -46,11 +46,11 @@ function onClickBtnLibrary() {
   refs.bgHeader.classList.remove('header__home');
 }
 
-function onSubmit(event) {
-  event.preventDefault();
-  const query = event.currentTarget.elements.search.value;
-  console.log(query);
-}
+// function onSubmit(event) {
+//   event.preventDefault();
+//   const query = event.currentTarget.elements.search.value;
+//   console.log(query);
+// }
 
 function onClickBtn(event) {
   if (event.target === refs.library) {

@@ -1,6 +1,5 @@
 import placeholderImg from '../images/film.jpg';
 import Genres from '../genres.json';
-import lazySizes from 'lazysizes';
 function getGenresById(genre_ids) {
   if (genre_ids !== undefined && genre_ids.length !== 0) {
     // const tmpLoad = load(GENREFILMS_LOCALSTORAGE_KEY)
@@ -34,20 +33,15 @@ export function renderCards(data) {
         genre_ids,
       }) => {
         const genresNames = getGenresById(genre_ids);
-        console.log('placeholderImg: ', placeholderImg);
-        return `<li class="movie-card"  id="${id}" >
-  <div class="img-container">
-  ${`<img
-    data-src="https://image.tmdb.org/t/p/w400/${poster_path}"
-    src="${
-      poster_path
-        ? `https://image.tmdb.org/t/p/w200/${poster_path}`
-        : placeholderImg
-    }" alt="${title}" class="lazyload  movie-card__img">`}
-  </div>
-  <p class="movie-card__title">${title}</p>
-  <div class="movie-card__details">
-      <p class="movie-card__genres">${genresNames} </p>
+        const defaultImageUrl = new URL('../images/film.jpg', import.meta.url);
+        const imgUrl = poster_path
+          ? `https://image.tmdb.org/t/p/w200${poster_path}`
+          : `${defaultImageUrl.href}`;
+        return `<li class="movie-card"  id="${id}">
+    <img data-src="${imgUrl}" src="${imgUrl}" alt="${title}" class="lazyload  movie-card__img">
+    <p class="movie-card__title">${title}</p>
+    <div class="movie-card__details">
+    <p class="movie-card__genres">${genresNames} </p>
       ${
         release_date
           ? `<p class="movie-card__year">&nbsp;|&nbsp;${release_date.slice(
