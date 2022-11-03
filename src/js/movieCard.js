@@ -1,21 +1,18 @@
-import placeholderImg from '../placeholderImg/film.jpg';
-import {
-  load,
-  GENREFILMS_LOCALSTORAGE_KEY,
-} from '../localstorage/localstorage';
+import placeholderImg from '../images/film.jpg';
+import Genres from '../genres.json';
 
 function getGenresById(genre_ids) {
   if (genre_ids !== undefined && genre_ids.length !== 0) {
-    const tmpLoad = load(GENREFILMS_LOCALSTORAGE_KEY)
-      ? load(GENREFILMS_LOCALSTORAGE_KEY)
-      : [];
-    const allGenres = Array.from(tmpLoad);
+    // const tmpLoad = load(GENREFILMS_LOCALSTORAGE_KEY)
+    //   ? load(GENREFILMS_LOCALSTORAGE_KEY)
+    //   : [];
+    // const allGenres = Array.from(tmpLoad);
 
-    const myGenres = allGenres.filter(genre => genre_ids.includes(genre.id));
+    const myGenres = Genres.filter(genre => genre_ids.includes(genre.id));
 
     return myGenres.length > 3
       ? myGenres
-          .slice(0, 2)
+          .slice(0, 3)
           .map(genre => genre.name)
           .join(', ') + ', Other'
       : myGenres.map(genre => genre.name).join(', ');
