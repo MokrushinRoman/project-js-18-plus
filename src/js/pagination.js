@@ -17,8 +17,9 @@ async function onSerchSubmit(e) {
   e.preventDefault();
   movieList.innerHTML = "";
   pagBtnEl.remove();
-  fetchParams.query = serchForm.elements.searchQuery.value;
+  fetchParams.query = serchForm.elements.searchQuery.value.toLowerCase().trim();
   fetchParams.page = 1;
+  console.log(fetchParams);
   await newMovieSearch(fetchParams); 
   const paginationButtons = new PaginationButton(totalPages, fetchParams.page).render();
 }
