@@ -1,9 +1,18 @@
-userId = '111';
-// test1 = { watched: [], queue: [] };
-// localStorage.setItem(userId, JSON.stringify(test1));
+import auth from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+let userId;
+// onAuthStateChanged(auth, user => {
+//   if (user) {
+//     userId = user.uid;
+//   }
+// });
+userId = '5CUd0vw3kJXZfOfswPTjJul5Jxa2'; //временно так как не могу получить из firebase
 
 export function getMoviesFromLocalStorage(listName) {
   try {
+    if (!userId) {
+      return;
+    }
     return (movies = localStorage.getItem(userId)
       ? JSON.parse(localStorage.getItem(userId))
       : { watched: [], queue: [] });
@@ -14,6 +23,9 @@ export function getMoviesFromLocalStorage(listName) {
 
 export function addMovieInLocaleStorage(listName, movie) {
   try {
+    if (!userId) {
+      return;
+    }
     const moviesFromLocaleStorage = getMoviesFromLocalStorage(userId);
     moviesFromLocaleStorage[listName].push(movie);
     localStorage.setItem(userId, JSON.stringify(moviesFromLocaleStorage));
@@ -24,6 +36,9 @@ export function addMovieInLocaleStorage(listName, movie) {
 
 export function removeMovieInLocaleStorage(listName, movieId) {
   try {
+    if (!userId) {
+      return;
+    }
     const moviesFromLocaleStorage = getMoviesFromLocalStorage(userId);
     const findIndexMovie = moviesFromLocaleStorage[listName].findIndex(
       movie => movie.id === movieId
@@ -39,6 +54,9 @@ export function removeMovieInLocaleStorage(listName, movieId) {
 
 export function findMoviesInLocaleStorage(listName, movieId) {
   try {
+    if (!userId) {
+      return;
+    }
     const moviesFromLocaleStorage = getMoviesFromLocalStorage(userId);
     if (
       moviesFromLocaleStorage[listName].findIndex(

@@ -3,7 +3,7 @@ import { getMoviesFromLocalStorage } from './local-storage';
 
 const watchedBtnRef = document.querySelector('#btn__watched');
 const queueBtnRef = document.querySelector('#btn__queue');
-const libraryListError = document.querySelector('.library-list__error');
+const libraryListError = document.querySelector('.library-error');
 
 const movieList = document.querySelector('.movie-list');
 export let pageList = '';
@@ -38,7 +38,6 @@ export function renderMoviesList(listName) {
     return;
   }
   const movies = getMoviesFromLocalStorage(listName)[listName];
-  console.log('111', movies);
   if (checkCountMovies(movies)) {
     if (movies.length) {
       movieList.innerHTML = movieListMarkup(movies);
@@ -47,7 +46,6 @@ export function renderMoviesList(listName) {
 }
 
 export function checkCountMovies(arrMovies) {
-  console.log('arrMovies: ', arrMovies);
   if (arrMovies.length < 1) {
     libraryListError.style.display = 'block';
     movieList.innerHTML = '';

@@ -1,6 +1,6 @@
 import { movies } from '../index.js';
 import { getTrending, searchMovies } from '../filmsApi';
-import { onWatchedBtnClick } from './myLibrary';
+import { onWatchedBtnClick } from './my-library';
 
 const refs = {
   bgHeader: document.getElementById('bg'),
@@ -11,7 +11,7 @@ const refs = {
   form: document.querySelector('.search__form'),
   search: document.querySelector('.search__form_button'),
   movieList: document.querySelector('.movie-list'),
-  libraryListError: document.querySelector('.library-list__error'),
+  libraryListError: document.querySelector('.library-error'),
 };
 
 onHome();
@@ -23,7 +23,7 @@ function onHome() {
 }
 
 export function onClickBtnHome() {
-  refs.libraryListError.innerText = '';
+  // refs.libraryListError.innerText = '';
   refs.libraryListError.style.display = 'none';
 
   refs.bgHeader.classList.remove('header__library');
