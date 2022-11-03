@@ -1,7 +1,8 @@
 import API from './api';
 const MAIN_API_KEY = 'b92b6dc04d7a0a77de1e180daf2986e1';
 
-const API_KEY = ''; /*put your personal API-key instead of empty string*/
+const API_KEY =
+  'b92b6dc04d7a0a77de1e180daf2986e1'; /*put your personal API-key instead of empty string*/
 
 import { Notify } from 'notiflix';
 export const getTrending = async ({ timeWindow = 'day', page = 1 } = {}) => {
