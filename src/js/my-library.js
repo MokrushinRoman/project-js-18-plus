@@ -37,7 +37,7 @@ export function renderMoviesList(listName) {
   if (listName !== pageList) {
     return;
   }
-  const movies = getMoviesFromLocalStorage(listName)[listName];
+  const movies = getMoviesFromLocalStorage()[listName];
   if (checkCountMovies(movies)) {
     if (movies.length) {
       movieList.innerHTML = movieListMarkup(movies);
