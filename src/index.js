@@ -4,8 +4,16 @@ import './js/myLibrary';
 import './js/students-modal';
 import { getModal } from './js/modal';
 
+import PaginationButton from "./js/pagination.js";
+
+const paginationButtons = new PaginationButton(20, 5);
 getModal('.movie-list');
 
+paginationButtons.render();
+
+paginationButtons.onChange(e => {
+  console.log('-- changed', e.target.value)
+});
 let totalPages = 0;
 let page = 1;
 let itemsPerPage = 20;
