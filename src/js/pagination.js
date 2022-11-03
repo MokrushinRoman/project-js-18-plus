@@ -1,11 +1,14 @@
 import '../js/myLibrary';
 import { searchMovies, getTrending } from '../filmsApi';
+import { Notify } from 'notiflix';
 
 const fetchParams = {
   query: null,
   page: 1,
 };
 
+let paginationButtons = null;
+let currentPage = null;
 let totalPages = "";
 let maxPages = 10;
 const serchForm = document.querySelector('#search-form');
@@ -16,12 +19,12 @@ serchForm.addEventListener('submit', onSerchSubmit);
 async function onSerchSubmit(e) {
   e.preventDefault();
   movieList.innerHTML = "";
+  currentPage = 1;
   pagBtnEl.remove();
   fetchParams.query = serchForm.elements.searchQuery.value.toLowerCase().trim();
-  fetchParams.page = 1;
-  console.log(fetchParams);
-  await newMovieSearch(fetchParams); 
-  const paginationButtons = new PaginationButton(totalPages, fetchParams.page).render();
+  fetchParams.page = currentPage;
+  await newMovieSearch(fetchParams);
+  createPaginations(totalPages, currentPage);
 }
 
 const pageNumbers = (total, max, current) => {
@@ -111,7 +114,7 @@ async function newMovieSearch(params) {
       return movieCards;
     }
   );
-  movieList.innerHTML = result;
+  !result ? Notify.failure("Can't find anything") : movieList.innerHTML = result;
 }
 
 async function nextUserMovies(params) {
@@ -143,7 +146,7 @@ async function nextUserMovies(params) {
 
 export default function PaginationButton(total, current) {
   totalPages = total;
-  let currentPage = current;
+  currentPage = current;
   const maxPagesVisible = maxPages;
   fetchParams.page = currentPage;
   let pages = pageNumbers(totalPages, maxPagesVisible, currentPage);
@@ -168,7 +171,6 @@ export default function PaginationButton(total, current) {
     buttonElement.addEventListener('click', e => {
       fetchParams.page = handleClick(e);
       crateNewPage();
-      console.log(fetchParams);
       this.update();
       paginationButtonContainer.value = currentPage;
       paginationButtonContainer.dispatchEvent(new CustomEvent('change', {detail: {currentPageBtn}}));
@@ -244,5 +246,6 @@ export default function PaginationButton(total, current) {
 }
 
 export default function createPaginations(total, current) {
-  const paginationButtons = new PaginationButton(total, current).render();
+  paginationButtons = new PaginationButton(total, current);
+  paginationButtons.render();
 }; 

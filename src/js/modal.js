@@ -175,6 +175,9 @@ async function onPosterClick(e) {
   refs.videoPlayerEl = refs.modalEl.querySelector(
     '.movie-modal__video-player-container'
   );
+  if (!refs.videoPlayerEl) {
+    return;
+  }
   document.removeEventListener('keydown', onKeyDown);
   refs.modalEl.removeEventListener('click', onClickOutside);
   refs.modalEl.removeEventListener('click', onPosterClick);
@@ -183,7 +186,6 @@ async function onPosterClick(e) {
 }
 
 function onClosePlayerToEsc(e) {
-  console.log(e.code);
   e.code === 'Escape' && removeVideoPlayer();
 }
 

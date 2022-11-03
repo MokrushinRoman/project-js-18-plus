@@ -62,4 +62,3 @@ export async function movies({ page }) {
 }
 movies({ page });
 currentLocation = window.location.href;
-console.log('currentLocation: ', currentLocation);

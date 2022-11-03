@@ -46,11 +46,10 @@ function onClickBtnLibrary() {
   refs.bgHeader.classList.remove('header__home');
 }
 
-// function onSubmit(event) {
-//   event.preventDefault();
-//   const query = event.currentTarget.elements.search.value;
-//   console.log(query);
-// }
+function onSubmit(event) {
+  event.preventDefault();
+  const query = event.currentTarget.elements.search.value;
+}
 
 function onClickBtn(event) {
   if (event.target === refs.library) {
