@@ -4,7 +4,8 @@ import './js/myLibrary';
 import './js/students-modal';
 import { getModal } from './js/modal';
 
-import PaginationButton from "./js/pagination.js";
+import PaginationButton from './js/pagination.js';
+import { renderCards } from './js/movieCard';
 
 const paginationButtons = new PaginationButton(20, 5);
 getModal('.movie-list');
@@ -12,7 +13,7 @@ getModal('.movie-list');
 paginationButtons.render();
 
 paginationButtons.onChange(e => {
-  console.log('-- changed', e.target.value)
+  console.log('-- changed', e.target.value);
 });
 let totalPages = 0;
 let page = 1;
@@ -41,22 +42,24 @@ export async function movies({ page }) {
   const result = await getTrending({ page }).then(
     ({ results, total_pages }) => {
       totalPages = total_pages;
-      const movieCards = results
-        .map(
-          ({
-            title = '',
-            name = '',
-            poster_path,
+      const movieCards = renderCards(results);
+      // results
+      //   .map(
+      //     ({
+      //       title = '',
+      //       name = '',
+      //       poster_path,
 
-            id,
-          }) =>
-            card({
-              title: title ? title : name,
-              imgUrl: poster_path,
-              id,
-            })
-        )
-        .join('');
+      //       id,
+      //     }) =>
+      // 		renderCards
+      //       card({
+      //         title: title ? title : name,
+      //         imgUrl: poster_path,
+      //         id,
+      //       })
+      //   )
+      //   .join('');
 
       return movieCards;
     }

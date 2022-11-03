@@ -1,6 +1,8 @@
-import 'lazysizes';
 import placeholderImg from '../placeholderImg/film.jpg';
-import { load, GENREFILMS_LOCALSTORAGE_KEY } from '../localstorage/localstorage';
+import {
+  load,
+  GENREFILMS_LOCALSTORAGE_KEY,
+} from '../localstorage/localstorage';
 
 function getGenresById(genre_ids) {
   if (genre_ids !== undefined && genre_ids.length !== 0) {
@@ -20,7 +22,6 @@ function getGenresById(genre_ids) {
   } else return 'No genres found';
 }
 
-
 export function renderCards(data) {
   const movieCardMarkup = data
     ?.map(
@@ -35,8 +36,9 @@ export function renderCards(data) {
         vote_average,
         genre_ids,
       }) => {
+        console.log(poster_path);
         const genresNames = getGenresById(genre_ids);
-        return `<li class="movie-card" data-id="${id}">
+        return `<li class="movie-card"  id="${id}" >
   <div class="img-container">
   ${
     !poster_path
@@ -44,11 +46,11 @@ export function renderCards(data) {
       src="${placeholderImg}" alt="${title}" class="movie-card__img">`
       : `<img
     data-src="https://image.tmdb.org/t/p/w400/${poster_path}"
-    src="${placeholderImg}" alt="${title}" class="lazyload blur-up movie-card__img">`
+    src="https://image.tmdb.org/t/p/w200/${poster_path}" alt="${title}" class="lazyload  movie-card__img">`
   }
   </div>
-  <h2 class="movie-card__title">${title}</h2>
-  <div class="movie-card__details">   
+  <p class="movie-card__title">${title}</p>
+  <div class="movie-card__details">
       <p class="movie-card__genres">${genresNames} </p>
       ${
         release_date
@@ -58,12 +60,12 @@ export function renderCards(data) {
             )}</p>`
           : ''
       }
-    
+
     ${
       vote_average
         ? `<p class="movie-card__rating">${vote_average.toFixed(1)}</p>`
         : ''
-    }   
+    }
   </div>
 </li>`;
       }

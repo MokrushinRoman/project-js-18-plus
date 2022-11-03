@@ -5,29 +5,27 @@
 @import 'sass/base/reset';
 
 @import 'sass/utils/mixins';
-
+@import 'sass/utils/hidden';
 @import 'sass/components/container';
 @import 'sass/components/buttons';
 @import 'sass/components/authModal';
 @import 'sass/components/movies';
 @import 'sass/components/students-modal';
 
-@import './sass/components/container';
-@import './sass/components/buttons';
-@import './sass/components/pagination';
-@import './sass/components/movies';
-@import './sass/components/modal';
+@import 'sass/components/container';
+@import 'sass/components/buttons';
+@import 'sass/components/pagination';
+@import 'sass/components/movies';
+@import 'sass/components/movies_card';
+@import 'sass/components/modal';
 
-@import './sass/layout/header';
-@import './sass/layout/footer';
+@import 'sass/layout/header';
+@import 'sass/layout/footer';
 @import '../node_modules/tui-pagination/dist/tui-pagination.css';
-@import './sass/layout/loader';
+@import 'sass/layout/loader';
 
-
-@import './sass/components/modal';
-
+@import 'sass/components/modal';
 
 @import './sass/layout/header';
 @import './sass/layout/footer';
 @import './sass/layout/loader';
-

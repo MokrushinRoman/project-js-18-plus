@@ -47,11 +47,27 @@
                 id="userName"
                 class="form-control__input"
                 name="username"
-                placeholder="enter your name"
+                placeholder="Enter your name"
               />
               <small class="form-control__error-message"></small>
             </label>
           </div>
+          <div class="form-control input-file">
+            <label class="form-control__file" for="file">
+              <input
+                type="file"
+                id="file"
+                class="form-control__input"
+                name="file"
+              />
+
+              <small class="form-control__error-message"></small>
+            </label>
+            <button type="button" id="file-remove-button" class="auth-form__remove-file-button hide" >
+              &#x2715
+            </button>
+          </div>
+
           <div class="form-control">
             <label class="form-control__label" for="email">
               <input
@@ -59,7 +75,7 @@
                 id="email"
                 class="form-control__input auth-form__input"
                 name="email"
-                placeholder="enter your email"
+                placeholder="Enter your email"
               />
               <small class="form-control__error-message"></small>
             </label>
@@ -71,7 +87,19 @@
                 class="form-control__input auth-form__input"
                 id="password"
                 name="password"
-                placeholder="enter your password"
+                placeholder="Enter your password"
+              />
+              <small class="form-control__error-message"> </small>
+            </label>
+          </div>
+          <div class="form-control">
+            <label class="form-control__label" for="confirmPassword">
+              <input
+                type="text"
+                class="form-control__input auth-form__input"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Confirm password"
               />
               <small class="form-control__error-message"> </small>
             </label>

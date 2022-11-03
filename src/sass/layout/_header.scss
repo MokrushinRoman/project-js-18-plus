@@ -263,6 +263,10 @@
       display: flex;
       align-items: center;
     }
+    &__avatar {
+      width: 30px;
+      height: 30px;
+    }
     &__button {
       @include nav__button;
       &:last-child {
@@ -333,6 +337,10 @@
 }
 
 .search__form {
+  &_img {
+    width: 15px;
+    height: 15px;
+  }
   &_wrapper {
     position: relative;
   }
