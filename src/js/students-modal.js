@@ -13,13 +13,13 @@
   
   function onOpenModal() {
     window.addEventListener("keydown", onEscKeyPress);
-    refs.modal.classList.remove("is-hidden");
+    refs.modal.classList.remove("hide");
     refs.body.classList.remove("no-scroll");
   }
 
   function onCloseModal() {
     window.removeEventListener("keydown", onEscKeyPress);
-    refs.modal.classList.add("is-hidden");
+    refs.modal.classList.add("hide");
     refs.body.classList.add("no-scroll");
   } 
    
