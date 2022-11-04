@@ -1,66 +1,59 @@
 import { showLoader, hideLoader } from './loader';
+import { getMoviesFromLocalStorage } from './local-storage';
+import { renderCards } from './movieCard';
 
 const watchedBtnRef = document.querySelector('#btn__watched');
 const queueBtnRef = document.querySelector('#btn__queue');
-const libraryListError = document.querySelector('.library-list__error');
+const libraryListError = document.querySelector('.library-error');
+
 const movieList = document.querySelector('.movie-list');
+export let pageList = '';
 
 watchedBtnRef.addEventListener('click', onWatchedBtnClick);
 queueBtnRef.addEventListener('click', onQueueBtnClick);
 
 export function onWatchedBtnClick() {
+  // if (watchedBtnRef.classList.contains('btn__library--active')) return;
+  showLoader();
   watchedBtnRef.classList.add('btn__library--active');
   queueBtnRef.classList.remove('btn__library--active');
-
-  getFilmsInlocalStorage('watched');
+  pageList = 'watched';
+  renderMoviesList('watched');
+  hideLoader();
 }
 
 function onQueueBtnClick() {
   if (queueBtnRef.classList.contains('btn__library--active')) return;
-
+  showLoader();
   queueBtnRef.classList.add('btn__library--active');
   watchedBtnRef.classList.remove('btn__library--active');
-
-  getFilmsInlocalStorage('queue');
+  pageList = 'queue';
+  renderMoviesList('queue');
+  hideLoader();
 }
 
-function getFilmsInlocalStorage(nameList) {
-  showLoader();
-  const movies = localStorage.getItem(nameList)
-    ? [...JSON.parse(localStorage.getItem(nameList))]
-    : [];
-
+export function renderMoviesList(listName) {
+  if (listName !== pageList) {
+    return;
+  }
+  const movies = getMoviesFromLocalStorage()[listName];
   if (checkCountMovies(movies)) {
     if (movies.length) {
       movieList.innerHTML = movieListMarkup(movies);
     }
   }
-  hideLoader();
 }
 
 export function checkCountMovies(arrMovies) {
   if (arrMovies.length < 1) {
     libraryListError.style.display = 'block';
-    libraryListError.innerHTML = 'Oops, films not found!';
     movieList.innerHTML = '';
     return false;
   }
   libraryListError.style.display = 'none';
-  libraryListError.innerHTML = '';
   return true;
 }
 
 function movieListMarkup(arrMovies) {
-  return arrMovies
-    .map(({ title, poster_path, id }) => {
-      return `<li id="${id}" class="movie-list__item movie">
-        <img class="movie__img" src=${
-          poster_path ? `https://image.tmdb.org/t/p/w200${poster_path} ` : ''
-        }
-          alt="${title}" loading="lazy"
-        />
-        <MovieTittle title={title}>${title}</MovieTittle>
-      </li>`;
-    })
-    .join('');
+  return renderCards(results);
 }

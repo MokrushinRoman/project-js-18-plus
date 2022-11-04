@@ -1,4 +1,4 @@
-import '../js/myLibrary';
+import './myLibrary';
 import { searchMovies, getTrending } from '../filmsApi';
 import { Notify } from 'notiflix';
 import { renderCards } from './movieCard';
