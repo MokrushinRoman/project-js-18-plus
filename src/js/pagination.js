@@ -2,6 +2,7 @@ import './myLibrary';
 import { searchMovies, getTrending } from '../filmsApi';
 import { Notify } from 'notiflix';
 import { renderCards } from './movieCard';
+import { hideLoader, showLoader } from './loader';
 
 const fetchParams = {
   query: '',
@@ -61,20 +62,22 @@ async function nextRandomMovies({ page }) {
 }
 
 async function newMovieSearch(params) {
+  let totalMovies = null;
   const result = await searchMovies(params).then(
-    ({ results, total_pages }) => {
+    ({ results, total_pages, total_results }) => {
+      totalMovies = total_results;
       totalPages = total_pages;
       return renderCards(results);
     }
   );
   if (!result) {
-    pagBtnEl.remove();
+    pagBtnEl?.remove();
     createErrorMassage();
     return;
   }
   movieList.innerHTML = result;
-  createPaginations(totalPages, currentPage);
   errorSerchEl && errorSerchEl.remove();
+  totalMovies <= 20 ? pagBtnEl?.remove() : createPaginations(totalPages, currentPage);
 }
 
 function createErrorMassage() {
