@@ -1,8 +1,8 @@
 import { movies } from '../index.js';
-import { onWatchedBtnClick } from './myLibrary';
+import { onWatchedBtnClick, pageList } from './myLibrary';
 
 const refs = {
-  bgHeader: document.getElementById('bg'),
+  bgHeader: document.getElementById('header'),
   logo: document.querySelector('.header__logo--text'),
   home: document.querySelector('#button__home'),
   library: document.querySelector('#button__library'),
@@ -10,7 +10,7 @@ const refs = {
   form: document.querySelector('.search__form'),
   search: document.querySelector('.search__form_button'),
   movieList: document.querySelector('.movie-list'),
-  libraryListError: document.querySelector('.library-error'),
+  libraryListError: document.querySelector('.library-list__error'),
 };
 
 onHome();
@@ -23,7 +23,7 @@ function onHome() {
 
 export function onClickBtnHome() {
   // refs.libraryListError.innerText = '';
-  refs.libraryListError.style.display = 'none';
+  refs.libraryListError.style.display = 'none'; //скрытие ошибки пустых листов на странице home
 
   refs.bgHeader?.classList.remove('header__library');
   refs.form.style.display = 'flex';
@@ -33,6 +33,7 @@ export function onClickBtnHome() {
   refs.home.classList.add('navigation__button--active');
 
   movies({ page: 1 });
+  pageList = ''; //нужно для работы library
 }
 
 function onClickBtnLibrary() {

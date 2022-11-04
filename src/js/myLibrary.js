@@ -4,10 +4,10 @@ import { renderCards } from './movieCard';
 
 const watchedBtnRef = document.querySelector('#btn__watched');
 const queueBtnRef = document.querySelector('#btn__queue');
-const libraryListError = document.querySelector('.library-error');
+const libraryListError = document.querySelector('.library-list__error');
 
 const movieList = document.querySelector('.movie-list');
-export let pageList = '';
+export let pageList = ''; 
 
 watchedBtnRef.addEventListener('click', onWatchedBtnClick);
 queueBtnRef.addEventListener('click', onQueueBtnClick);
@@ -55,5 +55,5 @@ export function checkCountMovies(arrMovies) {
 }
 
 function movieListMarkup(arrMovies) {
-  return renderCards(results);
+  return renderCards(arrMovies);
 }

@@ -1,5 +1,7 @@
 import auth from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { Notify } from 'notiflix';
+
 let userId;
 onAuthStateChanged(auth, user => {
   if (user) {
@@ -11,25 +13,28 @@ onAuthStateChanged(auth, user => {
 
 export function getMoviesFromLocalStorage() {
   if (!userId) {
-    return;
+    return { watched: [], queue: [] };
   }
-  return (movies = localStorage.getItem(userId)
+  return localStorage.getItem(userId)
     ? JSON.parse(localStorage.getItem(userId))
-    : { watched: [], queue: [] });
+    : { watched: [], queue: [] };
 }
 
 export function addMovieInLocaleStorage(listName, movie) {
   if (!userId) {
-    return;
+    Notify.failure('You need to be logged in to add!');
+    return false;
   }
   const moviesFromLocaleStorage = getMoviesFromLocalStorage();
   moviesFromLocaleStorage[listName].push(movie);
   localStorage.setItem(userId, JSON.stringify(moviesFromLocaleStorage));
+  return true;
 }
 
 export function removeMovieInLocaleStorage(listName, movieId) {
   if (!userId) {
-    return;
+    Notify.failure('You need to be logged in to add!');
+    return false;
   }
   const moviesFromLocaleStorage = getMoviesFromLocalStorage();
   const findIndexMovie = moviesFromLocaleStorage[listName].findIndex(

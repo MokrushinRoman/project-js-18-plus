@@ -75,7 +75,10 @@ async function onModalOpen(e) {
       if (isOnCurrentList) {
         return;
       }
-      addMovieInLocaleStorage(listName, movie);
+
+      if (!addMovieInLocaleStorage(listName, movie)) {
+        return;
+      }
       if (isOnOtherList) {
         removeMovieInLocaleStorage(otherListName, movie.id);
         otherBtn.innerHTML = `add to ${otherListName}`;
