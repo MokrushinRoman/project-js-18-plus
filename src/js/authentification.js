@@ -26,7 +26,7 @@ const emailRegExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 // [SM]get close btn
 
 // [SM] handle click outside of modal to close it
-handleClickOutsideModal = e => {
+const handleClickOutsideModal = e => {
   if (e.target == refs.modal) {
     closeAuthModal();
   }
@@ -79,7 +79,7 @@ const removeEventListeners = () => {
   refs.removeFileBtn?.removeEventListener('click', clearUploadedFile);
 };
 // [SM] fully close modal and clear listeners
-closeAuthModal = () => {
+function closeAuthModal() {
   clearErrorMessage();
   const authFormElements = document.querySelectorAll('.auth-form');
   // [SM] reset form
@@ -94,7 +94,7 @@ closeAuthModal = () => {
     }
     el.classList.add('hide');
   });
-};
+}
 let errorMessageTimeOut;
 // [SM]Check sign up validation
 const validateSignUpForm = e => {
@@ -178,9 +178,9 @@ const validateSignInForm = e => {
     : toggleSignIn(emailValue, passValue);
 };
 // [SM] clear timeOut
-clearErrorMessage = () => {
+function clearErrorMessage() {
   clearTimeout(errorMessageTimeOut);
-};
+}
 // [SM] create user
 async function createUser({ email, password, name }) {
   await createUserWithEmailAndPassword(auth, email, password)
@@ -268,7 +268,7 @@ function togglePrivateRoutes() {
   privateRoutes.forEach(routeElement => routeElement.classList.toggle('hide'));
 }
 // [SM]
-handleAddAvatar = e => {
+function handleAddAvatar() {
   const value = e.currentTarget.value;
   if (value) {
     const url = window.URL.createObjectURL(refs.inputFile.files[0]);
@@ -280,10 +280,10 @@ handleAddAvatar = e => {
     refs.inputFile.style.background = 'unset';
     refs.removeFileBtn.removeEventListener('click', clearUploadedFile);
   }
-};
+}
 
 // [SM] open login form
-showLogInForm = () => {
+function showLogInForm() {
   refs.modal.classList.toggle('hide');
   refs.logInForm.classList.remove('hide');
   // [SM] handle click outside of modal to close it
@@ -294,9 +294,9 @@ showLogInForm = () => {
   // [SM] logInForm.classList.toggle('hide');
   refs.emailInput.focus();
   refs.logInForm.addEventListener('submit', validateSignInForm);
-};
+}
 // [SM] open sign in form
-showSignInForm = () => {
+function showSignInForm() {
   refs.modal.classList.toggle('hide');
   const parentWrapper = refs.signUpForm.closest('.auth-form');
   parentWrapper.classList.remove('hide');
@@ -309,7 +309,7 @@ showSignInForm = () => {
   refs.close.addEventListener('click', handleCloseModal);
 
   refs.signUpForm.addEventListener('submit', validateSignUpForm);
-};
+}
 // [SM] Access auth elements
 const authAction = document.querySelectorAll('.auth__button');
 
