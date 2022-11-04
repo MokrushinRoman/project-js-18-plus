@@ -15,18 +15,18 @@ queueBtnRef.addEventListener('click', onQueueBtnClick);
 export function onWatchedBtnClick() {
   // if (watchedBtnRef.classList.contains('btn__library--active')) return;
   showLoader();
-  watchedBtnRef.classList.add('btn__library--active');
-  queueBtnRef.classList.remove('btn__library--active');
+  watchedBtnRef.className = 'library__btn library__btn--active';
+  queueBtnRef.classList.remove('library__btn--active');
   pageList = 'watched';
   renderMoviesList('watched');
   hideLoader();
 }
 
 function onQueueBtnClick() {
-  if (queueBtnRef.classList.contains('btn__library--active')) return;
+  console.log('clicked');
   showLoader();
-  queueBtnRef.classList.add('btn__library--active');
-  watchedBtnRef.classList.remove('btn__library--active');
+  queueBtnRef.className = 'library__btn library__btn--active';
+  watchedBtnRef.classList.remove('library__btn--active');
   pageList = 'queue';
   renderMoviesList('queue');
   hideLoader();
@@ -38,6 +38,7 @@ export function renderMoviesList(listName) {
   }
   const movies = getMoviesFromLocalStorage()[listName];
   if (checkCountMovies(movies)) {
+    console.log('movies: ', movies);
     if (movies.length) {
       movieList.innerHTML = movieListMarkup(movies);
     }
@@ -55,5 +56,5 @@ export function checkCountMovies(arrMovies) {
 }
 
 function movieListMarkup(arrMovies) {
-  return renderCards(results);
+  return renderCards(arrMovies);
 }

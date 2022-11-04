@@ -82,6 +82,8 @@ const removeEventListeners = () => {
 // [SM] fully close modal and clear listeners
 function closeAuthModal() {
   clearErrorMessage();
+  refs.bodyEl.className = '';
+
   const authFormElements = document.querySelectorAll('.auth-form');
   // [SM] reset form
   refs.logInForm?.reset();
@@ -320,7 +322,6 @@ const authAction = document.querySelectorAll('.auth__button');
 authAction.forEach(item => {
   item.addEventListener('click', e => {
     let chosen = e.target.getAttribute('auth');
-    refs.bodyEl.classList.add('overflow-hidden');
 
     if (chosen === 'show-log-in-form') {
       if (auth.currentUser) {
@@ -329,8 +330,10 @@ authAction.forEach(item => {
 
         return auth.signOut();
       }
+      refs.bodyEl.classList.add('overflow-hidden');
       showLogInForm();
     } else {
+      refs.bodyEl.classList.add('overflow-hidden');
       showSignInForm();
     }
   });

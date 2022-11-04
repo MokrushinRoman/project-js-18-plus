@@ -2,7 +2,7 @@ import { movies } from '../index.js';
 import { onWatchedBtnClick } from './myLibrary';
 
 const refs = {
-  bgHeader: document.getElementById('bg'),
+  bgHeader: document.getElementById('header'),
   logo: document.querySelector('.header__logo--text'),
   home: document.querySelector('#button__home'),
   library: document.querySelector('#button__library'),
@@ -10,7 +10,7 @@ const refs = {
   form: document.querySelector('.search__form'),
   search: document.querySelector('.search__form_button'),
   movieList: document.querySelector('.movie-list'),
-  libraryListError: document.querySelector('.library-error'),
+  libraryListError: document.querySelector('.library-list__error'),
 };
 
 onHome();
@@ -22,10 +22,8 @@ function onHome() {
 }
 
 export function onClickBtnHome() {
-  // refs.libraryListError.innerText = '';
-  if (refs.libraryListError) {
-    refs.libraryListError.style.display = 'none';
-  }
+  refs.libraryListError.innerText = '';
+  refs.libraryListError.style.display = 'none';
 
   refs.bgHeader?.classList.remove('header__library');
   refs.form.style.display = 'flex';

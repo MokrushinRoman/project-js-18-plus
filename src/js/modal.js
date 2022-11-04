@@ -70,6 +70,9 @@ function handlerClickBtn(listName, btn) {
     otherListName,
     movieResponse.id
   );
+  const isInLibraryRoute = document
+    .querySelector('#header')
+    .classList.contains('header__library');
   if (valueBtn === `add to ${listName}`) {
     if (isOnCurrentList) {
       return;
@@ -78,13 +81,15 @@ function handlerClickBtn(listName, btn) {
     if (isOnOtherList) {
       removeMovieInLocaleStorage(otherListName, movieResponse.id);
       otherBtn.innerHTML = `add to ${otherListName}`;
-      if (pageList) {
+
+      if (pageList && isInLibraryRoute) {
         renderMoviesList(pageList);
       }
     }
 
     btn.innerHTML = `remove from ${listName}`;
-    if (pageList) {
+
+    if (pageList && isInLibraryRoute) {
       renderMoviesList(listName);
     }
     return;
@@ -216,7 +221,7 @@ function createModalMarkup({
     <div class="movie-modal-button__thumb ${!isUser && 'hide'}">
       <button
         type="button"
-        class="movie-modal-button movie-modal-button_accent"
+        class="movie-modal-button "
         data-control-watched
       >
         ${
