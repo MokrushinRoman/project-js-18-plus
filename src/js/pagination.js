@@ -4,6 +4,7 @@ import { Notify } from 'notiflix';
 import { renderCards } from './movieCard';
 import { hideLoader, showLoader } from './loader';
 
+
 const fetchParams = {
   query: '',
   page: 1,
@@ -14,7 +15,7 @@ let errorSerchEl = null;
 let currentPage = null;
 let totalPages = '';
 let maxPages = 10;
-let pagBtnEl = document.querySelector('.pagination-buttons');
+export let pagBtnEl = document.querySelector('.pagination-buttons');
 const serchForm = document.querySelector('#search-form');
 const movieList = document.querySelector('.movie-list');
 
