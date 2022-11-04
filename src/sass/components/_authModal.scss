@@ -1,29 +1,32 @@
 .auth-modal {
   @include position($pos: fixed, $t: 0, $l: 0);
   z-index: 1;
-
+  padding: 20px;
   height: 100%;
   width: 100%;
-  overflow: auto;
 
   background-color: rgba(0, 0, 0, 0.7);
 
   transition: opacity var(--transition);
 
   &__body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 100%;
+
     position: relative;
     background-color: #fefefe;
     border: 1px solid #888;
     transform: translate(-50%, -50%) scale(1);
-    @include position($t: 50%, $l: 50%);
     max-width: 450px;
-    width: calc(100% - 30px);
     padding: 40px;
     text-align: center;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
       0px 2px 1px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     transition: transform var(--transition) 1000ms;
+    @include position($t: 50%, $l: 50%);
+
     @include tablet {
       max-width: 450px;
       width: 100%;
