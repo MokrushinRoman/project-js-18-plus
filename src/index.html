@@ -1,30 +1,40 @@
 <!DOCTYPE html>
 <html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>18+ team project</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./index.scss" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>18+ team project</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./index.scss" />
-</head>
+  <!-- ❗️❗️❗️ Add partials like so for every page -->
+  <body>
+    <div class="app-wrapper">
+      <header class="header header__home" id="header">
+        <include src="partials/header.html"></include>
+      </header>
 
-<!-- ❗️❗️❗️ Add partials like so for every page -->
-<include src="partials/header.html"></include>
+      <main class="container main">
+        <h1 class="visually-hidden">Filmoteka</h1>
+        <include src="partials/home.html"></include>
+        <include src="partials/authModal.html"></include>
+        <p class="library-error"></p>
+        <div class="loader is-hidden">Loading...</div>
+      </main>
 
-<main class="container">
-  <h1 class="visually-hidden">Filmoteka</h1>
-  <include src="partials/home.html"></include>
-  <include src="partials/authModal.html"></include>
-  <div class="loader is-hidden">Loading...</div>
-</main>
-<include src="partials/footer.html"></include>
-<include src="partials/modal.html"></include>
+      <footer class="footer" lang="en">
+        <include src="partials/footer.html"></include>
+      </footer>
+    </div>
+    <include src="partials/modal.html"></include>
 
-<script type="module" src="./index.js"></script>
-<script type="module" src="js/authentification.js"></script>
-</body>
-
+    <script type="module" src="./index.js"></script>
+    <script type="module" src="js/authentification.js"></script>
+  </body>
 </html>
