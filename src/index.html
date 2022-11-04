@@ -16,7 +16,7 @@
   <!-- ❗️❗️❗️ Add partials like so for every page -->
   <body>
     <div class="app-wrapper">
-      <header class="header" id="header">
+      <header class="header header__home" id="header">
         <include src="partials/header.html"></include>
       </header>
 
@@ -24,6 +24,7 @@
         <h1 class="visually-hidden">Filmoteka</h1>
         <include src="partials/home.html"></include>
         <include src="partials/authModal.html"></include>
+        <p class="library-error"></p>
         <div class="loader is-hidden">Loading...</div>
       </main>
 
