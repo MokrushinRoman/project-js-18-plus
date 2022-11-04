@@ -1,9 +1,10 @@
 import '../js/myLibrary';
 import { searchMovies, getTrending } from '../filmsApi';
 import { Notify } from 'notiflix';
+import { renderCards } from './movieCard';
 
 const fetchParams = {
-  query: null,
+  query: '',
   page: 1,
 };
 
@@ -30,13 +31,13 @@ async function onSerchSubmit(e) {
 const pageNumbers = (total, max, current) => {
   const half = Math.floor(max / 2);
   let to = max;
-  
+
   if(current + half >= total) {
     to = total;
   } else if(current > half) {
     to = current + half ;
   }
-  
+
   let from = Math.max(to - max, 0);
 
   return Array.from({length: Math.min(total, max)}, (_, i) => (i + 1) + from);
@@ -51,40 +52,12 @@ function crateNewPage() {
   return nextUserMovies(fetchParams);
 };
 
-const card = ({
-  imgUrl,
-  title,
-  id,
-}) => `<li id="${id}" class="movie-list__item movie">
-    <img
-    class="movie__img"
-      src=${imgUrl ? `https://image.tmdb.org/t/p/w200${imgUrl} ` : ''}
-      alt="${title}"
-      loading="lazy"
-    />
-    <MovieTittle title={title}>${title}</MovieTittle>
-</li>`;
+
 
 async function nextRandomMovies({ page }) {
   const result = await getTrending({ page }).then(
     ({ results }) => {
-      const movieCards = results
-        .map(
-          ({
-            title = '',
-            name = '',
-            poster_path,
-
-            id,
-          }) =>
-            card({
-              title: title ? title : name,
-              imgUrl: poster_path,
-              id,
-            })
-        )
-        .join('');
-      return movieCards;
+    return renderCards(results)
     }
   );
   movieList.innerHTML = result;
@@ -94,24 +67,8 @@ async function newMovieSearch(params) {
   const result = await searchMovies(params).then(
     ({ results, total_pages }) => {
       totalPages = total_pages;
-      const movieCards = results
-        .map(
-          ({
-            title = '',
-            name = '',
-            poster_path,
+    return renderCards(results)
 
-            id,
-          }) =>
-            card({
-              title: title ? title : name,
-              imgUrl: poster_path,
-              id,
-            })
-        )
-        .join('');
-
-      return movieCards;
     }
   );
   !result ? Notify.failure("Can't find anything") : movieList.innerHTML = result;
@@ -121,24 +78,8 @@ async function nextUserMovies(params) {
   const result = await searchMovies(params).then(
     ({ results, total_pages }) => {
       totalPages = total_pages;
-      const movieCards = results
-        .map(
-          ({
-            title = '',
-            name = '',
-            poster_path,
+      return  renderCards(results)
 
-            id,
-          }) =>
-            card({
-              title: title ? title : name,
-              imgUrl: poster_path,
-              id,
-            })
-        )
-        .join('');
-
-      return movieCards;
     }
   );
   movieList.innerHTML = result;
@@ -158,7 +99,7 @@ export default function PaginationButton(total, current) {
     end: () => currentPage >= totalPages,
     next: () => pages.slice(-1)[0] === totalPages
   }
-  
+
   const frag = document.createDocumentFragment();
   const paginationButtonContainer = document.createElement('div');
   paginationButtonContainer.className = 'pagination-buttons';
@@ -175,15 +116,15 @@ export default function PaginationButton(total, current) {
       paginationButtonContainer.value = currentPage;
       paginationButtonContainer.dispatchEvent(new CustomEvent('change', {detail: {currentPageBtn}}));
     });
-    
+
     return buttonElement;
   }
-  
+
   const onPageButtonClick = e => currentPage = Number(e.currentTarget.textContent);
-  
+
   const onPageButtonUpdate = index => (btn) => {
     btn.textContent = pages[index];
-    
+
     if(pages[index] === currentPage) {
       currentPageBtn.classList.remove('active');
       btn.classList.add('active');
@@ -191,55 +132,55 @@ export default function PaginationButton(total, current) {
       currentPageBtn.focus();
     }
   };
-  
+
   buttons.set(
     createAndSetupButton('', 'start-page', disabled.start(), () => currentPage = 1),
     (btn) => btn.disabled = disabled.start()
   )
-  
+
   buttons.set(
     createAndSetupButton('', 'prev-page', disabled.prev(), () => currentPage -= 1),
     (btn) => btn.disabled = disabled.prev()
-  
+
   )
-  
+
   pages.map((pageNumber, index) => {
     const isCurrentPage = currentPage === pageNumber;
     const button = createAndSetupButton(
       pageNumber, isCurrentPage ? 'active' : '', false, onPageButtonClick
     );
-    
+
     if(isCurrentPage) {
       currentPageBtn = button;
     }
-    
+
     buttons.set(button, onPageButtonUpdate(index));
   });
-  
+
   buttons.set(
     createAndSetupButton('', 'next-page', disabled.next(), () => currentPage += 1),
     (btn) => btn.disabled = disabled.next()
   )
-  
+
   buttons.set(
     createAndSetupButton('', 'end-page', disabled.end(), () => currentPage = totalPages),
     (btn) => btn.disabled = disabled.end()
   )
-  
+
   buttons.forEach((_, btn) => frag.appendChild(btn));
   paginationButtonContainer.appendChild(frag);
-  
+
   this.render = (container = document.querySelector('main')) => {
     container.appendChild(paginationButtonContainer);
     pagBtnEl = document.querySelector('.pagination-buttons');
   }
- 
+
   this.update = (newPageNumber = currentPage) => {
     currentPage = newPageNumber;
     pages = pageNumbers(totalPages, maxPagesVisible, currentPage);
     buttons.forEach((updateButton, btn) => updateButton(btn));
   }
-  
+
   this.onChange = (handler) => {
     paginationButtonContainer.addEventListener('change', handler);
   }
@@ -248,4 +189,4 @@ export default function PaginationButton(total, current) {
 export default function createPaginations(total, current) {
   paginationButtons = new PaginationButton(total, current);
   paginationButtons.render();
-}; 
+};

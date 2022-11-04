@@ -1,5 +1,4 @@
 import { movies } from '../index.js';
-import { getTrending, searchMovies } from '../filmsApi';
 import { onWatchedBtnClick } from './myLibrary';
 
 const refs = {
@@ -26,7 +25,7 @@ export function onClickBtnHome() {
   refs.libraryListError.innerText = '';
   refs.libraryListError.style.display = 'none';
 
-  refs.bgHeader.classList.remove('header__library');
+  refs.bgHeader?.classList.remove('header__library');
   refs.form.style.display = 'flex';
   refs.btnList.style.display = 'none';
   refs.bgHeader.classList.add('header__home');

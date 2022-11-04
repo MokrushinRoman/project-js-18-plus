@@ -21,17 +21,7 @@ function getGenresById(genre_ids) {
 export function renderCards(data) {
   const movieCardMarkup = data
     ?.map(
-      ({
-        id,
-        title,
-        original_title,
-        overview,
-        popularity,
-        poster_path,
-        release_date,
-        vote_average,
-        genre_ids,
-      }) => {
+      ({ id, title, poster_path, release_date, vote_average, genre_ids }) => {
         const genresNames = getGenresById(genre_ids);
         const defaultImageUrl = new URL('../images/film.jpg', import.meta.url);
         const imgUrl = poster_path

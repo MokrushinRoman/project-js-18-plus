@@ -34,26 +34,7 @@ export async function movies({ page }) {
   const result = await getTrending({ page }).then(
     ({ results, total_pages }) => {
       totalPages = total_pages;
-      const movieCards = renderCards(results);
-      // results
-      //   .map(
-      //     ({
-      //       title = '',
-      //       name = '',
-      //       poster_path,
-
-      //       id,
-      //     }) =>
-      // 		renderCards
-      //       card({
-      //         title: title ? title : name,
-      //         imgUrl: poster_path,
-      //         id,
-      //       })
-      //   )
-      //   .join('');
-
-      return movieCards;
+      return renderCards(results);
     }
   );
 
