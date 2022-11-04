@@ -9,12 +9,14 @@ const fetchParams = {
 };
 
 let paginationButtons = null;
+let errorSerchEl = null;
 let currentPage = null;
 let totalPages = '';
 let maxPages = 10;
+let pagBtnEl = document.querySelector('.pagination-buttons');
 const serchForm = document.querySelector('#search-form');
 const movieList = document.querySelector('.movie-list');
-let pagBtnEl = document.querySelector('.pagination-buttons');
+
 serchForm.addEventListener('submit', onSerchSubmit);
 
 async function onSerchSubmit(e) {
@@ -24,8 +26,7 @@ async function onSerchSubmit(e) {
   pagBtnEl?.remove();
   fetchParams.query = serchForm.elements.searchQuery.value.toLowerCase().trim();
   fetchParams.page = currentPage;
-  await newMovieSearch(fetchParams);
-  createPaginations(totalPages, currentPage);
+  await newMovieSearch(fetchParams).catch(() => createErrorMassage());
 }
 
 const pageNumbers = (total, max, current) => {
@@ -60,13 +61,27 @@ async function nextRandomMovies({ page }) {
 }
 
 async function newMovieSearch(params) {
-  const result = await searchMovies(params).then(({ results, total_pages }) => {
-    totalPages = total_pages;
-    return renderCards(results);
-  });
-  !result
-    ? Notify.failure("Can't find anything")
-    : (movieList.innerHTML = result);
+  const result = await searchMovies(params).then(
+    ({ results, total_pages }) => {
+      totalPages = total_pages;
+      return renderCards(results);
+    }
+  );
+  if (!result) {
+    pagBtnEl.remove();
+    createErrorMassage();
+    return;
+  }
+  movieList.innerHTML = result;
+  createPaginations(totalPages, currentPage);
+  errorSerchEl && errorSerchEl.remove();
+}
+
+function createErrorMassage() {
+  errorSerchEl && errorSerchEl.remove();
+  const markup = '<div class="header__error-massage"><p>Search result not successful. Enter the correct movie name.</p></div>';
+  serchForm.insertAdjacentHTML("afterend", markup);
+  errorSerchEl = document.querySelector('.header__error-massage');
 }
 
 async function nextUserMovies(params) {

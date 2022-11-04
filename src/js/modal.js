@@ -24,7 +24,7 @@ export function getRefs() {
 }
 
 const refs = getRefs();
-
+let movieResponse = null;
 export function getModal(selector) {
   refs.movieListEL = document.querySelector(selector);
   refs.movieListEL.addEventListener('click', onModalOpen);
@@ -37,7 +37,7 @@ async function onModalOpen(e) {
 
   refs.idTargetCard = e.target.closest('.movie-card').attributes.id.value;
 
-  const movie = await createModal().then(response => {
+  movieResponse = await createModal().then(response => {
     return response;
   });
 
@@ -52,78 +52,91 @@ async function onModalOpen(e) {
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.bodyEl.classList.add('overflow-hidden');
   refs.modalEl.addEventListener('click', onPosterClick);
+}
 
-  function onWatched(e) {
-    const btn = e.target;
-    handlerClickBtn('watched', btn);
-  }
-
-  function onQueue(e) {
-    const btn = e.target;
-    handlerClickBtn('queue', btn);
-  }
-
-  function handlerClickBtn(listName, btn) {
-    const valueBtn = btn.textContent.trim().toLowerCase();
-
-    const isOnCurrentList = findMoviesInLocaleStorage(listName, movie.id);
-    const otherListName = listName === 'watched' ? 'queue' : 'watched';
-    const otherBtn =
-      otherListName === 'watched' ? refs.watchedBtn : refs.queueBtn;
-    const isOnOtherList = findMoviesInLocaleStorage(otherListName, movie.id);
-    if (valueBtn === `add to ${listName}`) {
-      if (isOnCurrentList) {
-        return;
-      }
-      addMovieInLocaleStorage(listName, movie);
-      if (isOnOtherList) {
-        removeMovieInLocaleStorage(otherListName, movie.id);
-        otherBtn.innerHTML = `add to ${otherListName}`;
-        if (pageList) {
-          renderMoviesList(pageList);
-        }
-      }
-
-      btn.innerHTML = `remove from ${listName}`;
+function handlerClickBtn(listName, btn) {
+  const valueBtn = btn.textContent.trim().toLowerCase();
+  const isOnCurrentList = findMoviesInLocaleStorage(listName, movieResponse.id);
+  const otherListName = listName === 'watched' ? 'queue' : 'watched';
+  const otherBtn =
+    otherListName === 'watched' ? refs.watchedBtn : refs.queueBtn;
+  const isOnOtherList = findMoviesInLocaleStorage(otherListName, movieResponse.id);
+  if (valueBtn === `add to ${listName}`) {
+    if (isOnCurrentList) {
+      return;
+    }
+    addMovieInLocaleStorage(listName, movieResponse);
+    if (isOnOtherList) {
+      removeMovieInLocaleStorage(otherListName, movieResponse.id);
+      otherBtn.innerHTML = `add to ${otherListName}`;
       if (pageList) {
-        renderMoviesList(listName);
+        renderMoviesList(pageList);
       }
-      return;
     }
 
-    btn.innerHTML = isOnCurrentList
-      ? `add to ${listName}`
-      : `remove from ${listName}`;
-
-    removeMovieInLocaleStorage(listName, movie.id);
-    if (!otherListName) {
-      return;
-    }
+    btn.innerHTML = `remove from ${listName}`;
     if (pageList) {
       renderMoviesList(listName);
     }
+    return;
   }
 
-  function onModalClose() {
-    refs.idTargetCard = '';
-    refs.modalEl.classList.add('movie-backdrop_is-hidden');
-    resetModal();
-    document.removeEventListener('keydown', onKeyDown);
-    refs.modalEl.removeEventListener('click', onClickOutside);
-    refs.watchedBtn.removeEventListener('click', onWatched);
-    refs.queueBtn.removeEventListener('click', onQueue);
-    refs.bodyEl.classList.remove('overflow-hidden');
-  }
+  btn.innerHTML = isOnCurrentList
+    ? `add to ${listName}`
+    : `remove from ${listName}`;
 
-  function onKeyDown(e) {
-    e.code === 'Escape' && onModalClose();
+  removeMovieInLocaleStorage(listName, movieResponse.id);
+  if (!otherListName) {
+    return;
   }
-
-  function onClickOutside(e) {
-    e.target === refs.modalEl && onModalClose();
+  if (pageList) {
+    renderMoviesList(listName);
   }
 }
+function onWatched(e) {
+  const btn = e.target;
+  handlerClickBtn('watched', btn);
+}
 
+function onQueue(e) {
+  const btn = e.target;
+  handlerClickBtn('queue', btn);
+}
+
+function onModalClose() {
+  refs.idTargetCard = '';
+  refs.modalEl.classList.add('movie-backdrop_is-hidden');
+  resetModal();
+  document.removeEventListener('keydown', onKeyDown);
+  refs.modalEl.removeEventListener('click', onClickOutside);
+  refs.watchedBtn.removeEventListener('click', onWatched);
+  refs.queueBtn.removeEventListener('click', onQueue);
+  refs.bodyEl.classList.remove('overflow-hidden');
+}
+
+function onKeyDown(e) {
+  e.code === 'Escape' && onModalClose();
+}
+
+function onClickOutside(e) {
+  e.target === refs.modalEl && onModalClose();
+}
+function onModalClose() {
+  refs.idTargetCard = '';
+  refs.modalEl.classList.add('movie-backdrop_is-hidden');
+  resetModal();
+  document.removeEventListener('keydown', onKeyDown);
+  refs.modalEl.removeEventListener('click', onClickOutside);
+  refs.watchedBtn.removeEventListener('click', onWatched);
+  refs.queueBtn.removeEventListener('click', onQueue);
+  refs.bodyEl.classList.remove('overflow-hidden');
+}
+function onKeyDown(e) {
+  e.code === 'Escape' && onModalClose();
+}
+function onClickOutside(e) {
+  e.target === refs.modalEl && onModalClose();
+}
 async function createModal() {
   return await getMovieDetails(refs.idTargetCard).then(response => {
     createModalMarkup(response);
@@ -153,20 +166,7 @@ function createModalMarkup({
   const popularityValue = popularity.toFixed(1);
   const markup = `<div class="movie-modal">
   <button type="button" class="close-button" data-modal-close>
-    <svg
-      class="close-button__icon"
-      width="30"
-      height="30"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <symbol viewBox="0 0 32 32">
-          <path
-            d="M23.733 10.304l-1.504-1.504-5.963 5.963-5.963-5.963-1.504 1.504 5.963 5.963-5.963 5.963 1.504 1.504 5.963-5.963 5.963 5.963 1.504-1.504-5.963-5.963 5.963-5.963z"
-          ></path>
-        </symbol>
-      </defs>
-    </svg>
+    <svg class="close-button__icon" width="30" height="30" xmlns="http://www.w3.org/2000/svg"><path d="M23.733 10.304l-1.504-1.504-5.963 5.963-5.963-5.963-1.504 1.504 5.963 5.963-5.963 5.963 1.504 1.504 5.963-5.963 5.963 5.963 1.504-1.504-5.963-5.963 5.963-5.963z"></path></svg>
   </button>
   <div class="movie-modal__poster-container">
     <img
@@ -262,6 +262,8 @@ async function onPosterClick(e) {
   refs.modalEl.removeEventListener('click', onClickOutside);
   refs.modalEl.removeEventListener('click', onPosterClick);
   refs.modalEl.addEventListener('click', onPlayerCloseToClick);
+  refs.watchedBtn.removeEventListener('click', onWatched);
+  refs.queueBtn.removeEventListener('click', onQueue);
   document.addEventListener('keydown', onClosePlayerToEsc);
 }
 
@@ -280,6 +282,8 @@ function removeVideoPlayer() {
   document.addEventListener('keydown', onKeyDown);
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.modalEl.addEventListener('click', onPosterClick);
+  refs.watchedBtn.addEventListener('click', onWatched);
+  refs.queueBtn.addEventListener('click', onQueue);
 }
 
 function getTrailer(arr) {

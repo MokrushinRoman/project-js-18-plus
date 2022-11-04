@@ -18,6 +18,7 @@ const refs = {
   logOutBtn: document.getElementById('logOutButton'),
   inputFile: document.getElementById('file'),
   removeFileBtn: document.getElementById('file-remove-button'),
+  bodyEl: document.querySelector('body'),
 };
 // const libraryBtn = document.getElementById('libraryButton');
 const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
@@ -112,7 +113,7 @@ const validateSignUpForm = e => {
   let errors = [];
   if (!nameValue) {
     errors.push({ el: username, message: 'name cannot be empty' });
-  } else if (15 < nameValue.length < 3) {
+  } else if (nameValue.length < 3 || nameValue.lenght > 15) {
     errors.push({
       el: username,
       message: 'name should be at least 3 symbols and not more than 15 symbols',
@@ -269,11 +270,13 @@ function togglePrivateRoutes() {
 }
 // [SM]
 function handleAddAvatar() {
-  const value = e.currentTarget.value;
+  const { value } = refs.inputFile;
   if (value) {
+    console.log('  refs.removeFileBtn: ', refs.removeFileBtn);
     const url = window.URL.createObjectURL(refs.inputFile.files[0]);
     refs.inputFile.style.background = `url(${url}) no-repeat 100px center / 30px calc(100% - 4px)`;
     refs.removeFileBtn.classList.toggle('hide');
+
     refs.removeFileBtn.addEventListener('click', clearUploadedFile);
   } else {
     refs.removeFileBtn.classList.toggle('hide');
@@ -317,6 +320,8 @@ const authAction = document.querySelectorAll('.auth__button');
 authAction.forEach(item => {
   item.addEventListener('click', e => {
     let chosen = e.target.getAttribute('auth');
+    refs.bodyEl.classList.add('overflow-hidden');
+
     if (chosen === 'show-log-in-form') {
       if (auth.currentUser) {
         // [SM] if user logged in, then it was clicke to logout so lets do logout

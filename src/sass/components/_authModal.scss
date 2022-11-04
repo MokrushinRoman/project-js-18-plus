@@ -1,29 +1,32 @@
 .auth-modal {
   @include position($pos: fixed, $t: 0, $l: 0);
   z-index: 1;
-
+  padding: 20px;
   height: 100%;
   width: 100%;
-  overflow: auto;
 
   background-color: rgba(0, 0, 0, 0.7);
 
   transition: opacity var(--transition);
 
   &__body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 100%;
+
     position: relative;
     background-color: #fefefe;
     border: 1px solid #888;
     transform: translate(-50%, -50%) scale(1);
-    @include position($t: 50%, $l: 50%);
     max-width: 450px;
-    width: calc(100% - 30px);
     padding: 40px;
     text-align: center;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
       0px 2px 1px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     transition: transform var(--transition) 1000ms;
+    @include position($t: 50%, $l: 50%);
+
     @include tablet {
       max-width: 450px;
       width: 100%;
@@ -109,7 +112,7 @@
       }
     }
     &__error-message {
-      position: absolute;
+      // position: absolute;
       visibility: hidden;
       color: $red-accent-color;
       bottom: 0;
@@ -125,10 +128,34 @@
       }
     }
   }
-  .auth-form__remove-file-button {
-    transform: scale(1);
 
-    @include flex-centred($d: flex, $ai: center, $jc: center);
+  #auth-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 19px;
+
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid #000000;
+    background-color: transparent;
+    color: #000000;
+    &:hover,
+    &:focus {
+      border-color: $accent-text-color;
+      color: $accent-text-color;
+      text-decoration: none;
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.auth-form {
+  &__remove-file-button {
+    transform: scale(1);
+    // @include flex-centred($d: flex, $ai: center, $jc: center);
 
     padding: 0;
 
@@ -142,29 +169,6 @@
       transform: scale(1.05);
     }
   }
-  #auth-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 19px;
-    padding: 0;
-    padding-left: 1px;
-    padding-top: 0.5px;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background-color: transparent;
-    color: #000000;
-    &:hover,
-    &:focus {
-      text-decoration: none;
-      cursor: pointer;
-      transform: scale(1.1);
-    }
-  }
-}
-
-.auth-form {
   &__title {
     margin-bottom: 10px;
     @include font(500, 15px, 1.1666, 0.03em);
