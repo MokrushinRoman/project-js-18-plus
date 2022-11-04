@@ -67,11 +67,3 @@ export function renderCards(data) {
     .join('');
   return movieCardMarkup;
 }
-// window.addEventListener('resize', () => {
-// 	const windowSize = window.innerWidth;
-// 	if (currentWidth > viewPorts.desktop && window.innerWidth < viewPorts.desktop) {
-
-// 	}
-// 	const imgElements = document.querySelectorAll('.movie-card__img');
-
-// });
