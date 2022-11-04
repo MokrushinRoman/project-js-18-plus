@@ -37,7 +37,7 @@ async function onModalOpen(e) {
 
   refs.idTargetCard = e.target.closest('.movie-card').attributes.id.value;
 
-    const movie = await createModal().then(response => {
+  const movie = await createModal().then(response => {
     return response;
   });
 
@@ -52,7 +52,6 @@ async function onModalOpen(e) {
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.bodyEl.classList.add('overflow-hidden');
   refs.modalEl.addEventListener('click', onPosterClick);
-
 
   function onWatched(e) {
     const btn = e.target;
@@ -72,20 +71,20 @@ async function onModalOpen(e) {
     const otherBtn =
       otherListName === 'watched' ? refs.watchedBtn : refs.queueBtn;
     const isOnOtherList = findMoviesInLocaleStorage(otherListName, movie.id);
-    if (valueBtn === `Add to ${listName}`) {
+    if (valueBtn === `add to ${listName}`) {
       if (isOnCurrentList) {
         return;
       }
       addMovieInLocaleStorage(listName, movie);
       if (isOnOtherList) {
         removeMovieInLocaleStorage(otherListName, movie.id);
-        otherBtn.innerHTML = `Add to ${otherListName}`;
+        otherBtn.innerHTML = `add to ${otherListName}`;
         if (pageList) {
           renderMoviesList(pageList);
         }
       }
 
-      btn.innerHTML = `Remove from ${listName}`;
+      btn.innerHTML = `remove from ${listName}`;
       if (pageList) {
         renderMoviesList(listName);
       }
@@ -94,7 +93,7 @@ async function onModalOpen(e) {
 
     btn.innerHTML = isOnCurrentList
       ? `add to ${listName}`
-      : `Remove from ${listName}`;
+      : `remove from ${listName}`;
 
     removeMovieInLocaleStorage(listName, movie.id);
     if (!otherListName) {
@@ -212,15 +211,15 @@ function createModalMarkup({
       >
         ${
           findMoviesInLocaleStorage('watched', id)
-            ? 'Remove from Watched'
-            : 'Add to Watched'
+            ? 'remove from Watched'
+            : 'add to Watched'
         }
       </button>
       <button type="button" class="movie-modal-button" data-control-turn>
                  ${
                    findMoviesInLocaleStorage('queue', id)
-                     ? 'Remove from queue'
-                     : 'Add to queue'
+                     ? 'remove from queue'
+                     : 'add to queue'
                  }
       </button>
     </div>

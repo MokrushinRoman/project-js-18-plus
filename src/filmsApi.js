@@ -1,6 +1,5 @@
 import API from './api';
-// const MAIN_API_KEY = 'b92b6dc04d7a0a77de1e180daf2986e1';
-const MAIN_API_KEY = '2cf89002e9c32c3f08ddaa0d9d0d5100';
+const MAIN_API_KEY = 'b92b6dc04d7a0a77de1e180daf2986e1';
 
 const API_KEY =
   'b92b6dc04d7a0a77de1e180daf2986e1'; /*put your personal API-key instead of empty string*/
