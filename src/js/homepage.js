@@ -23,7 +23,9 @@ function onHome() {
 
 export function onClickBtnHome() {
   // refs.libraryListError.innerText = '';
-  refs.libraryListError.style.display = 'none';
+  if (refs.libraryListError) {
+    refs.libraryListError.style.display = 'none';
+  }
 
   refs.bgHeader?.classList.remove('header__library');
   refs.form.style.display = 'flex';

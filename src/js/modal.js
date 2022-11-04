@@ -1,3 +1,5 @@
+import auth from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { getMovieDetails, getVideoTrailer } from '../filmsApi';
 import { Notify } from 'notiflix';
 import {
@@ -19,11 +21,15 @@ export function getRefs() {
     movieList: document.querySelector('.movie-list'),
     videoPlayerEl: '',
     modalBoxEl: '',
+    buttonThumb: document.querySelector('.movie-modal-button__thumb'),
   };
   return refs;
 }
-
+let isUser = null;
 const refs = getRefs();
+onAuthStateChanged(auth, user => {
+  isUser = user;
+});
 let movieResponse = null;
 export function getModal(selector) {
   refs.movieListEL = document.querySelector(selector);
@@ -60,7 +66,10 @@ function handlerClickBtn(listName, btn) {
   const otherListName = listName === 'watched' ? 'queue' : 'watched';
   const otherBtn =
     otherListName === 'watched' ? refs.watchedBtn : refs.queueBtn;
-  const isOnOtherList = findMoviesInLocaleStorage(otherListName, movieResponse.id);
+  const isOnOtherList = findMoviesInLocaleStorage(
+    otherListName,
+    movieResponse.id
+  );
   if (valueBtn === `add to ${listName}`) {
     if (isOnCurrentList) {
       return;
@@ -203,7 +212,8 @@ function createModalMarkup({
       <p class="movie-modal__description">${overview}</p>
 
     </div>
-    <div class="movie-modal-button__thumb">
+		<div class="${isUser && 'hide'}"> For save movie, please Log in</div>
+    <div class="movie-modal-button__thumb ${!isUser && 'hide'}">
       <button
         type="button"
         class="movie-modal-button movie-modal-button_accent"
