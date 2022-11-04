@@ -2,12 +2,15 @@ import { showLoader, hideLoader } from './loader';
 import { getMoviesFromLocalStorage } from './local-storage';
 import { renderCards } from './movieCard';
 
+
 const watchedBtnRef = document.querySelector('#btn__watched');
 const queueBtnRef = document.querySelector('#btn__queue');
 const libraryListError = document.querySelector('.library-error');
 
 const movieList = document.querySelector('.movie-list');
 export let pageList = '';
+
+
 
 watchedBtnRef.addEventListener('click', onWatchedBtnClick);
 queueBtnRef.addEventListener('click', onQueueBtnClick);
@@ -23,7 +26,6 @@ export function onWatchedBtnClick() {
 }
 
 function onQueueBtnClick() {
-  console.log('clicked');
   showLoader();
   queueBtnRef.className = 'library__btn library__btn--active';
   watchedBtnRef.classList.remove('library__btn--active');
@@ -38,7 +40,6 @@ export function renderMoviesList(listName) {
   }
   const movies = getMoviesFromLocalStorage()[listName];
   if (checkCountMovies(movies)) {
-    console.log('movies: ', movies);
     if (movies.length) {
       movieList.innerHTML = movieListMarkup(movies);
     }
