@@ -343,12 +343,12 @@
   &_wrapper {
     position: relative;
     margin: 0 auto;
-
+    width: 100%;
     @include tablet {
-      max-width: 336px;
+      width: 336px;
     }
     @include desktop {
-      max-width: 394px;
+      width: 394px;
     }
   }
 

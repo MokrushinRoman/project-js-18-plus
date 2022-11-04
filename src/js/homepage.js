@@ -28,7 +28,7 @@ export function onClickBtnHome() {
   refs.bgHeader?.classList.remove('header__library');
   refs.form.style.display = 'flex';
   refs.btnList.style.display = 'none';
-  refs.bgHeader.classList.add('header__home');
+  refs.bgHeader?.classList.add('header__home');
   refs.library.classList.remove('navigation__button--active');
   refs.home.classList.add('navigation__button--active');
 

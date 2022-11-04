@@ -37,6 +37,7 @@ const handleEscClick = e => {
   }
 };
 const handleLogOutClicked = () => {
+  console.log('click, logOUT!!!');
   onClickBtnHome();
   toggleSignIn();
 };
@@ -208,6 +209,7 @@ async function createUser({ email, password, name }) {
 }
 // [SM] check sign in or should logout
 function toggleSignIn(email, password) {
+  console.log('come to toggle: ');
   if (auth.currentUser) {
     togglePrivateRoutes();
 
