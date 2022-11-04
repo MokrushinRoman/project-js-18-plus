@@ -1,5 +1,16 @@
 import placeholderImg from '../images/film.jpg';
 import Genres from '../genres.json';
+Number.prototype.between = function (a, b) {
+  var min = Math.min.apply(Math, [a, b]),
+    max = Math.max.apply(Math, [a, b]);
+  return this > min && this < max;
+};
+const viewPorts = {
+  desktop: 1280,
+  tablet: 768,
+  mobile: 320,
+};
+const currentWidth = window.innerWidth;
 function getGenresById(genre_ids) {
   if (genre_ids !== undefined && genre_ids.length !== 0) {
     // const tmpLoad = load(GENREFILMS_LOCALSTORAGE_KEY)
@@ -25,10 +36,13 @@ export function renderCards(data) {
         const genresNames = getGenresById(genre_ids);
         const defaultImageUrl = new URL('../images/film.jpg', import.meta.url);
         const imgUrl = poster_path
-          ? `https://image.tmdb.org/t/p/w200${poster_path}`
+          ? `https://image.tmdb.org/t/p/w300${poster_path}`
           : `${defaultImageUrl.href}`;
+        const srcSet = poster_path
+          ? `https://image.tmdb.org/t/p/w400${poster_path} 1280w `
+          : '';
         return `<li class="movie-card"  id="${id}">
-    <img data-src="${imgUrl}" src="${imgUrl}" alt="${title}" class="lazyload  movie-card__img">
+    <img data-src="${imgUrl}" srcset=${srcSet} src="${imgUrl}" alt="${title}" class="lazyload  movie-card__img">
     <p class="movie-card__title">${title}</p>
     <div class="movie-card__details">
     <p class="movie-card__genres">${genresNames} </p>
@@ -53,3 +67,11 @@ export function renderCards(data) {
     .join('');
   return movieCardMarkup;
 }
+// window.addEventListener('resize', () => {
+// 	const windowSize = window.innerWidth;
+// 	if (currentWidth > viewPorts.desktop && window.innerWidth < viewPorts.desktop) {
+
+// 	}
+// 	const imgElements = document.querySelectorAll('.movie-card__img');
+
+// });
