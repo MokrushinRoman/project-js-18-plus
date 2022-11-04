@@ -1,1 +1,12 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
+.app-wrapper {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  .main {
+    flex-grow: 1;
+  }
+  .footer {
+    position: sticky;
+  }
+}
