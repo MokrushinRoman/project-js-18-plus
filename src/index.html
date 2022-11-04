@@ -16,6 +16,9 @@
   <!-- ❗️❗️❗️ Add partials like so for every page -->
   <body>
     <div class="app-wrapper">
+      <div class="blocker is-hidden" id="blocker">
+        <div class="loader"></div>
+      </div>
       <header class="header header__home" id="header">
         <include src="partials/header.html"></include>
       </header>
@@ -25,7 +28,6 @@
         <include src="partials/home.html"></include>
         <include src="partials/authModal.html"></include>
         <p class="library-error"></p>
-        <div class="loader is-hidden">Loading...</div>
       </main>
 
       <footer class="footer" lang="en">

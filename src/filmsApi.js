@@ -6,7 +6,6 @@ const API_KEY =
 
 import { Notify } from 'notiflix';
 export const getTrending = async ({ timeWindow = 'day', page = 1 } = {}) => {
-  API('/genre/movie/list?api_key=b92b6dc04d7a0a77de1e180daf2986e1');
   return await API.get(
     `/trending/all/${timeWindow}?api_key=${API_KEY}&page=${page}`
   )
@@ -20,6 +19,16 @@ export const getTrending = async ({ timeWindow = 'day', page = 1 } = {}) => {
 };
 // @param
 export const searchMovies = async params => {
+  if (!params.query) {
+    return await API.get(`/trending/all/day?api_key=${API_KEY}&page=1`)
+      .then(response => {
+        return response.data;
+      })
+      .catch(err => {
+        Notify.failure(`Oops! ${err.message || "Can't find anything"}`);
+        throw err;
+      });
+  }
   const searchParams = new URLSearchParams(params).toString();
 
   return await API.get(`/search/movie?api_key=${API_KEY}&${searchParams}`)
@@ -33,10 +42,9 @@ export const getMovieDetails = id => {
   return API.get(`/movie/${id}?api_key=${API_KEY}`)
     .then(response => response.data)
     .catch(err => {
-      console.log('err: ', err);
       const errorMessage =
         err.response.data.status_message || "Can't get details";
-      console.log('err.status_message: ', err.status_message);
+
       Notify.failure(errorMessage);
       throw err;
     });

@@ -14,7 +14,12 @@
     visibility: hidden;
   }
 }
-
+.not-logged {
+  @include font($fw: 500, $fs: 16px, $lh: 1.15, $ls: inherit);
+  @include flex-centred($d: flex, $ai: center, $jc: center);
+  color: $accent-text-color;
+  text-transform: uppercase;
+}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -68,7 +73,7 @@
   transform: translate(-50%, -50%);
 
   &::after {
-    content: "";
+    content: '';
     padding-top: 56.25%;
     display: block;
   }
@@ -96,22 +101,22 @@
     flex-basis: 375px;
   }
 
-    &:hover:after {
-      transform: translate(-50%, -40%) scale(1.2);
-    }
+  &:hover:after {
+    transform: translate(-50%, -40%) scale(1.2);
+  }
 
-    &::after {
-      @include position($pos: absolute, $t: 50%, $l: 50%);
-      z-index: 2;
-      content: "";
-      width: 25%;
-      height: 25%;
-      transform: translate(-50%, -40%) scale(1);
-      background-image: url(/src/images/icon-play-button.svg);
-      background-repeat: no-repeat;
-      pointer-events: none;
-      transition: transform $transition-basic;
-    }
+  &::after {
+    @include position($pos: absolute, $t: 50%, $l: 50%);
+    z-index: 2;
+    content: '';
+    width: 25%;
+    height: 25%;
+    transform: translate(-50%, -40%) scale(1);
+    background-image: url(/src/images/icon-play-button.svg);
+    background-repeat: no-repeat;
+    pointer-events: none;
+    transition: transform $transition-basic;
+  }
 }
 
 .movie-modal__poster-item {
@@ -133,8 +138,8 @@
   }
 
   @media (min-width: $desktop) {
-      flex-basis: 390px;
-    }
+    flex-basis: 390px;
+  }
 }
 
 .movie-modal__title {

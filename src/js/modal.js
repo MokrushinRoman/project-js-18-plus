@@ -217,7 +217,7 @@ function createModalMarkup({
       <p class="movie-modal__description">${overview}</p>
 
     </div>
-		<div class="${isUser && 'hide'}"> For save movie, please Log in</div>
+		<div class="${isUser && 'hide'} not-logged"> For save movie, please Log in</div>
     <div class="movie-modal-button__thumb ${!isUser && 'hide'}">
       <button
         type="button"

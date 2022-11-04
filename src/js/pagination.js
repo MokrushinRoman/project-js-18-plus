@@ -4,7 +4,6 @@ import { Notify } from 'notiflix';
 import { renderCards } from './movieCard';
 import { hideLoader, showLoader } from './loader';
 
-
 const fetchParams = {
   query: '',
   page: 1,
@@ -27,8 +26,12 @@ async function onSerchSubmit(e) {
   currentPage = 1;
   pagBtnEl?.remove();
   fetchParams.query = serchForm.elements.searchQuery.value.toLowerCase().trim();
+
   fetchParams.page = currentPage;
-  await newMovieSearch(fetchParams).catch(() => createErrorMassage());
+  showLoader();
+  await newMovieSearch(fetchParams).catch(() => {
+    createErrorMassage();
+  });
 }
 
 const pageNumbers = (total, max, current) => {
@@ -50,6 +53,7 @@ function crateNewPage() {
   if (!fetchParams.query) {
     movieList.innerHTML = '';
     const page = fetchParams.page;
+    showLoader();
     return nextRandomMovies({ page });
   }
   return nextUserMovies(fetchParams);
@@ -59,6 +63,7 @@ async function nextRandomMovies({ page }) {
   const result = await getTrending({ page }).then(({ results }) => {
     return renderCards(results);
   });
+  hideLoader();
   movieList.innerHTML = result;
 }
 
@@ -71,21 +76,30 @@ async function newMovieSearch(params) {
       return renderCards(results);
     }
   );
+  hideLoader();
   if (!result) {
     pagBtnEl?.remove();
+    hideLoader();
     createErrorMassage();
     return;
   }
   movieList.innerHTML = result;
+  hideLoader();
+
   errorSerchEl && errorSerchEl.remove();
-  totalMovies <= 20 ? pagBtnEl?.remove() : createPaginations(totalPages, currentPage);
+
+  totalMovies <= 20
+    ? pagBtnEl?.remove()
+    : createPaginations(totalPages, currentPage);
 }
 
 function createErrorMassage() {
   errorSerchEl && errorSerchEl.remove();
-  const markup = '<div class="header__error-massage"><p>Search result not successful. Enter the correct movie name.</p></div>';
-  serchForm.insertAdjacentHTML("afterend", markup);
+  const markup =
+    '<div class="header__error-massage"><p>Search result not successful. Enter the correct movie name.</p></div>';
+  serchForm.insertAdjacentHTML('afterend', markup);
   errorSerchEl = document.querySelector('.header__error-massage');
+  hideLoader();
 }
 
 async function nextUserMovies(params) {
@@ -94,6 +108,7 @@ async function nextUserMovies(params) {
     return renderCards(results);
   });
   movieList.innerHTML = result;
+  hideLoader();
 }
 
 export function PaginationButton(total, current) {

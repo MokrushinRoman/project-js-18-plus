@@ -19,6 +19,7 @@ const refs = {
   inputFile: document.getElementById('file'),
   removeFileBtn: document.getElementById('file-remove-button'),
   bodyEl: document.querySelector('body'),
+  userAva: document.querySelector('#userAvatar'),
 };
 // const libraryBtn = document.getElementById('libraryButton');
 const passRegExp = /(?=.*?[A-Z])(?=.*?[a-z]).{6,}/;
@@ -38,7 +39,6 @@ const handleEscClick = e => {
   }
 };
 const handleLogOutClicked = () => {
-  console.log('click, logOUT!!!');
   onClickBtnHome();
   toggleSignIn();
 };
@@ -105,6 +105,7 @@ const validateSignUpForm = e => {
   const {
     elements: { email, password, username, confirmPassword, file },
   } = e.currentTarget;
+  const fileUrl = file.value ? window.URL.createObjectURL(file.files[0]) : null;
 
   const emailValue = email.value.trim();
   const nameValue = username.value.trim();
@@ -115,7 +116,7 @@ const validateSignUpForm = e => {
   let errors = [];
   if (!nameValue) {
     errors.push({ el: username, message: 'name cannot be empty' });
-  } else if (nameValue.length < 3 || nameValue.lenght > 15) {
+  } else if (nameValue.length < 3 || nameValue.length > 15) {
     errors.push({
       el: username,
       message: 'name should be at least 3 symbols and not more than 15 symbols',
@@ -153,7 +154,12 @@ const validateSignUpForm = e => {
     }, 5000);
   } else {
     showLoader();
-    createUser({ email: emailValue, password: passValue, name: nameValue });
+    createUser({
+      email: emailValue,
+      password: passValue,
+      name: nameValue,
+      fileUrl,
+    });
   }
 };
 // [SM]check Loggin for valid
@@ -185,19 +191,27 @@ function clearErrorMessage() {
   clearTimeout(errorMessageTimeOut);
 }
 // [SM] create user
-async function createUser({ email, password, name }) {
+async function createUser({ email, password, name, fileUrl }) {
   await createUserWithEmailAndPassword(auth, email, password)
     .then(async userCredential => {
       const user = userCredential.user;
-      if (user) {
-        await updateProfile(user, { displayName: name })
-          .then(() => {})
-          .catch(err => {
-            Notify.warning("Name wasn't saved");
-          });
+      let userOBj = { displayName: name };
+      if (fileUrl) {
+        userOBj.photoURL = fileUrl;
       }
-      var displayName = user.displayName;
+      if (user) {
+        await updateProfile(user, userOBj).catch(err => {
+          Notify.warning("Name wasn't saved");
+        });
+      }
+
+      const displayName = user.displayName;
+
+      const avaUrl = user.photoURL;
       const userContainer = document.querySelector('#userContainer');
+      // if (avaUrl) {
+      //   // refs.userAva.src = avaUrl;
+      // }
       if (userContainer) {
         userContainer.innerText = displayName;
       }
@@ -212,7 +226,6 @@ async function createUser({ email, password, name }) {
 }
 // [SM] check sign in or should logout
 function toggleSignIn(email, password) {
-  console.log('come to toggle: ');
   if (auth.currentUser) {
     togglePrivateRoutes();
 
@@ -249,9 +262,9 @@ auth.onAuthStateChanged(function (user) {
     let displayName = user.displayName;
     if (displayName) {
       const userContainer = document.querySelector('#userContainer');
-      if (userContainer) {
-        userContainer.innerText = displayName;
-      }
+      // if (userContainer) {
+      //   userContainer.innerText = displayName;
+      // }
     }
 
     var uid = user.uid;
@@ -274,7 +287,6 @@ function togglePrivateRoutes() {
 function handleAddAvatar() {
   const { value } = refs.inputFile;
   if (value) {
-    console.log('  refs.removeFileBtn: ', refs.removeFileBtn);
     const url = window.URL.createObjectURL(refs.inputFile.files[0]);
     refs.inputFile.style.background = `url(${url}) no-repeat 100px center / 30px calc(100% - 4px)`;
     refs.removeFileBtn.classList.toggle('hide');
