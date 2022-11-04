@@ -1,4 +1,5 @@
 import { movies } from '../index.js';
+import { hideLoader } from './loader.js';
 import { onWatchedBtnClick } from './myLibrary';
 import { pagBtnEl } from './pagination';
 
@@ -33,7 +34,7 @@ export function onClickBtnHome() {
   refs.library.classList.remove('navigation__button--active');
   refs.home.classList.add('navigation__button--active');
 
-  movies({ page: 1 });
+  movies({ page: 1 }).then(() => hideLoader());
 }
 
 function onClickBtnLibrary() {
