@@ -1,4 +1,5 @@
-import '../js/myLibrary';
+
+import './myLibrary';
 import { searchMovies, getTrending } from '../filmsApi';
 import { Notify } from 'notiflix';
 import { renderCards } from './movieCard';
@@ -34,14 +35,14 @@ const pageNumbers = (total, max, current) => {
 
   if(current + half >= total) {
     to = total;
-  } else if(current > half) {
-    to = current + half ;
+  } else if (current > half) {
+    to = current + half;
   }
 
   let from = Math.max(to - max, 0);
 
-  return Array.from({length: Math.min(total, max)}, (_, i) => (i + 1) + from);
-}
+  return Array.from({ length: Math.min(total, max) }, (_, i) => i + 1 + from);
+};
 
 function crateNewPage() {
   if (!fetchParams.query) {
@@ -104,6 +105,8 @@ export default function PaginationButton(total, current) {
   const paginationButtonContainer = document.createElement('div');
   paginationButtonContainer.className = 'pagination-buttons';
 
+
+
   const createAndSetupButton = (label = '', cls = '', disabled = false, handleClick) => {
     const buttonElement = document.createElement('button');
     buttonElement.textContent = label;
@@ -114,7 +117,9 @@ export default function PaginationButton(total, current) {
       crateNewPage();
       this.update();
       paginationButtonContainer.value = currentPage;
-      paginationButtonContainer.dispatchEvent(new CustomEvent('change', {detail: {currentPageBtn}}));
+      paginationButtonContainer.dispatchEvent(
+        new CustomEvent('change', { detail: { currentPageBtn } })
+      );
     });
 
     return buttonElement;
@@ -149,6 +154,7 @@ export default function PaginationButton(total, current) {
     const button = createAndSetupButton(
       pageNumber, isCurrentPage ? 'active' : '', false, onPageButtonClick
     );
+
 
     if(isCurrentPage) {
       currentPageBtn = button;

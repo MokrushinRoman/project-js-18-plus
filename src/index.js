@@ -1,4 +1,5 @@
 import { getTrending } from './filmsApi';
+
 import './js/homepage';
 import './js/myLibrary';
 import './js/students-modal';

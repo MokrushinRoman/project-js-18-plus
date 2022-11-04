@@ -1,5 +1,11 @@
 import { getMovieDetails, getVideoTrailer } from '../filmsApi';
 import { Notify } from 'notiflix';
+import {
+  addMovieInLocaleStorage,
+  removeMovieInLocaleStorage,
+  findMoviesInLocaleStorage,
+} from './local-storage';
+import { pageList, renderMoviesList } from './myLibrary';
 
 export function getRefs() {
   const refs = {
@@ -10,6 +16,7 @@ export function getRefs() {
     movieListEL: '',
     watchedBtn: '',
     queueBtn: '',
+    movieList: document.querySelector('.movie-list'),
     videoPlayerEl: '',
     modalBoxEl: '',
   };
@@ -27,21 +34,100 @@ async function onModalOpen(e) {
   if (e.target.nodeName !== 'IMG') {
     return;
   }
+
   refs.idTargetCard = e.target.closest('.movie-card').attributes.id.value;
-  await createModal();
+
+  const movie = await createModal().then(response => {
+    return response;
+  });
+
   refs.modalEl.classList.remove('movie-backdrop_is-hidden');
   getAccessToBtn();
+  refs.watchedBtn.addEventListener('click', onWatched);
+  refs.queueBtn.addEventListener('click', onQueue);
   refs.modalBoxEl = refs.modalEl.querySelector('.movie-modal');
+
   refs.modalCloseBtn.addEventListener('click', onModalClose);
   document.addEventListener('keydown', onKeyDown);
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.bodyEl.classList.add('overflow-hidden');
   refs.modalEl.addEventListener('click', onPosterClick);
+
+  function onWatched(e) {
+    const btn = e.target;
+    handlerClickBtn('watched', btn);
+  }
+
+  function onQueue(e) {
+    const btn = e.target;
+    handlerClickBtn('queue', btn);
+  }
+
+  function handlerClickBtn(listName, btn) {
+    const valueBtn = btn.textContent.trim().toLowerCase();
+
+    const isOnCurrentList = findMoviesInLocaleStorage(listName, movie.id);
+    const otherListName = listName === 'watched' ? 'queue' : 'watched';
+    const otherBtn =
+      otherListName === 'watched' ? refs.watchedBtn : refs.queueBtn;
+    const isOnOtherList = findMoviesInLocaleStorage(otherListName, movie.id);
+    if (valueBtn === `add to ${listName}`) {
+      if (isOnCurrentList) {
+        return;
+      }
+      addMovieInLocaleStorage(listName, movie);
+      if (isOnOtherList) {
+        removeMovieInLocaleStorage(otherListName, movie.id);
+        otherBtn.innerHTML = `add to ${otherListName}`;
+        if (pageList) {
+          renderMoviesList(pageList);
+        }
+      }
+
+      btn.innerHTML = `remove from ${listName}`;
+      if (pageList) {
+        renderMoviesList(listName);
+      }
+      return;
+    }
+
+    btn.innerHTML = isOnCurrentList
+      ? `add to ${listName}`
+      : `remove from ${listName}`;
+
+    removeMovieInLocaleStorage(listName, movie.id);
+    if (!otherListName) {
+      return;
+    }
+    if (pageList) {
+      renderMoviesList(listName);
+    }
+  }
+
+  function onModalClose() {
+    refs.idTargetCard = '';
+    refs.modalEl.classList.add('movie-backdrop_is-hidden');
+    resetModal();
+    document.removeEventListener('keydown', onKeyDown);
+    refs.modalEl.removeEventListener('click', onClickOutside);
+    refs.watchedBtn.removeEventListener('click', onWatched);
+    refs.queueBtn.removeEventListener('click', onQueue);
+    refs.bodyEl.classList.remove('overflow-hidden');
+  }
+
+  function onKeyDown(e) {
+    e.code === 'Escape' && onModalClose();
+  }
+
+  function onClickOutside(e) {
+    e.target === refs.modalEl && onModalClose();
+  }
 }
 
 async function createModal() {
-  await getMovieDetails(refs.idTargetCard).then(response => {
-    return createModalMarkup(response);
+  return await getMovieDetails(refs.idTargetCard).then(response => {
+    createModalMarkup(response);
+    return response;
   });
 }
 
@@ -51,20 +137,8 @@ function getAccessToBtn() {
   refs.queueBtn = refs.modalEl.querySelector('[data-control-turn]');
 }
 
-function onModalClose() {
-  refs.idTargetCard = '';
-  refs.modalEl.classList.add('movie-backdrop_is-hidden');
-  resetModal();
-  document.removeEventListener('keydown', onKeyDown);
-  refs.modalEl.removeEventListener('click', onClickOutside);
-  refs.bodyEl.classList.remove('overflow-hidden');
-}
-
-function onKeyDown(e) {
-  e.code === 'Escape' && onModalClose();
-}
-
 function createModalMarkup({
+  id,
   title,
   original_title,
   popularity,
@@ -127,6 +201,7 @@ function createModalMarkup({
     <div class="movie-modal__text-thumb">
       <h3 class="movie-modal__description-title">About</h3>
       <p class="movie-modal__description">${overview}</p>
+
     </div>
     <div class="movie-modal-button__thumb">
       <button
@@ -134,19 +209,23 @@ function createModalMarkup({
         class="movie-modal-button movie-modal-button_accent"
         data-control-watched
       >
-        Add to Watched
+        ${
+          findMoviesInLocaleStorage('watched', id)
+            ? 'remove from Watched'
+            : 'add to Watched'
+        }
       </button>
       <button type="button" class="movie-modal-button" data-control-turn>
-        Add to queue
+                 ${
+                   findMoviesInLocaleStorage('queue', id)
+                     ? 'remove from queue'
+                     : 'add to queue'
+                 }
       </button>
     </div>
   </div>
 </div>`;
   return refs.modalEl.insertAdjacentHTML('afterbegin', markup);
-}
-
-function onClickOutside(e) {
-  e.target === refs.modalEl && onModalClose();
 }
 
 function resetModal() {
@@ -175,6 +254,7 @@ async function onPosterClick(e) {
   refs.videoPlayerEl = refs.modalEl.querySelector(
     '.movie-modal__video-player-container'
   );
+
   if (!refs.videoPlayerEl) {
     return;
   }
