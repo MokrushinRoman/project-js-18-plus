@@ -1,0 +1,39 @@
+.button {
+  transform: translate(0) scale(1);
+
+  @include flex-centred();
+  height: 44px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+
+  background-color: transparent;
+
+  @include font(500, 12px, 1.3333, 00.03em);
+  color: $white-text-color;
+  text-transform: uppercase;
+
+  transition: transform var(--transition);
+
+  &--current {
+    border: none;
+    background-color: $button-accent-bg-color;
+    filter: drop-shadow(0px 8px 43px rgba(255, 107, 1, 0.6));
+  }
+
+  &:hover,
+  &:focus {
+    transform: translate(0) scale(1.015);
+  }
+
+  @include mobile {
+    width: 130px;
+  }
+
+  @include tablet {
+    width: 152px;
+  }
+
+  @include desktop {
+    width: 147px;
+  }
+}
