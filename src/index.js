@@ -3,7 +3,8 @@ import './js/homepage';
 import './js/myLibrary';
 import './js/students-modal';
 import { getModal } from './js/modal';
-import createPaginations from "./js/pagination.js";
+import { renderCards } from './js/movieCard';
+import createPaginations from './js/pagination.js';
 getModal('.movie-list');
 
 let totalPages = 0;
@@ -33,24 +34,7 @@ export async function movies({ page }) {
   const result = await getTrending({ page }).then(
     ({ results, total_pages }) => {
       totalPages = total_pages;
-      const movieCards = results
-        .map(
-          ({
-            title = '',
-            name = '',
-            poster_path,
-
-            id,
-          }) =>
-            card({
-              title: title ? title : name,
-              imgUrl: poster_path,
-              id,
-            })
-        )
-        .join('');
-
-      return movieCards;
+      return renderCards(results);
     }
   );
 

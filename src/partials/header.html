@@ -1,93 +1,90 @@
 <header class="header" id="header">
-  <div class="header__home" id="bg">
-    <div class="container">
-      <div class="header__container">
-        <a href="./index.html" class="header__logo" id="button__logo">
-          <div class="header__icon--container">
-            <img src="images/film.svg" alt="" />
-          </div>
-          <h1 class="header__logo--text">Filmoteka</h1>
-        </a>
-        <nav class="navigation">
-          <ul class="navigation__list">
-            <li class="navigation__item">
-              <button
-                class="navigation__button navigation__button--active"
-                id="button__home"
-              >
-                home
-              </button>
-            </li>
-            <li class="navigation__item private-route hide">
-              <button class="navigation__button" id="button__library">
-                my library
-              </button>
-            </li>
-          </ul>
-        </nav>
-        <div class="auth">
-          <div class="private-route auth__buttons-wrapper">
-            <button id="logIn" class="auth__button" auth="show-log-in-form">
-              log in
+  <div class="header__container">
+    <a href="./index.html" class="header__logo" id="button__logo">
+      <div class="header__icon--container">
+        <img src="images/film.svg" alt="" />
+      </div>
+      <h1 class="header__logo--text">Filmoteka</h1>
+    </a>
+    <div class="navigation-wrapper">
+      <nav class="navigation">
+        <ul class="navigation__list">
+          <li class="navigation__item">
+            <button
+              class="navigation__button navigation__button--active"
+              id="button__home"
+            >
+              home
             </button>
-            <button id="signUp" class="auth__button" auth="show-sign-in-form">
-              sign up
+          </li>
+          <li class="navigation__item private-route hide">
+            <button class="navigation__button" id="button__library">
+              my library
             </button>
-          </div>
-          <div class="private-route hide">
-            <div class="user-container private-route hide">
-              <div class="auth__avatar">
-                <img
-                  id="userAvatar"
-                  src="https://cdn-icons-png.flaticon.com/512/2698/2698175.png"
-                  alt="avatar"
-                />
-              </div>
-              <button type="button" class="auth__log-out" id="logOutButton">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/3840/3840829.png"
-                  alt=""
-                />
-              </button>
+          </li>
+        </ul>
+      </nav>
+      <div class="auth">
+        <div class="private-route auth__buttons-wrapper">
+          <button id="logIn" class="auth__button" auth="show-log-in-form">
+            log in
+          </button>
+          <button id="signUp" class="auth__button" auth="show-sign-in-form">
+            sign up
+          </button>
+        </div>
+        <div class="private-route hide">
+          <div class="user-container private-route hide">
+            <div class="auth__avatar">
+              <img
+                id="userAvatar"
+                src="https://cdn-icons-png.flaticon.com/512/2698/2698175.png"
+                alt="avatar"
+              />
             </div>
+            <button type="button" class="auth__log-out" id="logOutButton">
+              <img
+                src="https://cdn-icons-png.flaticon.com/128/3840/3840829.png"
+                alt=""
+              />
+            </button>
           </div>
         </div>
       </div>
-      <form class="search__form" id="search-form">
-        <div class="search__form_wrapper">
-          <input
-            class="search__form_input"
-            type="text"
-            name="search"
-            id="searchQuery"
-            placeholder="Movie search"
-            autocomplete="off"
-          />
-          <button type="submit" class="search__form_button">
-            <img
-              src="images/search-2.svg"
-              alt="search icon"
-              class="search__form_img"
-            />
-          </button>
-        </div>
-      </form>
-      <ul class="library__btn-list private-route hide">
-        <li class="btn-list__item">
-          <button
-            type="button"
-            class="library__btn library__btn--active"
-            id="btn__watched"
-          >
-            WATCHED
-          </button>
-        </li>
-        <li class="btn-list__item">
-          <button type="button" class="library__btn" id="btn__queue">
-            QUEUE
-          </button>
-        </li>
-      </ul>
     </div>
   </div>
+  <form class="search__form" id="search-form">
+    <div class="search__form_wrapper">
+      <input
+        class="search__form_input"
+        type="text"
+        name="search"
+        id="searchQuery"
+        placeholder="Movie search"
+        autocomplete="off"
+      />
+      <button type="submit" class="search__form_button">
+        <img
+          src="images/search-2.svg"
+          alt="search icon"
+          class="search__form_img"
+        />
+      </button>
+    </div>
+  </form>
+  <ul class="library__btn-list private-route hide">
+    <li class="btn-list__item">
+      <button
+        type="button"
+        class="library__btn library__btn--active"
+        id="btn__watched"
+      >
+        WATCHED
+      </button>
+    </li>
+    <li class="btn-list__item">
+      <button type="button" class="library__btn" id="btn__queue">QUEUE</button>
+    </li>
+  </ul>
+  <!-- <include src="./partials/theme_switcher.html"></include> -->
 </header>

@@ -43,6 +43,7 @@
     padding-bottom: 16px;
     margin-bottom: 4px;
     width: 100%;
+
     &__label {
       display: block;
       margin-bottom: 4px;
@@ -56,6 +57,51 @@
       border: 1px solid #000000;
 
       background-color: transparent;
+      // &[type='file'] {
+      //   opacity: 0;
+      //   padding: 0;
+      // }
+    }
+    &.input-file {
+      display: flex;
+      gap: 8px;
+      .form-control__file {
+        flex-grow: 1;
+      }
+      // @extend .form-control__input;
+      .form-control__input {
+        padding: 6px 40px 6px 10px;
+        cursor: pointer;
+        &::file-selector-button {
+          position: absolute;
+          visibility: hidden;
+        }
+        &::before {
+          margin-right: 48px;
+          content: 'Add avatar';
+          display: inline-block;
+          color: $accent-text-color;
+          border: 1px solid $accent-text-color;
+          border-radius: 5px;
+          padding: 4px 6px;
+          outline: none;
+          // overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          user-select: none;
+          -webkit-user-select: none;
+          cursor: pointer;
+          text-shadow: 1px 1px #fff;
+          font-weight: 700;
+          font-size: 10pt;
+        }
+        &:hover::before {
+          border-color: black;
+        }
+        &:active::before {
+          background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+        }
+      }
     }
     &.error {
       .form-control__input {
@@ -79,7 +125,23 @@
       }
     }
   }
+  .auth-form__remove-file-button {
+    transform: scale(1);
 
+    @include flex-centred($d: flex, $ai: center, $jc: center);
+
+    padding: 0;
+
+    background: inherit;
+    border: none;
+    transition: fill $transition-basic, transform $transition-basic;
+
+    &:hover,
+    &:focus {
+      color: $button-accent-bg-color;
+      transform: scale(1.05);
+    }
+  }
   #auth-close {
     position: absolute;
     top: 10px;
