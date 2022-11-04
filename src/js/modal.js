@@ -19,6 +19,7 @@ export function getRefs() {
     movieList: document.querySelector('.movie-list'),
     videoPlayerEl: '',
     modalBoxEl: '',
+    movieResponse: '',
   };
   return refs;
 }
@@ -37,7 +38,7 @@ async function onModalOpen(e) {
 
   refs.idTargetCard = e.target.closest('.movie-card').attributes.id.value;
 
-  const movie = await createModal().then(response => {
+  movieResponse = await createModal().then(response => {
     return response;
   });
 
@@ -52,76 +53,74 @@ async function onModalOpen(e) {
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.bodyEl.classList.add('overflow-hidden');
   refs.modalEl.addEventListener('click', onPosterClick);
+}
 
-  function onWatched(e) {
-    const btn = e.target;
-    handlerClickBtn('watched', btn);
-  }
-
-  function onQueue(e) {
-    const btn = e.target;
-    handlerClickBtn('queue', btn);
-  }
-
-  function handlerClickBtn(listName, btn) {
-    const valueBtn = btn.textContent.trim().toLowerCase();
-
-    const isOnCurrentList = findMoviesInLocaleStorage(listName, movie.id);
-    const otherListName = listName === 'watched' ? 'queue' : 'watched';
-    const otherBtn =
-      otherListName === 'watched' ? refs.watchedBtn : refs.queueBtn;
-    const isOnOtherList = findMoviesInLocaleStorage(otherListName, movie.id);
-    if (valueBtn === `add to ${listName}`) {
-      if (isOnCurrentList) {
-        return;
-      }
-      addMovieInLocaleStorage(listName, movie);
-      if (isOnOtherList) {
-        removeMovieInLocaleStorage(otherListName, movie.id);
-        otherBtn.innerHTML = `add to ${otherListName}`;
-        if (pageList) {
-          renderMoviesList(pageList);
-        }
-      }
-
-      btn.innerHTML = `remove from ${listName}`;
+function handlerClickBtn(listName, btn) {
+  const valueBtn = btn.textContent.trim().toLowerCase();
+  const isOnCurrentList = findMoviesInLocaleStorage(listName, movieResponse.id);
+  const otherListName = listName === 'watched' ? 'queue' : 'watched';
+  const otherBtn =
+    otherListName === 'watched' ? refs.watchedBtn : refs.queueBtn;
+  const isOnOtherList = findMoviesInLocaleStorage(otherListName, movieResponse.id);
+  if (valueBtn === `add to ${listName}`) {
+    if (isOnCurrentList) {
+      return;
+    }
+    addMovieInLocaleStorage(listName, movieResponse);
+    if (isOnOtherList) {
+      removeMovieInLocaleStorage(otherListName, movieResponse.id);
+      otherBtn.innerHTML = `add to ${otherListName}`;
       if (pageList) {
-        renderMoviesList(listName);
+        renderMoviesList(pageList);
       }
-      return;
     }
 
-    btn.innerHTML = isOnCurrentList
-      ? `add to ${listName}`
-      : `remove from ${listName}`;
-
-    removeMovieInLocaleStorage(listName, movie.id);
-    if (!otherListName) {
-      return;
-    }
+    btn.innerHTML = `remove from ${listName}`;
     if (pageList) {
       renderMoviesList(listName);
     }
+    return;
   }
 
-  function onModalClose() {
-    refs.idTargetCard = '';
-    refs.modalEl.classList.add('movie-backdrop_is-hidden');
-    resetModal();
-    document.removeEventListener('keydown', onKeyDown);
-    refs.modalEl.removeEventListener('click', onClickOutside);
-    refs.watchedBtn.removeEventListener('click', onWatched);
-    refs.queueBtn.removeEventListener('click', onQueue);
-    refs.bodyEl.classList.remove('overflow-hidden');
-  }
+  btn.innerHTML = isOnCurrentList
+    ? `add to ${listName}`
+    : `remove from ${listName}`;
 
-  function onKeyDown(e) {
-    e.code === 'Escape' && onModalClose();
+  removeMovieInLocaleStorage(listName, movieResponse.id);
+  if (!otherListName) {
+    return;
   }
+  if (pageList) {
+    renderMoviesList(listName);
+  }
+}
+function onWatched(e) {
+  const btn = e.target;
+  handlerClickBtn('watched', btn);
+}
 
-  function onClickOutside(e) {
-    e.target === refs.modalEl && onModalClose();
-  }
+function onQueue(e) {
+  const btn = e.target;
+  handlerClickBtn('queue', btn);
+}
+
+function onModalClose() {
+  refs.idTargetCard = '';
+  refs.modalEl.classList.add('movie-backdrop_is-hidden');
+  resetModal();
+  document.removeEventListener('keydown', onKeyDown);
+  refs.modalEl.removeEventListener('click', onClickOutside);
+  refs.watchedBtn.removeEventListener('click', onWatched);
+  refs.queueBtn.removeEventListener('click', onQueue);
+  refs.bodyEl.classList.remove('overflow-hidden');
+}
+
+function onKeyDown(e) {
+  e.code === 'Escape' && onModalClose();
+}
+
+function onClickOutside(e) {
+  e.target === refs.modalEl && onModalClose();
 }
 
 async function createModal() {
@@ -249,6 +248,8 @@ async function onPosterClick(e) {
   refs.modalEl.removeEventListener('click', onClickOutside);
   refs.modalEl.removeEventListener('click', onPosterClick);
   refs.modalEl.addEventListener('click', onPlayerCloseToClick);
+  refs.watchedBtn.removeEventListener('click', onWatched);
+  refs.queueBtn.removeEventListener('click', onQueue);
   document.addEventListener('keydown', onClosePlayerToEsc);
 }
 
@@ -267,6 +268,8 @@ function removeVideoPlayer() {
   document.addEventListener('keydown', onKeyDown);
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.modalEl.addEventListener('click', onPosterClick);
+  refs.watchedBtn.addEventListener('click', onWatched);
+  refs.queueBtn.addEventListener('click', onQueue);
 }
 
 function getTrailer(arr) {
