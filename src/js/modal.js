@@ -79,7 +79,20 @@ function createModalMarkup({
   const popularityValue = popularity.toFixed(1);
   const markup = `<div class="movie-modal">
   <button type="button" class="close-button" data-modal-close>
-    <svg class="close-button__icon" width="30" height="30" xmlns="http://www.w3.org/2000/svg"><path d="M23.733 10.304l-1.504-1.504-5.963 5.963-5.963-5.963-1.504 1.504 5.963 5.963-5.963 5.963 1.504 1.504 5.963-5.963 5.963 5.963 1.504-1.504-5.963-5.963 5.963-5.963z"></path></svg>
+    <svg
+      class="close-button__icon"
+      width="30"
+      height="30"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <symbol viewBox="0 0 32 32">
+          <path
+            d="M23.733 10.304l-1.504-1.504-5.963 5.963-5.963-5.963-1.504 1.504 5.963 5.963-5.963 5.963 1.504 1.504 5.963-5.963 5.963 5.963 1.504-1.504-5.963-5.963 5.963-5.963z"
+          ></path>
+        </symbol>
+      </defs>
+    </svg>
   </button>
   <div class="movie-modal__poster-container">
     <img
