@@ -13,9 +13,9 @@ export function getMoviesFromLocalStorage() {
   if (!userId) {
     return;
   }
-  return (movies = localStorage.getItem(userId)
+  return localStorage.getItem(userId)
     ? JSON.parse(localStorage.getItem(userId))
-    : { watched: [], queue: [] });
+    : { watched: [], queue: [] };
 }
 
 export function addMovieInLocaleStorage(listName, movie) {
