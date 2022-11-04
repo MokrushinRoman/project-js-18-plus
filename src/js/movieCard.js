@@ -32,9 +32,18 @@ function getGenresById(genre_ids) {
 export function renderCards(data) {
   const movieCardMarkup = data
     ?.map(
-      ({ id, title, poster_path, release_date, vote_average, genre_ids }) => {
+      ({
+        id,
+        title,
+        poster_path,
+        release_date,
+        vote_average,
+        genre_ids,
+        name,
+      }) => {
         const genresNames = getGenresById(genre_ids);
         const defaultImageUrl = new URL('../images/film.jpg', import.meta.url);
+        const movieTitle = title ?? name ?? 'no title';
         const imgUrl = poster_path
           ? `https://image.tmdb.org/t/p/w300${poster_path}`
           : `${defaultImageUrl.href}`;
@@ -42,8 +51,8 @@ export function renderCards(data) {
           ? `https://image.tmdb.org/t/p/w400${poster_path} 1280w `
           : '';
         return `<li class="movie-card"  id="${id}">
-    <img data-src="${imgUrl}" srcset=${srcSet} src="${imgUrl}" alt="${title}" class="lazyload  movie-card__img">
-    <p class="movie-card__title">${title}</p>
+    <img data-src="${imgUrl}" srcset=${srcSet} src="${imgUrl}" alt="${movieTitle}" class="lazyload  movie-card__img">
+    <p class="movie-card__title">${movieTitle}</p>
     <div class="movie-card__details">
     <p class="movie-card__genres">${genresNames} </p>
       ${
