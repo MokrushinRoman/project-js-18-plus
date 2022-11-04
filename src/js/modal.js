@@ -5,7 +5,7 @@ import {
   removeMovieInLocaleStorage,
   findMoviesInLocaleStorage,
 } from './local-storage';
-import { pageList, renderMoviesList } from './my-library';
+import { pageList, renderMoviesList } from './myLibrary';
 
 export function getRefs() {
   const refs = {
@@ -34,12 +34,13 @@ async function onModalOpen(e) {
   if (e.target.nodeName !== 'IMG') {
     return;
   }
-  refs.idTargetCard = e.target.parentElement.attributes.id.value;
 
-  const movie = await createModal().then(response => {
+  refs.idTargetCard = e.target.closest('.movie-card').attributes.id.value;
+
+    const movie = await createModal().then(response => {
     return response;
   });
-  createModalMarkup(movie);
+
   refs.modalEl.classList.remove('movie-backdrop_is-hidden');
   getAccessToBtn();
   refs.watchedBtn.addEventListener('click', onWatched);
@@ -51,6 +52,7 @@ async function onModalOpen(e) {
   refs.modalEl.addEventListener('click', onClickOutside);
   refs.bodyEl.classList.add('overflow-hidden');
   refs.modalEl.addEventListener('click', onPosterClick);
+
 
   function onWatched(e) {
     const btn = e.target;
@@ -70,20 +72,20 @@ async function onModalOpen(e) {
     const otherBtn =
       otherListName === 'watched' ? refs.watchedBtn : refs.queueBtn;
     const isOnOtherList = findMoviesInLocaleStorage(otherListName, movie.id);
-    if (valueBtn === `add to ${listName}`) {
+    if (valueBtn === `Add to ${listName}`) {
       if (isOnCurrentList) {
         return;
       }
       addMovieInLocaleStorage(listName, movie);
       if (isOnOtherList) {
         removeMovieInLocaleStorage(otherListName, movie.id);
-        otherBtn.innerHTML = `add to ${otherListName}`;
+        otherBtn.innerHTML = `Add to ${otherListName}`;
         if (pageList) {
           renderMoviesList(pageList);
         }
       }
 
-      btn.innerHTML = `remove from ${listName}`;
+      btn.innerHTML = `Remove from ${listName}`;
       if (pageList) {
         renderMoviesList(listName);
       }
@@ -92,7 +94,7 @@ async function onModalOpen(e) {
 
     btn.innerHTML = isOnCurrentList
       ? `add to ${listName}`
-      : `remove from ${listName}`;
+      : `Remove from ${listName}`;
 
     removeMovieInLocaleStorage(listName, movie.id);
     if (!otherListName) {
@@ -125,6 +127,7 @@ async function onModalOpen(e) {
 
 async function createModal() {
   return await getMovieDetails(refs.idTargetCard).then(response => {
+    createModalMarkup(response);
     return response;
   });
 }
@@ -155,7 +158,7 @@ function createModalMarkup({
       class="close-button__icon"
       width="30"
       height="30"
-      xmlns="http://www.w3.org/2000/svg
+      xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
         <symbol viewBox="0 0 32 32">
@@ -182,7 +185,7 @@ function createModalMarkup({
         </li>
         <li class="movie-modal__table_grey">
           <p>
-            <span class="movie-modal__table_bc_accent">${voteAverage}</span>&#32;&#47;&#32; 
+            <span class="movie-modal__table_bc_accent">${voteAverage}</span>&#32;&#47;&#32;
             <span class="movie-modal__table_bc_grey">${vote_count}</span>
           </p>
         </li>
@@ -209,14 +212,14 @@ function createModalMarkup({
       >
         ${
           findMoviesInLocaleStorage('watched', id)
-            ? 'remove from Watched'
+            ? 'Remove from Watched'
             : 'Add to Watched'
         }
       </button>
       <button type="button" class="movie-modal-button" data-control-turn>
                  ${
                    findMoviesInLocaleStorage('queue', id)
-                     ? 'remove from queue'
+                     ? 'Remove from queue'
                      : 'Add to queue'
                  }
       </button>
@@ -252,6 +255,10 @@ async function onPosterClick(e) {
   refs.videoPlayerEl = refs.modalEl.querySelector(
     '.movie-modal__video-player-container'
   );
+
+  if (!refs.videoPlayerEl) {
+    return;
+  }
   document.removeEventListener('keydown', onKeyDown);
   refs.modalEl.removeEventListener('click', onClickOutside);
   refs.modalEl.removeEventListener('click', onPosterClick);
@@ -260,7 +267,6 @@ async function onPosterClick(e) {
 }
 
 function onClosePlayerToEsc(e) {
-  console.log(e.code);
   e.code === 'Escape' && removeVideoPlayer();
 }
 

@@ -1,10 +1,10 @@
 import { getTrending } from './filmsApi';
 
 import './js/homepage';
-import './js/my-library';
+import './js/myLibrary';
 import './js/students-modal';
 import { getModal } from './js/modal';
-
+import { renderCards } from './js/movieCard';
 import createPaginations from './js/pagination.js';
 getModal('.movie-list');
 
@@ -35,24 +35,7 @@ export async function movies({ page }) {
   const result = await getTrending({ page }).then(
     ({ results, total_pages }) => {
       totalPages = total_pages;
-      const movieCards = results
-        .map(
-          ({
-            title = '',
-            name = '',
-            poster_path,
-
-            id,
-          }) =>
-            card({
-              title: title ? title : name,
-              imgUrl: poster_path,
-              id,
-            })
-        )
-        .join('');
-
-      return movieCards;
+      return renderCards(results);
     }
   );
 
@@ -61,4 +44,3 @@ export async function movies({ page }) {
 }
 movies({ page });
 currentLocation = window.location.href;
-console.log('currentLocation: ', currentLocation);

@@ -1,6 +1,5 @@
 import { movies } from '../index.js';
-import { getTrending, searchMovies } from '../filmsApi';
-import { onWatchedBtnClick } from './my-library';
+import { onWatchedBtnClick } from './myLibrary';
 
 const refs = {
   bgHeader: document.getElementById('bg'),
@@ -19,17 +18,17 @@ onHome();
 function onHome() {
   refs.home.addEventListener('click', onClickBtn);
   refs.library.addEventListener('click', onClickBtn);
-  refs.form.addEventListener('submit', onSubmit);
+  // refs.form.addEventListener('submit', onSubmit);
 }
 
 export function onClickBtnHome() {
   // refs.libraryListError.innerText = '';
   refs.libraryListError.style.display = 'none';
 
-  refs.bgHeader.classList.remove('header__library');
+  refs.bgHeader?.classList.remove('header__library');
   refs.form.style.display = 'flex';
   refs.btnList.style.display = 'none';
-  refs.bgHeader.classList.add('header__home');
+  refs.bgHeader?.classList.add('header__home');
   refs.library.classList.remove('navigation__button--active');
   refs.home.classList.add('navigation__button--active');
 
@@ -49,7 +48,6 @@ function onClickBtnLibrary() {
 function onSubmit(event) {
   event.preventDefault();
   const query = event.currentTarget.elements.search.value;
-  console.log(query);
 }
 
 function onClickBtn(event) {
