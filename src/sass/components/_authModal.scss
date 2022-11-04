@@ -112,7 +112,7 @@
       }
     }
     &__error-message {
-      position: absolute;
+      // position: absolute;
       visibility: hidden;
       color: $red-accent-color;
       bottom: 0;
@@ -128,10 +128,34 @@
       }
     }
   }
-  .auth-form__remove-file-button {
-    transform: scale(1);
 
-    @include flex-centred($d: flex, $ai: center, $jc: center);
+  #auth-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 19px;
+
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid #000000;
+    background-color: transparent;
+    color: #000000;
+    &:hover,
+    &:focus {
+      border-color: $accent-text-color;
+      color: $accent-text-color;
+      text-decoration: none;
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.auth-form {
+  &__remove-file-button {
+    transform: scale(1);
+    // @include flex-centred($d: flex, $ai: center, $jc: center);
 
     padding: 0;
 
@@ -145,29 +169,6 @@
       transform: scale(1.05);
     }
   }
-  #auth-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 19px;
-    padding: 0;
-    padding-left: 1px;
-    padding-top: 0.5px;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background-color: transparent;
-    color: #000000;
-    &:hover,
-    &:focus {
-      text-decoration: none;
-      cursor: pointer;
-      transform: scale(1.1);
-    }
-  }
-}
-
-.auth-form {
   &__title {
     margin-bottom: 10px;
     @include font(500, 15px, 1.1666, 0.03em);

@@ -270,11 +270,13 @@ function togglePrivateRoutes() {
 }
 // [SM]
 function handleAddAvatar() {
-  const value = e.currentTarget.value;
+  const { value } = refs.inputFile;
   if (value) {
+    console.log('  refs.removeFileBtn: ', refs.removeFileBtn);
     const url = window.URL.createObjectURL(refs.inputFile.files[0]);
     refs.inputFile.style.background = `url(${url}) no-repeat 100px center / 30px calc(100% - 4px)`;
     refs.removeFileBtn.classList.toggle('hide');
+
     refs.removeFileBtn.addEventListener('click', clearUploadedFile);
   } else {
     refs.removeFileBtn.classList.toggle('hide');
