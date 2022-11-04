@@ -1,5 +1,6 @@
 import { movies } from '../index.js';
 import { onWatchedBtnClick } from './myLibrary';
+import { pagBtnEl } from './pagination';
 
 const refs = {
   bgHeader: document.getElementById('header'),
@@ -36,6 +37,7 @@ export function onClickBtnHome() {
 }
 
 function onClickBtnLibrary() {
+  pagBtnEl?.remove();
   refs.movieList.innerText = '';
   refs.bgHeader.classList.add('header__library');
   refs.form.style.display = 'none';
